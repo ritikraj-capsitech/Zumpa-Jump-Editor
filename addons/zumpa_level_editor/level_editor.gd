@@ -72,9 +72,13 @@ func _ready() -> void:
 	update_tile_preview()
 
 	# Load initial default level
-	var loaded = LevelManager.get_default_level()
-	if loaded:
-		load_level(loaded, LevelManager.active_level_path)
+	var existing_paths = LevelManager.get_all_level_paths()
+	if existing_paths.size() > 0:
+		var loaded = LevelManager.load_level_data(existing_paths[0])
+		if loaded:
+			load_level(loaded, existing_paths[0])
+		else:
+			new_level()
 	else:
 		new_level()
 
@@ -153,7 +157,7 @@ func populate_level_selector() -> void:
 	level_select_opt.clear()
 	level_paths_list = LevelManager.get_all_level_paths()
 
-	var selected_idx = 0
+	var selected_idx = -1
 	for i in range(level_paths_list.size()):
 		var path = level_paths_list[i]
 		var file_name = path.get_file()
@@ -162,7 +166,14 @@ func populate_level_selector() -> void:
 			selected_idx = i
 
 	if level_paths_list.size() > 0:
-		level_select_opt.select(selected_idx)
+		if selected_idx >= 0:
+			level_select_opt.select(selected_idx)
+		else:
+			level_select_opt.select(0)
+	elif current_level:
+		var unsaved_name = current_level_path.get_file() + " (Unsaved)"
+		level_select_opt.add_item(unsaved_name, 0)
+		level_select_opt.select(0)
 
 func set_active_tool(id: String, active_btn: Button) -> void:
 	canvas.active_placement_id = id
@@ -267,7 +278,16 @@ func on_level_selected_from_opt(idx: int) -> void:
 
 func new_level() -> void:
 	var existing = LevelManager.get_all_level_paths()
-	var new_num = existing.size() + 1
+	var max_num = 0
+	for path in existing:
+		var file_name = path.get_file().get_basename()
+		if file_name.begins_with("level_"):
+			var num_str = file_name.replace("level_", "")
+			if num_str.is_valid_int():
+				var num = num_str.to_int()
+				if num > max_num:
+					max_num = num
+	var new_num = max_num + 1
 	var new_id = "level_%03d" % new_num
 
 	current_level = LevelData.new()

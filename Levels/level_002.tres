@@ -13,9 +13,70 @@ script = ExtResource("1_2ksvs")
 object_id = "win_area"
 position = Vector2(571, -627)
 
+[sub_resource type="Resource" id="Resource_1hli8"]
+script = ExtResource("1_2ksvs")
+object_id = "obs_2"
+position = Vector2(536, -172)
+scale = Vector2(0.3, 0.3)
+properties = {
+"move_distance": 200.0,
+"move_speed": 100.0,
+"rotation_speed": 2.0
+}
+
 [resource]
 script = ExtResource("2_pmejl")
 level_id = "level_002"
 level_name = "Level 2"
-level_size = Vector2(1080, 3000)
-objects = Array[ExtResource("1_2ksvs")]([SubResource("Resource_yoce0"), SubResource("Resource_ysrwp")])
+world_theme = "world_3"
+level_size = Vector2(1080, 1000)
+objects = Array[ExtResource("1_2ksvs")]([SubResource("Resource_yoce0"), SubResource("Resource_ysrwp"), SubResource("Resource_1hli8")])
+tile_data = Array[Dictionary]([{
+"atlas_x": 7,
+"atlas_y": 1,
+"source_id": 0,
+"x": 0,
+"y": 10
+}, {
+"atlas_x": 7,
+"atlas_y": 1,
+"source_id": 0,
+"x": 1,
+"y": 10
+}, {
+"atlas_x": 7,
+"atlas_y": 1,
+"source_id": 0,
+"x": 2,
+"y": 10
+}, {
+"atlas_x": 7,
+"atlas_y": 1,
+"source_id": 0,
+"x": 3,
+"y": 10
+}, {
+"atlas_x": 7,
+"atlas_y": 1,
+"source_id": 0,
+"x": 4,
+"y": 10
+}, {
+"atlas_x": 7,
+"atlas_y": 1,
+"source_id": 0,
+"x": 5,
+"y": 10
+}, {
+"atlas_x": 7,
+"atlas_y": 1,
+"source_id": 0,
+"x": 5,
+"y": 11
+}, {
+"atlas_x": 7,
+"atlas_y": 1,
+"source_id": 0,
+"x": 6,
+"y": 11
+}])

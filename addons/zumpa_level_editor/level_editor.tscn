@@ -6,7 +6,7 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xtt1v"]
 atlas = ExtResource("3_xtt1v")
-region = Rect2(112, 16, 16, 16)
+region = Rect2(16, 16, 16, 16)
 
 [node name="TilePreviewRect" type="Control" unique_id=1578408495]
 layout_mode = 3
@@ -60,13 +60,9 @@ text = " Load "
 unique_name_in_owner = true
 layout_mode = 2
 selected = 0
-item_count = 3
-popup/item_0/text = "level_001.tres"
+item_count = 1
+popup/item_0/text = "level_001.tres (Unsaved)"
 popup/item_0/id = 0
-popup/item_1/text = "level_002.tres"
-popup/item_1/id = 1
-popup/item_2/text = "level_003.tres"
-popup/item_2/id = 2
 
 [node name="PlayBtn" type="Button" parent="MainVBox/TopBarPanel/TopBar" unique_id=11104]
 unique_name_in_owner = true
@@ -147,7 +143,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-scroll_vertical = 2175
+scroll_vertical = 2210
 
 [node name="Canvas" type="Control" parent="MainVBox/ContentHBox/ScrollContainer" unique_id=11302]
 unique_name_in_owner = true
@@ -335,7 +331,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 30.0
-value = 7.0
+value = 1.0
 
 [node name="AtlasYRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1451166186]
 layout_mode = 2
@@ -429,7 +425,7 @@ text = "Name:"
 [node name="LevelNameEdit" type="LineEdit" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=11502]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Level 1 - Forest Hills"
+text = "Level 1"
 
 [node name="ThemeLbl" type="Label" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=1085531706]
 layout_mode = 2
@@ -438,7 +434,7 @@ text = "World Theme:"
 [node name="WorldThemeOpt" type="OptionButton" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=11507]
 unique_name_in_owner = true
 layout_mode = 2
-selected = 1
+selected = 0
 item_count = 3
 popup/item_0/text = "World 1 - Forest Hills"
 popup/item_0/id = 0
@@ -488,10 +484,11 @@ unique_name_in_owner = true
 layout_mode = 2
 min_value = -20000.0
 max_value = 20000.0
-value = 1100.0
+value = 1135.0
 
 [node name="SaveDialog" type="FileDialog" parent="." unique_id=11601]
 unique_name_in_owner = true
+oversampling_override = 1.0
 filters = PackedStringArray("*.tres ; Godot Resource File")
 
 [node name="LoadDialog" type="FileDialog" parent="." unique_id=11602]

@@ -37,9 +37,6 @@ static func get_all_level_paths() -> Array[String]:
 	var paths: Array[String] = []
 	var dir_path := "res://Levels"
 
-	# Ensure default levels exist first
-	ensure_default_levels()
-
 	if DirAccess.dir_exists_absolute(dir_path):
 		var dir := DirAccess.open(dir_path)
 		if dir:
@@ -73,38 +70,20 @@ static func load_next_level() -> LevelData:
 	return null
 
 static func get_default_level() -> LevelData:
-	ensure_default_levels()
 	if current_level_data:
 		return current_level_data
-	var loaded = load_level_data("res://Levels/level_001.tres")
-	if loaded:
-		return loaded
 	var all_paths = get_all_level_paths()
 	if all_paths.size() > 0:
-		return load_level_data(all_paths[0])
+		var loaded = load_level_data(all_paths[0])
+		if loaded:
+			return loaded
 	return create_default_level_1()
 
 static func ensure_default_levels() -> void:
+	# Retained for API compatibility without auto-saving to disk
 	var dir_path := "res://Levels"
 	if not DirAccess.dir_exists_absolute(dir_path):
 		DirAccess.make_dir_recursive_absolute(dir_path)
-
-	var has_levels := false
-	var dir := DirAccess.open(dir_path)
-	if dir:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		while file_name != "":
-			if not dir.current_is_dir() and file_name.ends_with(".tres"):
-				has_levels = true
-				break
-			file_name = dir.get_next()
-		dir.list_dir_end()
-
-	# Only generate starter level_001.tres if res://Levels/ is completely empty
-	if not has_levels:
-		var l1 = create_default_level_1()
-		save_level_data(l1, "res://Levels/level_001.tres")
 
 static func create_default_level_1() -> LevelData:
 	var lvl := LevelData.new()
