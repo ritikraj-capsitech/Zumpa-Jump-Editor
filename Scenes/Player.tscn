@@ -2,34 +2,22 @@
 
 [ext_resource type="Script" uid="uid://bqstlug4v3dt8" path="res://Scripts/character_body_2d.gd" id="1_ij6vw"]
 [ext_resource type="Texture2D" uid="uid://dlejuh2ggvvu8" path="res://Sprite/Player.png" id="2_ghijl"]
-[ext_resource type="Texture2D" uid="uid://jlkaipb6s1jj" path="res://Sprite/ENV/setting screen.png" id="3_gntrk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_44cfe"]
 size = Vector2(143, 146)
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=927742863]
+z_index = 10
 script = ExtResource("1_ij6vw")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=382123635]
 position = Vector2(0, -584)
-
-[node name="TextureRect" type="TextureRect" parent="Camera2D" unique_id=854588818]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -541.0
-offset_top = -975.0
-offset_right = 553.0
-offset_bottom = 987.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_gntrk")
-expand_mode = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=138880409]
 position = Vector2(-2.5, 1)
 shape = SubResource("RectangleShape2D_44cfe")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=158956230]
+z_index = 10
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_ghijl")

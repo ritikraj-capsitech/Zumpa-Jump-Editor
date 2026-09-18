@@ -79,24 +79,38 @@ static func get_default_level() -> LevelData:
 	var loaded = load_level_data("res://Levels/level_001.tres")
 	if loaded:
 		return loaded
+	var all_paths = get_all_level_paths()
+	if all_paths.size() > 0:
+		return load_level_data(all_paths[0])
 	return create_default_level_1()
 
 static func ensure_default_levels() -> void:
-	if not DirAccess.dir_exists_absolute("res://Levels"):
-		DirAccess.make_dir_recursive_absolute("res://Levels")
+	var dir_path := "res://Levels"
+	if not DirAccess.dir_exists_absolute(dir_path):
+		DirAccess.make_dir_recursive_absolute(dir_path)
 
-	if not ResourceLoader.exists("res://Levels/level_001.tres"):
+	var has_levels := false
+	var dir := DirAccess.open(dir_path)
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if not dir.current_is_dir() and file_name.ends_with(".tres"):
+				has_levels = true
+				break
+			file_name = dir.get_next()
+		dir.list_dir_end()
+
+	# Only generate a starter level_001.tres if res://Levels/ is completely empty
+	if not has_levels:
 		var l1 = create_default_level_1()
 		save_level_data(l1, "res://Levels/level_001.tres")
-
-	if not ResourceLoader.exists("res://Levels/level_002.tres"):
-		var l2 = create_default_level_2()
-		save_level_data(l2, "res://Levels/level_002.tres")
 
 static func create_default_level_1() -> LevelData:
 	var lvl := LevelData.new()
 	lvl.level_id = "level_001"
-	lvl.level_name = "Level 1 - Beginning"
+	lvl.level_name = "Level 1 - Forest Hills"
+	lvl.world_theme = "world_1"
 	lvl.player_start = Vector2(529, 1135)
 	lvl.level_size = Vector2(1080, 3000)
 
@@ -117,7 +131,8 @@ static func create_default_level_1() -> LevelData:
 static func create_default_level_2() -> LevelData:
 	var lvl := LevelData.new()
 	lvl.level_id = "level_002"
-	lvl.level_name = "Level 2 - Moving Obstacle Challenge"
+	lvl.level_name = "Level 2 - Desert Challenge"
+	lvl.world_theme = "world_2"
 	lvl.player_start = Vector2(529, 1135)
 	lvl.level_size = Vector2(1080, 3500)
 
@@ -139,3 +154,28 @@ static func create_default_level_2() -> LevelData:
 
 	return lvl
 
+static func create_default_level_3() -> LevelData:
+	var lvl := LevelData.new()
+	lvl.level_id = "level_003"
+	lvl.level_name = "Level 3 - Cyber Zone"
+	lvl.world_theme = "world_3"
+	lvl.player_start = Vector2(529, 1135)
+	lvl.level_size = Vector2(1080, 3500)
+
+	# Platform
+	var plt := ObjectData.new("platform", Vector2(540, 1839), 0.0, Vector2(1, 1))
+	lvl.add_object(plt)
+
+	# Obs2 (Moving & Rotating Obstacle)
+	var obs2 := ObjectData.new("obs_2", Vector2(369, 204), 0.0, Vector2(1, 1), {"rotation_speed": 2.0, "move_speed": 100.0, "move_distance": 200.0})
+	lvl.add_object(obs2)
+
+	# Obs1 (Rotating)
+	var obs1 := ObjectData.new("obs_1", Vector2(569, 684), 0.0, Vector2(1, 1), {"rotation_speed": 2.0})
+	lvl.add_object(obs1)
+
+	# WinArea
+	var win := ObjectData.new("win_area", Vector2(571, -627), 0.0, Vector2(1, 1))
+	lvl.add_object(win)
+
+	return lvl

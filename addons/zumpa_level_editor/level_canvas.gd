@@ -11,13 +11,14 @@ signal level_data_modified()
 
 var level_data: LevelData = null
 var selected_object: ObjectData = null
-var active_placement_id: String = "" # "" for select mode, "player_start" or object_id
+var active_placement_id: String = "" # "" for select mode, "player_start", "tile_brush", or object_id
 
 var is_dragging: bool = false
 var drag_offset: Vector2 = Vector2.ZERO
 
 var preview_nodes: Dictionary = {} # ObjectData -> Node2D
 var player_start_preview: Node2D = null
+var canvas_tilemap: TileMapLayer = null
 
 # Canvas offset mapping: World (0,0) is at Canvas (100, 2000)
 var origin_offset: Vector2 = Vector2(100, 2000)
@@ -35,6 +36,7 @@ func refresh_canvas() -> void:
 	for child in get_children():
 		child.queue_free()
 	preview_nodes.clear()
+	canvas_tilemap = null
 
 	if not level_data:
 		update_canvas_size()
@@ -42,6 +44,21 @@ func refresh_canvas() -> void:
 		return
 
 	update_canvas_size()
+
+	# Create TileMapLayer Preview on Canvas
+	canvas_tilemap = TileMapLayer.new()
+	canvas_tilemap.name = "CanvasTileMap"
+	canvas_tilemap.tile_set = WorldThemeRegistry.create_tileset_for_theme(level_data.world_theme)
+	canvas_tilemap.position = origin_offset
+	add_child(canvas_tilemap)
+
+	# Render saved TileMap cells
+	if level_data.tile_data.size() > 0:
+		for cell in level_data.tile_data:
+			var coords := Vector2i(cell.get("x", 0), cell.get("y", 0))
+			var source_id: int = cell.get("source_id", 0)
+			var atlas_coords := Vector2i(cell.get("atlas_x", 0), cell.get("atlas_y", 0))
+			canvas_tilemap.set_cell(coords, source_id, atlas_coords)
 
 	# Create Player Start Marker preview
 	var p_start_node := Node2D.new()
@@ -93,6 +110,41 @@ func snap_pos(w_pos: Vector2) -> Vector2:
 	var sy = snapped(w_pos.y, grid_size)
 	return Vector2(sx, sy)
 
+func place_tile_at(w_pos: Vector2) -> void:
+	if not level_data:
+		return
+	var cell_x = int(floor(w_pos.x / 64.0))
+	var cell_y = int(floor(w_pos.y / 64.0))
+
+	# Check if tile already exists
+	for cell in level_data.tile_data:
+		if cell.get("x", 0) == cell_x and cell.get("y", 0) == cell_y:
+			return
+
+	level_data.tile_data.append({
+		"x": cell_x,
+		"y": cell_y,
+		"source_id": 0,
+		"atlas_x": 0,
+		"atlas_y": 0
+	})
+	refresh_canvas()
+	emit_signal("level_data_modified")
+
+func erase_tile_at(w_pos: Vector2) -> void:
+	if not level_data:
+		return
+	var cell_x = int(floor(w_pos.x / 64.0))
+	var cell_y = int(floor(w_pos.y / 64.0))
+
+	for i in range(level_data.tile_data.size() - 1, -1, -1):
+		var cell = level_data.tile_data[i]
+		if cell.get("x", 0) == cell_x and cell.get("y", 0) == cell_y:
+			level_data.tile_data.remove_at(i)
+			refresh_canvas()
+			emit_signal("level_data_modified")
+			return
+
 func _gui_input(event: InputEvent) -> void:
 	if not level_data:
 		return
@@ -104,7 +156,11 @@ func _gui_input(event: InputEvent) -> void:
 				var c_pos = mb.position
 				var w_pos = canvas_to_world(c_pos)
 
-				if active_placement_id == "player_start":
+				if active_placement_id == "tile_brush":
+					place_tile_at(w_pos)
+				elif active_placement_id == "tile_eraser":
+					erase_tile_at(w_pos)
+				elif active_placement_id == "player_start":
 					level_data.player_start = snap_pos(w_pos)
 					if player_start_preview:
 						player_start_preview.position = world_to_canvas(level_data.player_start)
@@ -142,17 +198,27 @@ func _gui_input(event: InputEvent) -> void:
 					is_dragging = false
 					emit_signal("level_data_modified")
 
-	elif event is InputEventMouseMotion and is_dragging:
+		elif mb.button_index == MOUSE_BUTTON_RIGHT and mb.pressed:
+			var w_pos = canvas_to_world(mb.position)
+			erase_tile_at(w_pos)
+
+	elif event is InputEventMouseMotion:
 		var mm := event as InputEventMouseMotion
-		if selected_object:
-			var w_pos = canvas_to_world(mm.position) + drag_offset
-			selected_object.position = snap_pos(w_pos)
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			var w_pos = canvas_to_world(mm.position)
+			if active_placement_id == "tile_brush":
+				place_tile_at(w_pos)
+			elif active_placement_id == "tile_eraser":
+				erase_tile_at(w_pos)
+			elif is_dragging and selected_object:
+				var target_pos = canvas_to_world(mm.position) + drag_offset
+				selected_object.position = snap_pos(target_pos)
 
-			if preview_nodes.has(selected_object):
-				preview_nodes[selected_object].position = world_to_canvas(selected_object.position)
+				if preview_nodes.has(selected_object):
+					preview_nodes[selected_object].position = world_to_canvas(selected_object.position)
 
-			emit_signal("object_moved", selected_object)
-			queue_redraw()
+				emit_signal("object_moved", selected_object)
+				queue_redraw()
 
 func find_object_at_canvas_pos(c_pos: Vector2) -> ObjectData:
 	var w_pos = canvas_to_world(c_pos)
@@ -176,8 +242,11 @@ func _draw() -> void:
 	var left_c_x = world_to_canvas(Vector2(0, 0)).x
 	var right_c_x = world_to_canvas(Vector2(1080, 0)).x
 
-	# Fill portrait playable corridor with subtle tint
-	draw_rect(Rect2(Vector2(left_c_x, top_c_y), Vector2(1080, bot_c_y - top_c_y)), Color(0.1, 0.1, 0.2, 0.15))
+	# Fill portrait playable corridor with subtle theme tint
+	var theme_info = WorldThemeRegistry.get_theme(level_data.world_theme)
+	var t_color: Color = theme_info.get("theme_color", Color(0.1, 0.1, 0.2, 0.15))
+	var fill_color := Color(t_color.r, t_color.g, t_color.b, 0.12)
+	draw_rect(Rect2(Vector2(left_c_x, top_c_y), Vector2(1080, bot_c_y - top_c_y)), fill_color)
 
 	# Boundary side lines
 	draw_line(Vector2(left_c_x, top_c_y), Vector2(left_c_x, bot_c_y), Color(0.2, 0.8, 1.0, 0.8), 3.0)

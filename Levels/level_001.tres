@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://lvl001tretba"]
+[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://k5jp2vn2phbs"]
 
 [ext_resource type="Script" uid="uid://bjdghriqpswf0" path="res://Scripts/level_data.gd" id="1_lvl"]
 [ext_resource type="Script" uid="uid://duog4ubo06jj2" path="res://Scripts/object_data.gd" id="2_obj"]
@@ -10,19 +10,19 @@ position = Vector2(540, 1839)
 
 [sub_resource type="Resource" id="Resource_lvtey"]
 script = ExtResource("2_obj")
-object_id = "win_area"
-position = Vector2(571, -627)
-
-[sub_resource type="Resource" id="Resource_t7hda"]
-script = ExtResource("2_obj")
 object_id = "obs_1"
-position = Vector2(791, 632)
+position = Vector2(785, 519)
 properties = {
 "rotation_speed": 2.0
 }
 
+[sub_resource type="Resource" id="Resource_t7hda"]
+script = ExtResource("2_obj")
+object_id = "win_area"
+position = Vector2(571, -627)
+
 [resource]
 script = ExtResource("1_lvl")
-level_name = "New Level"
+level_name = "Level 1 - Forest Hills"
 level_size = Vector2(1080, 3000)
 objects = Array[ExtResource("2_obj")]([SubResource("Resource_06sw6"), SubResource("Resource_lvtey"), SubResource("Resource_t7hda")])

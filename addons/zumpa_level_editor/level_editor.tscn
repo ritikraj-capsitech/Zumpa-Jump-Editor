@@ -328,6 +328,14 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "New Level"
 
+[node name="ThemeLbl" type="Label" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=1085531706]
+layout_mode = 2
+text = "World Theme:"
+
+[node name="WorldThemeOpt" type="OptionButton" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=11507]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="WidthLbl" type="Label" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=562263494]
 layout_mode = 2
 text = "Width:"

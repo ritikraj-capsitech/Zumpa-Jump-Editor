@@ -1,7 +1,6 @@
 @tool
 class_name LevelLoader
 
-static var wall_texture: Texture2D = preload("res://Sprite/LVLFrames/Union.png")
 static var player_prefab: PackedScene = preload("res://Scenes/Player.tscn")
 
 static func load_level(level_data: LevelData, container: Node) -> CharacterBody2D:
@@ -13,8 +12,11 @@ static func load_level(level_data: LevelData, container: Node) -> CharacterBody2
 	for child in container.get_children():
 		child.queue_free()
 
+	var theme_info = WorldThemeRegistry.get_theme(level_data.world_theme)
+
 	# 1. Spawn Player
 	var player: CharacterBody2D = player_prefab.instantiate() as CharacterBody2D
+	player.z_index = 10
 	player.position = level_data.player_start
 
 	# Determine fall threshold (lowest Y position in level + padding)
@@ -26,14 +28,33 @@ static func load_level(level_data: LevelData, container: Node) -> CharacterBody2
 
 	container.add_child(player)
 
-	# 2. Spawn Side Boundaries
-	spawn_boundaries(level_data, container)
+	# 2. Spawn TileMap / TileMapLayer World Terrain
+	spawn_world_tilemap(level_data, container)
 
-	# 3. Spawn Level Objects
+	# 3. Spawn Side Boundaries
+	spawn_boundaries(level_data, container, theme_info)
+
+	# 4. Spawn Level Objects
 	for obj_data in level_data.objects:
 		spawn_object(obj_data, container)
 
 	return player
+
+static func spawn_world_tilemap(level_data: LevelData, container: Node) -> Node:
+	var tilemap_layer := TileMapLayer.new()
+	tilemap_layer.name = "WorldTileMap"
+	tilemap_layer.tile_set = WorldThemeRegistry.create_tileset_for_theme(level_data.world_theme)
+
+	# Render saved tile map cells
+	if level_data.tile_data.size() > 0:
+		for cell in level_data.tile_data:
+			var coords := Vector2i(cell.get("x", 0), cell.get("y", 0))
+			var source_id: int = cell.get("source_id", 0)
+			var atlas_coords := Vector2i(cell.get("atlas_x", 0), cell.get("atlas_y", 0))
+			tilemap_layer.set_cell(coords, source_id, atlas_coords)
+
+	container.add_child(tilemap_layer)
+	return tilemap_layer
 
 static func spawn_object(obj_data: ObjectData, container: Node) -> Node2D:
 	if not obj_data:
@@ -56,7 +77,12 @@ static func spawn_object(obj_data: ObjectData, container: Node) -> Node2D:
 	container.add_child(node)
 	return node
 
-static func spawn_boundaries(level_data: LevelData, container: Node) -> void:
+static func spawn_boundaries(level_data: LevelData, container: Node, theme_info: Dictionary) -> void:
+	var wall_path: String = theme_info.get("wall_texture", "res://Sprite/LVLFrames/Union.png")
+	var wall_texture: Texture2D = null
+	if ResourceLoader.exists(wall_path):
+		wall_texture = load(wall_path)
+
 	# Calculate vertical range needed for boundaries
 	var min_y: float = -level_data.level_size.y
 	var max_y: float = 2000.0
@@ -77,9 +103,10 @@ static func spawn_boundaries(level_data: LevelData, container: Node) -> void:
 		left_wall.name = "LeftWall_" + str(int(current_y))
 		left_wall.position = Vector2(-255, current_y)
 
-		var left_sprite := Sprite2D.new()
-		left_sprite.texture = wall_texture
-		left_wall.add_child(left_sprite)
+		if wall_texture:
+			var left_sprite := Sprite2D.new()
+			left_sprite.texture = wall_texture
+			left_wall.add_child(left_sprite)
 
 		var left_col := CollisionShape2D.new()
 		var left_rect := RectangleShape2D.new()
@@ -96,9 +123,10 @@ static func spawn_boundaries(level_data: LevelData, container: Node) -> void:
 		right_wall.position = Vector2(1320, current_y)
 		right_wall.rotation = PI
 
-		var right_sprite := Sprite2D.new()
-		right_sprite.texture = wall_texture
-		right_wall.add_child(right_sprite)
+		if wall_texture:
+			var right_sprite := Sprite2D.new()
+			right_sprite.texture = wall_texture
+			right_wall.add_child(right_sprite)
 
 		var right_col := CollisionShape2D.new()
 		var right_rect := RectangleShape2D.new()

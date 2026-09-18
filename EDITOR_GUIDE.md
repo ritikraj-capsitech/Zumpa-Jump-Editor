@@ -1,29 +1,37 @@
 # Zumpa Editor Guide & Documentation
 
-This document explains the architecture of the **Zumpa Jump Level Editor** system, how levels and objects are structured, and step-by-step instructions on how to add a new obstacle to the editor.
+This document explains the architecture of the **Zumpa Jump Level Editor & Multi-World System**, how levels, TileMaps, and objects are structured, and step-by-step instructions on how to add a new obstacle or world theme.
 
 ---
 
-## 1. How the Editor Works
+## 1. How the Editor & World Architecture Works
 
-The Zumpa Editor is built around a data-driven node instantiation architecture in Godot 4. Instead of manually placing scene nodes in every level, levels are saved as lightweight data resources (`.tres`) and constructed dynamically at runtime.
+The Zumpa Editor is built around a data-driven node instantiation architecture in Godot 4. Levels are saved as lightweight data resources (`.tres`) and constructed dynamically at runtime with custom **TileMaps**, background visuals, side boundary frames, and placeable objects.
 
 ### Key Architecture Components
 
 ```
 +------------------------------------------------------------------+
 |                          LevelData (.tres)                       |
-|  - level_id / level_name                                         |
+|  - level_id / level_name / world_theme                           |
 |  - player_start / level_size                                     |
 |  - objects: Array[ObjectData]                                    |
+|  - tile_data: Array[Dictionary]                                  |
++------------------------------------------------------------------+
+								  |
+								  v
++------------------------------------------------------------------+
+|                       WorldThemeRegistry                         |
+|  Maps world_theme -> TileSet, Background, Wall Textures          |
 +------------------------------------------------------------------+
 								  |
 								  v
 +------------------------------------------------------------------+
 |                            LevelLoader                           |
 |  1. Spawns Player (res://Scenes/Player.tscn)                     |
-|  2. Spawns side wall boundaries dynamically                      |
-|  3. Iterates over objects -> calls ObjectRegistry.instantiate    |
+|  2. Spawns dynamic TileMapLayer for World Terrain                |
+|  3. Spawns side wall boundaries dynamically per world theme      |
+|  4. Iterates over objects -> calls ObjectRegistry.instantiate    |
 +------------------------------------------------------------------+
 								  |
 								  v
@@ -33,172 +41,43 @@ The Zumpa Editor is built around a data-driven node instantiation architecture i
 +------------------------------------------------------------------+
 ```
 
-1. **[`ObjectData`](file:///e:/Zumpa%20Jump/zumpa-editor/Scripts/object_data.gd)**
-   - Represents a single object instance placed in a level.
-   - Stores: `object_id`, `position`, `rotation`, `scale`, and a `properties` dictionary (for custom runtime properties like `rotation_speed`).
+1. **[`WorldThemeRegistry`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/world_theme_registry.gd)**
+   - Maps world theme IDs (e.g. `"world_1"`, `"world_2"`, `"world_3"`) to background images, dynamic side wall textures, platform textures, and TileSet resources.
 
-2. **[`LevelData`](file:///e:/Zumpa%20Jump/zumpa-editor/Scripts/level_data.gd)**
-   - The primary resource holding level configurations (`level_id`, `level_name`, `player_start`, `level_size`, and an array of `ObjectData` entries).
+2. **[`LevelData`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/level_data.gd)**
+   - Resource holding level metadata (`level_id`, `level_name`, `world_theme`, `player_start`, `level_size`, `objects`, and `tile_data`).
 
-3. **[`ObjectRegistry`](file:///e:/Zumpa%20Jump/zumpa-editor/Scripts/object_registry.gd)**
-   - Central dictionary mapping `object_id` strings (e.g. `"obs_1"`, `"platform"`, `"win_area"`) to:
-	 - `name`: Display Name
-	 - `scene_path`: Path to Godot scene (`res://Obstacle/...`)
-	 - `category`: Group classification (`Obstacles`, `Platforms`, `Triggers`)
-	 - `default_properties`: Dictionary of default property values
-	 - `default_scale`: Base scale `Vector2`
-   - Supplies `instantiate_object(id)` to load and instantiate packed scenes.
+3. **[`ObjectRegistry`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/object_registry.gd)**
+   - Central dictionary mapping `object_id` strings (e.g. `"obs_1"`, `"obs_2"`, `"platform"`, `"win_area"`) to display names, scene paths, categories, and default properties.
 
-4. **[`LevelLoader`](file:///e:/Zumpa%20Jump/zumpa-editor/Scripts/level_loader.gd)**
-   - Takes a `LevelData` resource and a parent container node (`$LevelRoot`).
-   - Clears existing nodes, spawns the player at `player_start`, generates side wall boundaries, instantiates each `ObjectData` using `ObjectRegistry`, and applies overrides (position, rotation, scale, custom properties).
-
-5. **[`LevelManager`](file:///e:/Zumpa%20Jump/zumpa-editor/Scripts/level_manager.gd)**
-   - Manages saving and loading of `.tres` level files via Godot's `ResourceSaver` and `ResourceLoader`.
+4. **[`LevelLoader`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/level_loader.gd)**
+   - Takes a `LevelData` resource and instantiates a Godot 4 `TileMapLayer` (`$LevelRoot/WorldTileMap`), player node, theme side wall boundaries, and placed objects.
 
 ---
 
-## 2. How to Add a New Obstacle to the Editor
+## 2. How to Add a New World Theme
 
-Follow these **4 steps** to create and register a new obstacle in the Zumpa Editor.
-
----
-
-### Step 1: Create the Obstacle Scene & Script
-
-1. **Create Scene**: Create a new PackedScene in Godot and save it in `res://Obstacle/` (e.g. `res://Obstacle/obs_2.tscn`).
-2. **Node Hierarchy Example**:
-   ```
-   StaticBody2D (or Area2D)  <-- Add to group "obstacle"
-   ├── Sprite2D (or AnimatedSprite2D)
-   └── CollisionShape2D
-   ```
-3. **Assign to Group**: In Godot's Node inspector tab, add the root node to the `"obstacle"` group (or assign in script `add_to_group("obstacle")`) so the player detects collision and triggers game over.
-4. **Attach Script**: Create a script (e.g. `res://Scripts/obs_2.gd`) and attach it to the root node. Define any customizable parameters using `@export`:
+1. Open [`Scripts/world_theme_registry.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/world_theme_registry.gd).
+2. Add a new theme entry to `_themes` dictionary:
 
 ```gdscript
-extends StaticBody2D
-
-@export var move_speed: float = 100.0
-@export var move_distance: float = 200.0
-
-var start_x: float = 0.0
-var direction: int = 1
-
-func _ready() -> void:
-	start_x = position.x
-	add_to_group("obstacle")
-
-func _physics_process(delta: float) -> void:
-	position.x += direction * move_speed * delta
-	if abs(position.x - start_x) >= move_distance:
-		direction *= -1
-```
-
----
-
-### Step 2: Register the Obstacle in `ObjectRegistry`
-
-Open [`Scripts/object_registry.gd`](file:///e:/Zumpa%20Jump/zumpa-editor/Scripts/object_registry.gd) and add your new obstacle entry to the `_registry` dictionary:
-
-```gdscript
-static var _registry: Dictionary = {
-	"obs_1": {
-		"id": "obs_1",
-		"name": "Rotating Obstacle 1",
-		"scene_path": "res://Obstacle/obs_1.tscn",
-		"category": "Obstacles",
-		"default_properties": {"rotation_speed": 2.0},
-		"default_scale": Vector2(1, 1)
-	},
-	"obs_2": {
-		"id": "obs_2",
-		"name": "Moving Obstacle 2",
-		"scene_path": "res://Obstacle/obs_2.tscn",
-		"category": "Obstacles",
-		"default_properties": {"move_speed": 100.0, "move_distance": 200.0},
-		"default_scale": Vector2(1, 1)
-	},
-	"platform": {
-		"id": "platform",
-		"name": "Ground Platform",
-		"scene_path": "res://Obstacle/platform.tscn",
-		"category": "Platforms",
-		"default_properties": {},
-		"default_scale": Vector2(1, 1)
-	},
-	"win_area": {
-		"id": "win_area",
-		"name": "Win Area",
-		"scene_path": "res://Scenes/win_area_node.tscn",
-		"category": "Triggers",
-		"default_properties": {},
-		"default_scale": Vector2(1, 1)
-	}
+"world_4": {
+	"id": "world_4",
+	"name": "World 4 - Volcano Pass",
+	"background": "res://Sprite/ENV/setting screen-3.png",
+	"wall_texture": "res://Sprite/LVLFrames/Union (6).png",
+	"platform_texture": "res://Sprite/ENV/Group 218.png",
+	"theme_color": Color(0.9, 0.2, 0.2, 1.0)
 }
 ```
 
-*Alternative*: You can also call `ObjectRegistry.register_object()` dynamically at runtime if registered from an plugin or external script:
-
-```gdscript
-ObjectRegistry.register_object(
-	"obs_2",
-	"Moving Obstacle 2",
-	"res://Obstacle/obs_2.tscn",
-	"Obstacles",
-	{"move_speed": 100.0, "move_distance": 200.0},
-	Vector2(1, 1)
-)
-```
+3. The new world theme will automatically appear in the **World Theme** dropdown inside the Level Editor toolbar and adapt the level background, tile set, side walls, and HUD graphics upon selection!
 
 ---
 
-### Step 3: Add the Obstacle to a Level
+## 3. How to Add a New Obstacle to the Editor
 
-You can add the new obstacle to a level either in GDScript or by adding it inside level resource files (`.tres`).
-
-#### In GDScript:
-```gdscript
-var new_obstacle = ObjectData.new(
-	"obs_2",                            # object_id matching registry
-	Vector2(500, 800),                  # Position
-	0.0,                                # Rotation in degrees
-	Vector2(1, 1),                      # Scale
-	{"move_speed": 150.0, "move_distance": 300.0} # Custom property overrides
-)
-
-level_data.add_object(new_obstacle)
-LevelManager.save_level_data(level_data, "res://Levels/level_001.tres")
-```
-
-#### In Level `.tres` Files:
-```ini
-[sub_resource type="Resource" id="Resource_obs2"]
-script = ExtResource("2_obj")
-object_id = "obs_2"
-position = Vector2(500, 800)
-properties = {
-"move_distance": 300.0,
-"move_speed": 150.0
-}
-```
-
----
-
-### Step 4: Verify and Load
-
-When [`LevelLoader.load_level()`](file:///e:/Zumpa%20Jump/zumpa-editor/Scripts/level_loader.gd) runs:
-1. `ObjectRegistry.instantiate_object("obs_2")` creates an instance of `res://Obstacle/obs_2.tscn`.
-2. `LevelLoader` assigns `position`, `rotation_degrees`, and `scale`.
-3. `LevelLoader` iterates over `properties` dictionary (`move_speed`, `move_distance`) and sets `node.set(prop_name, prop_value)`.
-4. The node is added to the level container tree automatically!
-
----
-
-## Summary Checklist for Adding Obstacles
-
-- [ ] Save scene to `res://Obstacle/your_obstacle.tscn`
-- [ ] Add root node to group `"obstacle"` for player collision handling
-- [ ] Script with exported property variables (`@export`)
-- [ ] Add entry in [`Scripts/object_registry.gd`](file:///e:/Zumpa%20Jump/zumpa-editor/Scripts/object_registry.gd)
-- [ ] Instantiated automatically via [`LevelLoader`](file:///e:/Zumpa%20Jump/zumpa-editor/Scripts/level_loader.gd)
+1. **Create Scene**: Create a PackedScene in `res://Obstacle/` (e.g. `res://Obstacle/obs_3.tscn`).
+2. **Assign Group**: Add root node to group `"obstacle"`.
+3. **Script with Exports**: Attach GDScript defining `@export` properties.
+4. **Register**: Add entry in [`Scripts/object_registry.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/object_registry.gd).

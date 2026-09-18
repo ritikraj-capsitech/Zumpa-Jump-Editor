@@ -4,9 +4,11 @@ class_name LevelData
 
 @export var level_id: String = "level_001"
 @export var level_name: String = "Level 1"
+@export var world_theme: String = "world_1"
 @export var player_start: Vector2 = Vector2(529, 1135)
 @export var level_size: Vector2 = Vector2(1080, 2500)
 @export var objects: Array[ObjectData] = []
+@export var tile_data: Array[Dictionary] = []
 
 func add_object(obj_data: ObjectData) -> void:
 	objects.append(obj_data)

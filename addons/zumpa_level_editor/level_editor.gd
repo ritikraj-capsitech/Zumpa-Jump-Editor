@@ -36,6 +36,7 @@ extends Control
 # Bottom Bar
 @onready var level_id_edit: LineEdit = %LevelIDEdit
 @onready var level_name_edit: LineEdit = %LevelNameEdit
+@onready var world_theme_opt: OptionButton = %WorldThemeOpt
 @onready var width_spin: SpinBox = %WidthSpin
 @onready var height_spin: SpinBox = %HeightSpin
 @onready var player_x_spin: SpinBox = %PlayerXSpin
@@ -49,9 +50,11 @@ var current_level: LevelData = null
 var current_level_path: String = "res://Levels/level_001.tres"
 var tool_buttons: Dictionary = {}
 var level_paths_list: Array[String] = []
+var world_theme_keys: Array[String] = []
 
 func _ready() -> void:
 	setup_grid_options()
+	setup_world_theme_options()
 	setup_palette()
 	connect_signals()
 	populate_level_selector()
@@ -70,6 +73,16 @@ func setup_grid_options() -> void:
 	grid_size_opt.add_item("64 px", 64)
 	grid_size_opt.add_item("128 px", 128)
 	grid_size_opt.select(1) # 32px default
+
+func setup_world_theme_options() -> void:
+	world_theme_opt.clear()
+	world_theme_keys.clear()
+	var themes = WorldThemeRegistry.get_all_themes()
+	var idx = 0
+	for key in themes:
+		world_theme_keys.append(key)
+		world_theme_opt.add_item(themes[key].get("name", key), idx)
+		idx += 1
 
 func setup_palette() -> void:
 	for child in palette_container.get_children():
@@ -92,6 +105,22 @@ func setup_palette() -> void:
 	p_btn.pressed.connect(func(): set_active_tool("player_start", p_btn))
 	palette_container.add_child(p_btn)
 	tool_buttons["player_start"] = p_btn
+
+	# Tile Brush Tool
+	var tb_btn := Button.new()
+	tb_btn.text = "🧱 Draw Tile"
+	tb_btn.toggle_mode = true
+	tb_btn.pressed.connect(func(): set_active_tool("tile_brush", tb_btn))
+	palette_container.add_child(tb_btn)
+	tool_buttons["tile_brush"] = tb_btn
+
+	# Tile Eraser Tool
+	var te_btn := Button.new()
+	te_btn.text = "🧹 Erase Tile"
+	te_btn.toggle_mode = true
+	te_btn.pressed.connect(func(): set_active_tool("tile_eraser", te_btn))
+	palette_container.add_child(te_btn)
+	tool_buttons["tile_eraser"] = te_btn
 
 	# Separator
 	var sep := HSeparator.new()
@@ -156,6 +185,11 @@ func connect_signals() -> void:
 	# Bottom bar edits
 	level_id_edit.text_changed.connect(func(t): if current_level: current_level.level_id = t)
 	level_name_edit.text_changed.connect(func(t): if current_level: current_level.level_name = t)
+	world_theme_opt.item_selected.connect(func(idx):
+		if current_level and idx >= 0 and idx < world_theme_keys.size():
+			current_level.world_theme = world_theme_keys[idx]
+			canvas.queue_redraw()
+	)
 	width_spin.value_changed.connect(func(v):
 		if current_level:
 			current_level.level_size.x = v
@@ -197,6 +231,7 @@ func new_level() -> void:
 	current_level = LevelData.new()
 	current_level.level_id = new_id
 	current_level.level_name = "Level %d" % new_num
+	current_level.world_theme = "world_1"
 	current_level.player_start = Vector2(529, 1135)
 	current_level.level_size = Vector2(1080, 3000)
 
@@ -220,6 +255,14 @@ func load_level(lvl: LevelData, path: String) -> void:
 
 	level_id_edit.text = lvl.level_id
 	level_name_edit.text = lvl.level_name
+	
+	# Select world theme in option button
+	var theme_idx = world_theme_keys.find(lvl.world_theme)
+	if theme_idx != -1:
+		world_theme_opt.select(theme_idx)
+	else:
+		world_theme_opt.select(0)
+
 	width_spin.value = lvl.level_size.x
 	height_spin.value = lvl.level_size.y
 	player_x_spin.value = lvl.player_start.x
