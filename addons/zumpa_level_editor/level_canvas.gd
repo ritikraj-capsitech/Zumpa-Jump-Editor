@@ -20,6 +20,8 @@ var preview_nodes: Dictionary = {} # ObjectData -> Node2D
 var player_start_preview: Node2D = null
 var canvas_tilemap: TileMapLayer = null
 
+var current_tile_atlas: Vector2i = Vector2i(1, 1)
+
 # Canvas offset mapping: World (0,0) is at Canvas (100, 2000)
 var origin_offset: Vector2 = Vector2(100, 2000)
 
@@ -119,24 +121,28 @@ func snap_pos(w_pos: Vector2) -> Vector2:
 func place_tile_at(w_pos: Vector2) -> void:
 	if not level_data:
 		return
-	var theme_info = WorldThemeRegistry.get_theme(level_data.world_theme)
-	var def_atlas: Vector2i = theme_info.get("default_atlas_coords", Vector2i(1, 1))
 
 	# 48px tile size (16px * 3.0 scale)
 	var cell_x = int(floor(w_pos.x / 48.0))
 	var cell_y = int(floor(w_pos.y / 48.0))
 
-	# Check if tile already exists
-	for cell in level_data.tile_data:
+	# Check if tile already exists at cell
+	for i in range(level_data.tile_data.size()):
+		var cell = level_data.tile_data[i]
 		if cell.get("x", 0) == cell_x and cell.get("y", 0) == cell_y:
+			if cell.get("atlas_x", 0) != current_tile_atlas.x or cell.get("atlas_y", 0) != current_tile_atlas.y:
+				cell["atlas_x"] = current_tile_atlas.x
+				cell["atlas_y"] = current_tile_atlas.y
+				refresh_canvas()
+				emit_signal("level_data_modified")
 			return
 
 	level_data.tile_data.append({
 		"x": cell_x,
 		"y": cell_y,
 		"source_id": 0,
-		"atlas_x": def_atlas.x,
-		"atlas_y": def_atlas.y
+		"atlas_x": current_tile_atlas.x,
+		"atlas_y": current_tile_atlas.y
 	})
 	refresh_canvas()
 	emit_signal("level_data_modified")

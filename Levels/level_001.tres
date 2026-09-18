@@ -3,69 +3,305 @@
 [ext_resource type="Script" uid="uid://bjdghriqpswf0" path="res://Scripts/level_data.gd" id="1_lvl"]
 [ext_resource type="Script" uid="uid://duog4ubo06jj2" path="res://Scripts/object_data.gd" id="2_obj"]
 
-[sub_resource type="Resource" id="Resource_06sw6"]
-script = ExtResource("2_obj")
-object_id = "platform"
-position = Vector2(540, 1839)
-
-[sub_resource type="Resource" id="Resource_lvtey"]
+[sub_resource type="Resource" id="Resource_obs1"]
 script = ExtResource("2_obj")
 object_id = "obs_1"
-position = Vector2(785, 519)
+position = Vector2(540, 500)
 properties = {
 "rotation_speed": 2.0
 }
 
-[sub_resource type="Resource" id="Resource_t7hda"]
+[sub_resource type="Resource" id="Resource_win"]
 script = ExtResource("2_obj")
 object_id = "win_area"
-position = Vector2(571, -627)
+position = Vector2(540, -550)
 
 [resource]
 script = ExtResource("1_lvl")
 level_name = "Level 1 - Forest Hills"
+player_start = Vector2(529, 1100)
 level_size = Vector2(1080, 3000)
-objects = Array[ExtResource("2_obj")]([SubResource("Resource_06sw6"), SubResource("Resource_lvtey"), SubResource("Resource_t7hda")])
+objects = Array[ExtResource("2_obj")]([SubResource("Resource_obs1"), SubResource("Resource_win")])
 tile_data = Array[Dictionary]([{
+"atlas_x": 0,
+"atlas_y": 1,
+"source_id": 0,
+"x": 4,
+"y": 24
+}, {
 "atlas_x": 1,
 "atlas_y": 1,
 "source_id": 0,
+"x": 5,
+"y": 24
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 6,
+"y": 24
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 7,
+"y": 24
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 8,
+"y": 24
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 9,
+"y": 24
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 10,
+"y": 24
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 11,
+"y": 24
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 12,
+"y": 24
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 13,
+"y": 24
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 14,
+"y": 24
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 15,
+"y": 24
+}, {
+"atlas_x": 1,
+"atlas_y": 2,
+"source_id": 0,
+"x": 4,
+"y": 25
+}, {
+"atlas_x": 1,
+"atlas_y": 2,
+"source_id": 0,
+"x": 5,
+"y": 25
+}, {
+"atlas_x": 1,
+"atlas_y": 2,
+"source_id": 0,
+"x": 6,
+"y": 25
+}, {
+"atlas_x": 1,
+"atlas_y": 2,
+"source_id": 0,
+"x": 7,
+"y": 25
+}, {
+"atlas_x": 1,
+"atlas_y": 2,
+"source_id": 0,
+"x": 8,
+"y": 25
+}, {
+"atlas_x": 1,
+"atlas_y": 2,
+"source_id": 0,
+"x": 9,
+"y": 25
+}, {
+"atlas_x": 1,
+"atlas_y": 2,
+"source_id": 0,
+"x": 10,
+"y": 25
+}, {
+"atlas_x": 1,
+"atlas_y": 2,
+"source_id": 0,
+"x": 11,
+"y": 25
+}, {
+"atlas_x": 1,
+"atlas_y": 2,
+"source_id": 0,
+"x": 12,
+"y": 25
+}, {
+"atlas_x": 1,
+"atlas_y": 2,
+"source_id": 0,
+"x": 13,
+"y": 25
+}, {
+"atlas_x": 1,
+"atlas_y": 2,
+"source_id": 0,
+"x": 14,
+"y": 25
+}, {
+"atlas_x": 1,
+"atlas_y": 2,
+"source_id": 0,
+"x": 15,
+"y": 25
+}, {
+"atlas_x": 1,
+"atlas_y": 2,
+"source_id": 0,
+"x": 16,
+"y": 25
+}, {
+"atlas_x": 1,
+"atlas_y": 2,
+"source_id": 0,
+"x": 17,
+"y": 25
+}, {
+"atlas_x": 1,
+"atlas_y": 2,
+"source_id": 0,
+"x": 18,
+"y": 25
+}, {
+"atlas_x": 0,
+"atlas_y": 1,
+"source_id": 0,
 "x": 3,
-"y": 12
+"y": 18
 }, {
 "atlas_x": 1,
 "atlas_y": 1,
 "source_id": 0,
 "x": 4,
-"y": 12
+"y": 18
 }, {
 "atlas_x": 1,
 "atlas_y": 1,
 "source_id": 0,
 "x": 5,
-"y": 12
+"y": 18
 }, {
-"atlas_x": 1,
-"atlas_y": 1,
-"source_id": 0,
-"x": 5,
-"y": 13
-}, {
-"atlas_x": 1,
+"atlas_x": 0,
 "atlas_y": 1,
 "source_id": 0,
 "x": 4,
-"y": 13
+"y": 3
 }, {
 "atlas_x": 1,
 "atlas_y": 1,
 "source_id": 0,
-"x": 3,
-"y": 13
+"x": 5,
+"y": 3
 }, {
-"atlas_x": 7,
+"atlas_x": 1,
 "atlas_y": 1,
 "source_id": 0,
-"x": 5,
-"y": 14
+"x": 6,
+"y": 3
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 7,
+"y": 3
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 8,
+"y": 3
+}, {
+"atlas_x": 2,
+"atlas_y": 1,
+"source_id": 0,
+"x": 9,
+"y": 3
+}, {
+"atlas_x": 0,
+"atlas_y": 1,
+"source_id": 0,
+"x": 6,
+"y": -5
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 7,
+"y": -5
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 8,
+"y": -5
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 9,
+"y": -5
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 10,
+"y": -5
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 11,
+"y": -5
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 12,
+"y": -5
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 13,
+"y": -5
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 14,
+"y": -5
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 15,
+"y": -5
+}, {
+"atlas_x": 2,
+"atlas_y": 1,
+"source_id": 0,
+"x": 16,
+"y": -5
 }])

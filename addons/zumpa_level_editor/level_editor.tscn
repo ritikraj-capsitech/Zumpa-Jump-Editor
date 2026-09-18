@@ -303,6 +303,96 @@ layout_mode = 2
 disabled = true
 text = "Apply Changes"
 
+[node name="HSeparator2" type="HSeparator" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1690495358]
+layout_mode = 2
+
+[node name="TileHeader" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1993687638]
+layout_mode = 2
+text = "TILE PALETTE"
+horizontal_alignment = 1
+
+[node name="AtlasXRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1291381864]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/AtlasXRow" unique_id=691728352]
+layout_mode = 2
+text = "Atlas X: "
+
+[node name="AtlasXSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/AtlasXRow" unique_id=11420]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 30.0
+value = 1.0
+
+[node name="AtlasYRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1451166186]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/AtlasYRow" unique_id=323326097]
+layout_mode = 2
+text = "Atlas Y: "
+
+[node name="AtlasYSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/AtlasYRow" unique_id=11421]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 30.0
+value = 1.0
+
+[node name="PreviewCenter" type="CenterContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=11422]
+layout_mode = 2
+
+[node name="TilePreviewRect" type="TextureRect" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PreviewCenter" unique_id=11423]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PresetsLabel" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1993687639]
+layout_mode = 2
+text = "Quick Presets:"
+
+[node name="PresetGrid" type="GridContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=11424]
+layout_mode = 2
+columns = 2
+
+[node name="BtnGrassTop" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PresetGrid" unique_id=11425]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "🟩 Grass Top"
+
+[node name="BtnGrassLeft" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PresetGrid" unique_id=11426]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "↖️ Grass Left"
+
+[node name="BtnGrassRight" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PresetGrid" unique_id=11427]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "↗️ Grass Right"
+
+[node name="BtnDirt" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PresetGrid" unique_id=11428]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "🟫 Dirt"
+
+[node name="BtnSand" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PresetGrid" unique_id=11429]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "🏜️ Sand"
+
+[node name="BtnStone" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PresetGrid" unique_id=11430]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "🪨 Stone"
+
 [node name="BottomBarPanel" type="PanelContainer" parent="MainVBox" unique_id=1376739543]
 layout_mode = 2
 

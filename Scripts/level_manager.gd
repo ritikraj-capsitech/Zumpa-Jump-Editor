@@ -111,19 +111,55 @@ static func create_default_level_1() -> LevelData:
 	lvl.level_id = "level_001"
 	lvl.level_name = "Level 1 - Forest Hills"
 	lvl.world_theme = "world_1"
-	lvl.player_start = Vector2(529, 1135)
+	lvl.player_start = Vector2(529, 1100)
 	lvl.level_size = Vector2(1080, 3000)
 
-	# Pre-built TileMap Ground Platform
+	# Bottom ground
+	for cell_x in range(5, 18):
+		var ax = 1
+		if cell_x == 4: ax = 0
+		elif cell_x == 18: ax = 2
+		lvl.tile_data.append({"x": cell_x, "y": 24, "source_id": 0, "atlas_x": ax, "atlas_y": 1})
+		lvl.tile_data.append({"x": cell_x, "y": 25, "source_id": 0, "atlas_x": 1, "atlas_y": 2})
+
+	# Stepping platforms
+	for cell_x in range(3, 9):
+		var ax = 1
+		if cell_x == 3: ax = 0
+		elif cell_x == 8: ax = 2
+		lvl.tile_data.append({"x": cell_x, "y": 18, "source_id": 0, "atlas_x": ax, "atlas_y": 1})
+
+	for cell_x in range(13, 19):
+		var ax = 1
+		if cell_x == 13: ax = 0
+		elif cell_x == 18: ax = 2
+		lvl.tile_data.append({"x": cell_x, "y": 14, "source_id": 0, "atlas_x": ax, "atlas_y": 1})
+
+	for cell_x in range(7, 15):
+		var ax = 1
+		if cell_x == 7: ax = 0
+		elif cell_x == 14: ax = 2
+		lvl.tile_data.append({"x": cell_x, "y": 9, "source_id": 0, "atlas_x": ax, "atlas_y": 1})
+
+	for cell_x in range(4, 10):
+		var ax = 1
+		if cell_x == 4: ax = 0
+		elif cell_x == 9: ax = 2
+		lvl.tile_data.append({"x": cell_x, "y": 3, "source_id": 0, "atlas_x": ax, "atlas_y": 1})
+
+	# Top goal platform
 	for cell_x in range(6, 17):
-		lvl.tile_data.append({"x": cell_x, "y": 25, "source_id": 0, "atlas_x": 1, "atlas_y": 1})
+		var ax = 1
+		if cell_x == 6: ax = 0
+		elif cell_x == 16: ax = 2
+		lvl.tile_data.append({"x": cell_x, "y": -5, "source_id": 0, "atlas_x": ax, "atlas_y": 1})
 
 	# Obs1
-	var obs := ObjectData.new("obs_1", Vector2(785, 519), 0.0, Vector2(1, 1), {"rotation_speed": 2.0})
+	var obs := ObjectData.new("obs_1", Vector2(540, 500), 0.0, Vector2(1, 1), {"rotation_speed": 2.0})
 	lvl.add_object(obs)
 
 	# WinArea
-	var win := ObjectData.new("win_area", Vector2(571, -627), 0.0, Vector2(1, 1))
+	var win := ObjectData.new("win_area", Vector2(540, -550), 0.0, Vector2(1, 1))
 	lvl.add_object(win)
 
 	return lvl

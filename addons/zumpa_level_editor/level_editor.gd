@@ -33,6 +33,17 @@ extends Control
 @onready var prop_move_dist_row: HBoxContainer = %PropMoveDistRow
 @onready var apply_btn: Button = %ApplyBtn
 
+# Tile Palette Inspector
+@onready var atlas_x_spin: SpinBox = %AtlasXSpin
+@onready var atlas_y_spin: SpinBox = %AtlasYSpin
+@onready var tile_preview_rect: TextureRect = %TilePreviewRect
+@onready var btn_grass_top: Button = %BtnGrassTop
+@onready var btn_grass_left: Button = %BtnGrassLeft
+@onready var btn_grass_right: Button = %BtnGrassRight
+@onready var btn_dirt: Button = %BtnDirt
+@onready var btn_sand: Button = %BtnSand
+@onready var btn_stone: Button = %BtnStone
+
 # Bottom Bar
 @onready var level_id_edit: LineEdit = %LevelIDEdit
 @onready var level_name_edit: LineEdit = %LevelNameEdit
@@ -58,6 +69,7 @@ func _ready() -> void:
 	setup_palette()
 	connect_signals()
 	populate_level_selector()
+	update_tile_preview()
 
 	# Load initial default level
 	var loaded = LevelManager.get_default_level()
@@ -182,12 +194,26 @@ func connect_signals() -> void:
 
 	apply_btn.pressed.connect(apply_inspector_changes)
 
+	# Tile Palette signals
+	atlas_x_spin.value_changed.connect(func(_v): update_tile_preview())
+	atlas_y_spin.value_changed.connect(func(_v): update_tile_preview())
+
+	btn_grass_top.pressed.connect(func(): set_tile_atlas(1, 1))
+	btn_grass_left.pressed.connect(func(): set_tile_atlas(0, 1))
+	btn_grass_right.pressed.connect(func(): set_tile_atlas(2, 1))
+	btn_dirt.pressed.connect(func(): set_tile_atlas(1, 2))
+	btn_sand.pressed.connect(func(): set_tile_atlas(7, 1))
+	btn_stone.pressed.connect(func(): set_tile_atlas(11, 1))
+
 	# Bottom bar edits
 	level_id_edit.text_changed.connect(func(t): if current_level: current_level.level_id = t)
 	level_name_edit.text_changed.connect(func(t): if current_level: current_level.level_name = t)
 	world_theme_opt.item_selected.connect(func(idx):
 		if current_level and idx >= 0 and idx < world_theme_keys.size():
 			current_level.world_theme = world_theme_keys[idx]
+			var theme_info = WorldThemeRegistry.get_theme(current_level.world_theme)
+			var def_atlas: Vector2i = theme_info.get("default_atlas_coords", Vector2i(1, 1))
+			set_tile_atlas(def_atlas.x, def_atlas.y)
 			canvas.queue_redraw()
 	)
 	width_spin.value_changed.connect(func(v):
@@ -215,6 +241,22 @@ func connect_signals() -> void:
 
 	save_dialog.file_selected.connect(save_level_to_file)
 	load_dialog.file_selected.connect(load_level_from_file)
+
+func set_tile_atlas(ax: int, ay: int) -> void:
+	atlas_x_spin.value = ax
+	atlas_y_spin.value = ay
+	update_tile_preview()
+
+func update_tile_preview() -> void:
+	var ax = int(atlas_x_spin.value)
+	var ay = int(atlas_y_spin.value)
+	canvas.current_tile_atlas = Vector2i(ax, ay)
+
+	if ResourceLoader.exists("res://tiles/Terrain (16x16).png"):
+		var atlas_tex := AtlasTexture.new()
+		atlas_tex.atlas = load("res://tiles/Terrain (16x16).png")
+		atlas_tex.region = Rect2(ax * 16, ay * 16, 16, 16)
+		tile_preview_rect.texture = atlas_tex
 
 func on_level_selected_from_opt(idx: int) -> void:
 	if idx >= 0 and idx < level_paths_list.size():
@@ -255,13 +297,17 @@ func load_level(lvl: LevelData, path: String) -> void:
 
 	level_id_edit.text = lvl.level_id
 	level_name_edit.text = lvl.level_name
-	
+
 	# Select world theme in option button
 	var theme_idx = world_theme_keys.find(lvl.world_theme)
 	if theme_idx != -1:
 		world_theme_opt.select(theme_idx)
 	else:
 		world_theme_opt.select(0)
+
+	var theme_info = WorldThemeRegistry.get_theme(lvl.world_theme)
+	var def_atlas: Vector2i = theme_info.get("default_atlas_coords", Vector2i(1, 1))
+	set_tile_atlas(def_atlas.x, def_atlas.y)
 
 	width_spin.value = lvl.level_size.x
 	height_spin.value = lvl.level_size.y

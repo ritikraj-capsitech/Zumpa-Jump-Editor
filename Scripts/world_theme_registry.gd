@@ -32,6 +32,17 @@ static var _themes: Dictionary = {
 	}
 }
 
+static func register_theme(theme_id: String, display_name: String, bg_path: String, wall_path: String, platform_tile_path: String, default_atlas: Vector2i = Vector2i(1, 1), theme_color: Color = Color.WHITE) -> void:
+	_themes[theme_id] = {
+		"id": theme_id,
+		"name": display_name,
+		"background": bg_path,
+		"wall_texture": wall_path,
+		"platform_texture": platform_tile_path,
+		"default_atlas_coords": default_atlas,
+		"theme_color": theme_color
+	}
+
 static func get_all_themes() -> Dictionary:
 	return _themes
 
