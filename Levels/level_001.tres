@@ -11,7 +11,7 @@ position = Vector2(540, 1839)
 [sub_resource type="Resource" id="Resource_pej4d"]
 script = ExtResource("1_06sw6")
 object_id = "win_area"
-position = Vector2(571, -627)
+position = Vector2(541, -648)
 
 [sub_resource type="Resource" id="Resource_5esd3"]
 script = ExtResource("1_06sw6")

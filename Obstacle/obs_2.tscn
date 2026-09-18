@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b3knrufe3ektk"]
 
-[ext_resource type="Script" uid="uid://cyjbsc11mmipi" path="res://obs_2.gd" id="1_74o3y"]
+[ext_resource type="Script" uid="uid://cyjbsc11mmipi" path="res://Scripts/obs_2.gd" id="1_74o3y"]
 [ext_resource type="Texture2D" uid="uid://ddxl1miskniag" path="res://Sprite/Obstacles/Group 175.png" id="2_th1ew"]
 
 [node name="obs_2" type="StaticBody2D" unique_id=322931471 groups=["obstacle"]]

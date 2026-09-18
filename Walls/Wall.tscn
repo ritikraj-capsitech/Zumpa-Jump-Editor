@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cn8na3hpno1qu"]
+
+[ext_resource type="Texture2D" uid="uid://bylld7nv27f4b" path="res://Sprite/LVLFrames/Union.png" id="1_col5h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bb1o8"]
+size = Vector2(465, 2343)
+
+[node name="Wall" type="StaticBody2D" unique_id=314294487]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1130270306]
+position = Vector2(59.00389, -7.971254)
+shape = SubResource("RectangleShape2D_bb1o8")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=367683391]
+texture = ExtResource("1_col5h")

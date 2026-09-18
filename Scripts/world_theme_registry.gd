@@ -15,8 +15,8 @@ static var _themes: Dictionary = {
 	"world_2": {
 		"id": "world_2",
 		"name": "World 2 - Desert Sunset",
-		"background": "res://Sprite/ENV/setting screen-1.png",
-		"wall_texture": "res://Sprite/LVLFrames/Union (2).png",
+		"background": "res://Sprite/ENV/setting screen (1).png",
+		"wall_texture": "res://Sprite/LVLFrames/Union.png",
 		"platform_texture": "res://tiles/Terrain (16x16).png",
 		"default_atlas_coords": Vector2i(7, 1),
 		"theme_color": Color(0.9, 0.6, 0.2, 1.0)
@@ -24,8 +24,8 @@ static var _themes: Dictionary = {
 	"world_3": {
 		"id": "world_3",
 		"name": "World 3 - Cyber Night",
-		"background": "res://Sprite/ENV/setting screen-2.png",
-		"wall_texture": "res://Sprite/LVLFrames/Union (3).png",
+		"background": "res://Sprite/ENV/setting screen-3.png",
+		"wall_texture": "res://Sprite/LVLFrames/Union.png",
 		"platform_texture": "res://tiles/Terrain (16x16).png",
 		"default_atlas_coords": Vector2i(11, 1),
 		"theme_color": Color(0.2, 0.6, 1.0, 1.0)
