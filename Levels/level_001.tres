@@ -33,35 +33,55 @@ properties = {
 "rotation_speed": 2.0
 }
 
+[sub_resource type="Resource" id="Resource_06sw6"]
+script = ExtResource("1_06sw6")
+object_id = "wall"
+position = Vector2(-16, 1375)
+
+[sub_resource type="Resource" id="Resource_lvtey"]
+script = ExtResource("1_06sw6")
+object_id = "wall"
+position = Vector2(-16, 471)
+
+[sub_resource type="Resource" id="Resource_syybk"]
+script = ExtResource("1_06sw6")
+object_id = "wall"
+position = Vector2(24, -1304)
+
+[sub_resource type="Resource" id="Resource_aanc0"]
+script = ExtResource("1_06sw6")
+object_id = "wall"
+position = Vector2(1068, -536)
+rotation = 180.0
+
+[sub_resource type="Resource" id="Resource_w7dne"]
+script = ExtResource("1_06sw6")
+object_id = "wall"
+position = Vector2(1069, 370)
+rotation = 180.0
+
+[sub_resource type="Resource" id="Resource_kk30f"]
+script = ExtResource("1_06sw6")
+object_id = "wall"
+position = Vector2(1068, 1276)
+rotation = 180.0
+
+[sub_resource type="Resource" id="Resource_oktjj"]
+script = ExtResource("1_06sw6")
+object_id = "wall"
+position = Vector2(1066, -1441)
+rotation = 180.0
+
+[sub_resource type="Resource" id="Resource_w4ctq"]
+script = ExtResource("1_06sw6")
+object_id = "wall"
+position = Vector2(-16, -433)
+
 [resource]
 script = ExtResource("2_lvtey")
 level_size = Vector2(1080, 3000)
-objects = Array[ExtResource("1_06sw6")]([SubResource("Resource_t7hda"), SubResource("Resource_pej4d"), SubResource("Resource_5esd3"), SubResource("Resource_dgi6h")])
+objects = Array[ExtResource("1_06sw6")]([SubResource("Resource_t7hda"), SubResource("Resource_pej4d"), SubResource("Resource_5esd3"), SubResource("Resource_dgi6h"), SubResource("Resource_06sw6"), SubResource("Resource_lvtey"), SubResource("Resource_syybk"), SubResource("Resource_aanc0"), SubResource("Resource_w7dne"), SubResource("Resource_kk30f"), SubResource("Resource_oktjj"), SubResource("Resource_w4ctq")])
 tile_data = Array[Dictionary]([{
-"atlas_x": 1,
-"atlas_y": 1,
-"source_id": 0,
-"x": 0,
-"y": 17
-}, {
-"atlas_x": 1,
-"atlas_y": 1,
-"source_id": 0,
-"x": 1,
-"y": 17
-}, {
-"atlas_x": 1,
-"atlas_y": 1,
-"source_id": 0,
-"x": 2,
-"y": 17
-}, {
-"atlas_x": 1,
-"atlas_y": 1,
-"source_id": 0,
-"x": 3,
-"y": 17
-}, {
 "atlas_x": 1,
 "atlas_y": 1,
 "source_id": 0,

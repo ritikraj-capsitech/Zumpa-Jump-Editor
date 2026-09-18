@@ -31,8 +31,8 @@ static func load_level(level_data: LevelData, container: Node) -> CharacterBody2
 	# 2. Spawn TileMap / TileMapLayer World Terrain
 	spawn_world_tilemap(level_data, container)
 
-	# 3. Spawn Side Boundaries
-	spawn_boundaries(level_data, container, theme_info)
+	# 3. Spawn Side Boundaries (DISABLED - Placeable Wall objects are now used instead)
+	# spawn_boundaries(level_data, container, theme_info)
 
 	# 4. Spawn Level Objects
 	for obj_data in level_data.objects:
@@ -83,64 +83,64 @@ static func spawn_object(obj_data: ObjectData, container: Node) -> Node2D:
 	container.add_child(node)
 	return node
 
-static func spawn_boundaries(level_data: LevelData, container: Node, theme_info: Dictionary) -> void:
-	var wall_path: String = theme_info.get("wall_texture", "res://Sprite/LVLFrames/Union.png")
-	var wall_texture: Texture2D = null
-	if ResourceLoader.exists(wall_path):
-		wall_texture = load(wall_path)
-
-	# Calculate vertical range needed for boundaries
-	var min_y: float = -level_data.level_size.y
-	var max_y: float = 2000.0
-
-	for obj in level_data.objects:
-		if obj.position.y < min_y:
-			min_y = obj.position.y - 1000.0
-		if obj.position.y > max_y:
-			max_y = obj.position.y + 1000.0
-
-	var segment_height: float = 2343.0
-	var col_shape_size: Vector2 = Vector2(465, 2343)
-
-	var current_y: float = max_y
-	while current_y >= min_y:
-		# Left Wall Segment
-		var left_wall := StaticBody2D.new()
-		left_wall.name = "LeftWall_" + str(int(current_y))
-		left_wall.position = Vector2(-255, current_y)
-
-		if wall_texture:
-			var left_sprite := Sprite2D.new()
-			left_sprite.texture = wall_texture
-			left_wall.add_child(left_sprite)
-
-		var left_col := CollisionShape2D.new()
-		var left_rect := RectangleShape2D.new()
-		left_rect.size = col_shape_size
-		left_col.shape = left_rect
-		left_col.position = Vector2(69, -15)
-		left_wall.add_child(left_col)
-
-		container.add_child(left_wall)
-
-		# Right Wall Segment
-		var right_wall := StaticBody2D.new()
-		right_wall.name = "RightWall_" + str(int(current_y))
-		right_wall.position = Vector2(1320, current_y)
-		right_wall.rotation = PI
-
-		if wall_texture:
-			var right_sprite := Sprite2D.new()
-			right_sprite.texture = wall_texture
-			right_wall.add_child(right_sprite)
-
-		var right_col := CollisionShape2D.new()
-		var right_rect := RectangleShape2D.new()
-		right_rect.size = col_shape_size
-		right_col.shape = right_rect
-		right_col.position = Vector2(60, -8)
-		right_wall.add_child(right_col)
-
-		container.add_child(right_wall)
-
-		current_y -= segment_height
+# static func spawn_boundaries(level_data: LevelData, container: Node, theme_info: Dictionary) -> void:
+# 	var wall_path: String = theme_info.get("wall_texture", "res://Sprite/LVLFrames/Union.png")
+# 	var wall_texture: Texture2D = null
+# 	if ResourceLoader.exists(wall_path):
+# 		wall_texture = load(wall_path)
+# 
+# 	# Calculate vertical range needed for boundaries
+# 	var min_y: float = -level_data.level_size.y
+# 	var max_y: float = 2000.0
+# 
+# 	for obj in level_data.objects:
+# 		if obj.position.y < min_y:
+# 			min_y = obj.position.y - 1000.0
+# 		if obj.position.y > max_y:
+# 			max_y = obj.position.y + 1000.0
+# 
+# 	var segment_height: float = 2343.0
+# 	var col_shape_size: Vector2 = Vector2(465, 2343)
+# 
+# 	var current_y: float = max_y
+# 	while current_y >= min_y:
+# 		# Left Wall Segment
+# 		var left_wall := StaticBody2D.new()
+# 		left_wall.name = "LeftWall_" + str(int(current_y))
+# 		left_wall.position = Vector2(-255, current_y)
+# 
+# 		if wall_texture:
+# 			var left_sprite := Sprite2D.new()
+# 			left_sprite.texture = wall_texture
+# 			left_wall.add_child(left_sprite)
+# 
+# 		var left_col := CollisionShape2D.new()
+# 		var left_rect := RectangleShape2D.new()
+# 		left_rect.size = col_shape_size
+# 		left_col.shape = left_rect
+# 		left_col.position = Vector2(69, -15)
+# 		left_wall.add_child(left_col)
+# 
+# 		container.add_child(left_wall)
+# 
+# 		# Right Wall Segment
+# 		var right_wall := StaticBody2D.new()
+# 		right_wall.name = "RightWall_" + str(int(current_y))
+# 		right_wall.position = Vector2(1320, current_y)
+# 		right_wall.rotation = PI
+# 
+# 		if wall_texture:
+# 			var right_sprite := Sprite2D.new()
+# 			right_sprite.texture = wall_texture
+# 			right_wall.add_child(right_sprite)
+# 
+# 		var right_col := CollisionShape2D.new()
+# 		var right_rect := RectangleShape2D.new()
+# 		right_rect.size = col_shape_size
+# 		right_col.shape = right_rect
+# 		right_col.position = Vector2(60, -8)
+# 		right_wall.add_child(right_col)
+# 
+# 		container.add_child(right_wall)
+# 
+# 		current_y -= segment_height

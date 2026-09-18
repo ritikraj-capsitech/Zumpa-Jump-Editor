@@ -33,6 +33,14 @@ static var _registry: Dictionary = {
 		"category": "Triggers",
 		"default_properties": {},
 		"default_scale": Vector2(1, 1)
+	},
+	"wall": {
+		"id": "wall",
+		"name": "Wall",
+		"scene_path": "res://Walls/Wall.tscn",
+		"category": "Walls",
+		"default_properties": {},
+		"default_scale": Vector2(1, 1)
 	}
 }
 
