@@ -1,124 +1,142 @@
-# Zumpa Jump - Project Progress & Context Handover
+# Zumpa Jump - Complete Technical Architecture & Team Guide
 
-This document provides a complete state overview, architecture guide, and recent progress details for the **Zumpa Jump Level Editor & Gameplay System** in Godot 4.
+This document provides a complete technical specification, file map, architecture guide, and workflow manual for the **Zumpa Jump Level Editor & Gameplay System** in **Godot 4**.
 
 ---
 
-## 1. Project Overview & Architecture
+## 1. Executive Summary & System Architecture
 
-Zumpa Jump is a portrait-mode platformer built in **Godot 4**. The level architecture is data-driven: levels are saved as lightweight Resource files (`.tres` in `res://Levels/`) and loaded dynamically at runtime.
+Zumpa Jump is a data-driven portrait-mode platformer. Levels are saved as lightweight Resource files (`.tres` in `res://Levels/`) and loaded dynamically at runtime.
 
-### Key Components & Data Flow
+### Data Flow Diagram
 
 ```
-+------------------------------------------------------------------+
-|                          LevelData (.tres)                       |
-|  - level_id / level_name / world_theme                           |
-|  - player_start / level_size                                     |
-|  - objects: Array[ObjectData]                                    |
-|  - tile_data: Array[Dictionary]                                  |
-+------------------------------------------------------------------+
-                                  |
-                                  v
-+------------------------------------------------------------------+
-|                       WorldThemeRegistry                         |
-|  Maps world_theme -> TileSet, Background, Wall Textures          |
-+------------------------------------------------------------------+
-                                  |
-                                  v
-+------------------------------------------------------------------+
-|                            LevelLoader                           |
-|  1. Spawns Player (res://Scenes/Player.tscn)                     |
-|  2. Spawns dynamic TileMapLayer for World Terrain                |
-|  3. Spawns side wall boundaries dynamically per world theme      |
-|  4. Iterates over objects -> calls ObjectRegistry.instantiate    |
-+------------------------------------------------------------------+
-                                  |
-                                  v
-+------------------------------------------------------------------+
-|                          ObjectRegistry                          |
-|  Maps object_id -> Scene Path, Category, Default Properties      |
-+------------------------------------------------------------------+
++-------------------------------------------------------------------------+
+|                           LevelData (.tres)                             |
+|  - level_id / level_name / world_theme                                  |
+|  - player_start / level_size                                            |
+|  - objects: Array[ObjectData]                                           |
+|  - tile_data: Array[Dictionary]                                         |
++-------------------------------------------------------------------------+
+                                    |
+                                    v
++-------------------------------------------------------------------------+
+|                       WorldThemeRegistry                                |
+|  Maps world_theme -> TileSet, Background, Wall Textures, Theme Color    |
++-------------------------------------------------------------------------+
+                                    |
+                                    v
++-------------------------------------------------------------------------+
+|                            LevelLoader                                  |
+|  1. Spawns Player (res://Scenes/Player.tscn) with z_index = 10          |
+|  2. Spawns dynamic TileMapLayer (3x scale) for World Terrain            |
+|  3. Spawns side wall boundaries dynamically per world theme             |
+|  4. Iterates over objects -> calls ObjectRegistry.instantiate           |
++-------------------------------------------------------------------------+
+                                    |
+                                    v
++-------------------------------------------------------------------------+
+|                          ObjectRegistry                                 |
+|  Maps object_id -> Scene Path, Category, Default Properties             |
++-------------------------------------------------------------------------+
 ```
 
 ---
 
-## 2. Recent Progress & Completed Tasks
+## 2. Complete File & Script Map
 
-### A. TileMap & Multi-World Theme System (`WorldThemeRegistry.gd`, `level_loader.gd`, `game_play.gd`)
-- **World Registry**: Created [`WorldThemeRegistry.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/world_theme_registry.gd) registering themes:
-  - `"world_1"`: Forest Hills (Green BG, standard side walls, forest platforms).
-  - `"world_2"`: Desert Sunset (Sunset BG, desert side walls, desert platforms).
-  - `"world_3"`: Cyber Night (Cyber BG, cyber side walls, cyber platforms).
-- **TileMap Terrain**: [`LevelLoader.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/level_loader.gd) instantiates a Godot 4 `TileMapLayer` (`$LevelRoot/WorldTileMap`) dynamically built from the level's selected `world_theme`.
-- **Dynamic Backgrounds & HUD**: [`game_play.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/game_play.gd) updates background texture and HUD world labels dynamically as the player advances across levels/worlds.
-- **Editor Theme Picker**: Added **World Theme** dropdown (`WorldThemeOpt`) to the level editor bottom toolbar in [`level_editor.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/addons/zumpa_level_editor/level_editor.gd) with visual canvas tint updates in [`level_canvas.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/addons/zumpa_level_editor/level_canvas.gd).
+### A. Data Models & Registries (`res://Scripts/`)
 
-### B. Obstacle 2 Integration (`obs_2.tscn` & `obs_2.gd`)
-- **Node & Script**: `res://Obstacle/obs_2.tscn` and `res://obs_2.gd`.
-- **Group Registration**: Root `StaticBody2D` belongs to group `"obstacle"`. Contact with player triggers immediate Game Over.
-- **Physics Motion**: Performs simultaneous rotation and horizontal sine-wave movement using `rotation_speed`, `move_speed`, and `move_distance`.
-- **Registry Entry**: Added `"obs_2"` to [`ObjectRegistry`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/object_registry.gd) with default properties `{"rotation_speed": 2.0, "move_speed": 100.0, "move_distance": 200.0}`.
-- **Editor Inspector Support**: Extended [`level_editor.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/addons/zumpa_level_editor/level_editor.gd) to expose spinboxes for `Move Speed` and `Move Dist` when `obs_2` is selected.
+1. **[`Scripts/level_data.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/level_data.gd)**
+   - **Class**: `LevelData` (extends `Resource`)
+   - **Purpose**: Primary data structure saved in `.tres` level files.
+   - **Fields**:
+     - `@export var level_id: String` (e.g. `"level_001"`)
+     - `@export var level_name: String` (e.g. `"Level 1 - Forest Hills"`)
+     - `@export var world_theme: String` (e.g. `"world_1"`, `"world_2"`, `"world_3"`)
+     - `@export var player_start: Vector2` (Spawn coordinates)
+     - `@export var level_size: Vector2` (Playable dimensions)
+     - `@export var objects: Array[ObjectData]` (Placed obstacle instances)
+     - `@export var tile_data: Array[Dictionary]` (Saved TileMap cell coordinates & atlas IDs)
 
-### C. Multi-Level System (`LevelManager.gd`)
-- **Directory Scanning**: [`LevelManager`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/level_manager.gd) scans `res://Levels/` for `.tres` files (`get_all_level_paths()`) sorted in order.
-- **Sequential Level Navigation**: Added `get_next_level_path(current_path)` and `load_next_level()`.
-- **Default Level Generation**:
-  - `level_001.tres`: Level 1 - Forest Hills (`world_1`).
-  - `level_002.tres`: Level 2 - Desert Challenge (`world_2`).
-  - `level_003.tres`: Level 3 - Cyber Zone (`world_3`).
+2. **[`Scripts/object_data.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/object_data.gd)**
+   - **Class**: `ObjectData` (extends `Resource`)
+   - **Purpose**: Represents a single placed object instance.
+   - **Fields**: `object_id`, `position`, `rotation`, `scale`, `properties` dictionary.
 
----
+3. **[`Scripts/object_registry.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/object_registry.gd)**
+   - **Class**: `ObjectRegistry` (extends `RefCounted`)
+   - **Purpose**: Central lookup table for placeable level objects.
+   - **Registered Objects**:
+     - `obs_1`: Rotating Obstacle 1 (`res://Obstacle/obs_1.tscn`)
+     - `obs_2`: Moving & Rotating Obstacle 2 (`res://Obstacle/obs_2.tscn`)
+     - `platform`: Ground Platform (`res://Obstacle/platform.tscn`)
+     - `win_area`: Win Area Trigger (`res://Scenes/win_area_node.tscn`)
 
-## 3. World Themes & Object Registry Reference
-
-### World Themes ([`Scripts/world_theme_registry.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/world_theme_registry.gd))
-
-| Theme ID | Display Name | Background Image | Side Wall Texture | Platform Texture |
-|---|---|---|---|---|
-| `world_1` | World 1 - Forest Hills | `setting screen.png` | `Union.png` | `RecPlatform.png` |
-| `world_2` | World 2 - Desert Sunset | `setting screen-1.png` | `Union (2).png` | `Group 215.png` |
-| `world_3` | World 3 - Cyber Night | `setting screen-2.png` | `Union (3).png` | `Group 217.png` |
-
-### Placeable Objects ([`Scripts/object_registry.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/object_registry.gd))
-
-| `object_id` | Display Name | Scene Path | Category | Default Properties |
-|---|---|---|---|---|
-| `obs_1` | Rotating Obstacle 1 | `res://Obstacle/obs_1.tscn` | Obstacles | `{"rotation_speed": 2.0}` |
-| `obs_2` | Moving & Rotating Obstacle 2 | `res://Obstacle/obs_2.tscn` | Obstacles | `{"rotation_speed": 2.0, "move_speed": 100.0, "move_distance": 200.0}` |
-| `platform` | Ground Platform | `res://Obstacle/platform.tscn` | Platforms | `{}` |
-| `win_area` | Win Area | `res://Scenes/win_area_node.tscn` | Triggers | `{}` |
+4. **[`Scripts/world_theme_registry.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/world_theme_registry.gd)**
+   - **Class**: `WorldThemeRegistry` (extends `RefCounted`)
+   - **Purpose**: Manages multi-world themes and procedural TileSets.
+   - **Themes**:
+     - 🌲 `world_1` (Forest Hills): Green BG, forest side walls, `(1,1)` grass top atlas.
+     - 🏜️ `world_2` (Desert Sunset): Sunset BG, desert side walls, `(7,1)` sand top atlas.
+     - 🌃 `world_3` (Cyber Night): Cyber BG, cyber side walls, `(11,1)` stone top atlas.
+   - **Function**: `create_tileset_for_theme(theme_id)` programmatically generates a `TileSet` with a 16x16 `TileSetAtlasSource` (`res://tiles/Terrain (16x16).png`) and automatically attaches 2D physics collision polygons to all tiles.
 
 ---
 
-## 4. Key File Map
+### B. Core System & Gameplay (`res://Scripts/` & `res://Scenes/`)
 
-- **Data & World Models**:
-  - [`Scripts/level_data.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/level_data.gd) - Level resource class with `world_theme` & `tile_data`.
-  - [`Scripts/world_theme_registry.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/world_theme_registry.gd) - Registry for multi-world TileSets and visuals.
-  - [`Scripts/object_data.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/object_data.gd) - Placed object instance class.
-  - [`Scripts/object_registry.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/object_registry.gd) - Central object registry dictionary.
+1. **[`Scripts/level_loader.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/level_loader.gd)**
+   - **Class**: `LevelLoader` (extends `RefCounted`)
+   - **Purpose**: Instantiates runtime nodes from `LevelData`.
+   - **Workflow**:
+     1. Clears existing container nodes.
+     2. Spawns `Player` (`res://Scenes/Player.tscn`) at `player_start` with `z_index = 10`. Calculates `FALL_Y` threshold.
+     3. Spawns `TileMapLayer` (`$LevelRoot/WorldTileMap`) scaled 3x (48px effective tile size) with theme TileSet.
+     4. Spawns theme-specific dynamic side wall segments (`Union.png`, `Union (2).png`, `Union (3).png`).
+     5. Instantiates placed objects from `ObjectRegistry` with position/rotation/scale/property overrides.
 
-- **System Core**:
-  - [`Scripts/level_manager.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/level_manager.gd) - Multi-level loader, saver, and scanner.
-  - [`Scripts/level_loader.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/level_loader.gd) - Spawns TileMapLayer terrain, player, and dynamic boundaries into scene tree.
+2. **[`Scripts/level_manager.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/level_manager.gd)**
+   - **Class**: `LevelManager` (extends `RefCounted`)
+   - **Purpose**: Handles level file saving, loading, directory scanning (`res://Levels/`), and level progression (`get_next_level_path()`).
 
-- **Gameplay & Player**:
-  - [`Scripts/character_body_2d.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/character_body_2d.gd) - Player movement, obstacle collision, Game Over, and Win UI with Level transition.
-  - [`Scripts/game_play.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/game_play.gd) - Gameplay scene manager with dynamic background & Level/World HUD.
-  - [`Scenes/game_play.tscn`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scenes/game_play.tscn) - Main game play scene.
+3. **[`Scripts/game_play.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/game_play.gd)**
+   - **Class**: `GamePlay` (extends `Control`)
+   - **Purpose**: Controls `res://Scenes/game_play.tscn`. Applies theme background textures (`z_index = -100`) and displays in-game HUD overlay.
 
-- **Editor Addon**:
-  - [`addons/zumpa_level_editor/level_editor.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/addons/zumpa_level_editor/level_editor.gd) - Editor plugin main UI script with World Theme picker.
-  - [`addons/zumpa_level_editor/level_editor.tscn`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/addons/zumpa_level_editor/level_editor.tscn) - Editor scene layout.
-  - [`addons/zumpa_level_editor/level_canvas.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/addons/zumpa_level_editor/level_canvas.gd) - Drag & drop level editing canvas with theme color hints.
+4. **[`Scripts/character_body_2d.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/character_body_2d.gd)**
+   - **Class**: `CharacterBody2D` (Player)
+   - **Purpose**: Player physics movement (keyboard + mobile touch), ground bounce, obstacle contact game over, and win condition dialogs (`▶ NEXT LEVEL`).
 
 ---
 
-## 5. Instructions for Antigravity AI
+### C. Obstacles (`res://Obstacle/` & Root)
 
-1. Refer to `PROGRESS_CONTEXT.md` and `EDITOR_GUIDE.md`.
-2. All level `.tres` files reside in `res://Levels/`.
-3. To add a new World Theme:
-   - Add entry in [`Scripts/world_theme_registry.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/world_theme_registry.gd) with background image path, wall texture path, and platform texture path.
+1. **[`Scripts/obs_1.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/obs_1.gd)**: Rotates continuously (`rotation += rotation_speed * delta`). Belongs to group `"obstacle"`.
+2. **[`obs_2.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/obs_2.gd)**: Simultaneous rotation and horizontal sine-wave movement (`position.x = start_x + sin(...) * move_distance`). Belongs to group `"obstacle"`.
+
+---
+
+### D. Level Editor Addon (`res://addons/zumpa_level_editor/`)
+
+1. **[`zumpa_level_editor.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/addons/zumpa_level_editor/zumpa_level_editor.gd)**: Godot `EditorPlugin` script registering the level editor main tab.
+2. **[`level_editor.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/addons/zumpa_level_editor/level_editor.gd)**: Main UI script managing toolbar buttons, level dropdown, world theme selector, tile palette spinboxes, and object property inspectors.
+3. **[`level_canvas.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/addons/zumpa_level_editor/level_canvas.gd)**: 2D drawing viewport canvas:
+   - Draws mathematically aligned 48px tile grid lines.
+   - Draws real-time green/red hover cursor box highlights (`hover_cell`).
+   - Handles tile brush painting/erasing and object drag-and-drop.
+4. **[`level_editor.tscn`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/addons/zumpa_level_editor/level_editor.tscn)**: UI scene layout featuring Top Bar, Left Palette, Center Scrollable Canvas, Right Inspector (with Tile Palette zoom preview), and Bottom Bar.
+
+---
+
+## 3. How to Extend the Project (Team Manual)
+
+### How to Add a New Obstacle
+1. Create a PackedScene in `res://Obstacle/` (e.g. `res://Obstacle/obs_3.tscn`).
+2. Add root node to group `"obstacle"`.
+3. Attach script with `@export` properties.
+4. Add entry to [`Scripts/object_registry.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/object_registry.gd).
+
+### How to Add a New World Theme
+1. Open [`Scripts/world_theme_registry.gd`](file:///e:/Zumpa%20Jump/Zumpa-Jump-Editor/Scripts/world_theme_registry.gd).
+2. Add a new theme definition to `_themes` dictionary or call `WorldThemeRegistry.register_theme(...)`.
