@@ -6,17 +6,23 @@ extends Control
 func _ready() -> void:
 	var lvl_data: LevelData = LevelManager.get_default_level()
 	if lvl_data:
-		apply_world_theme(lvl_data)
-		LevelLoader.load_level(lvl_data, level_root)
+		var player = LevelLoader.load_level(lvl_data, level_root)
+		apply_world_theme(lvl_data, player)
 		setup_hud(lvl_data)
 	else:
 		push_error("GamePlay: Failed to obtain LevelData")
 
-func apply_world_theme(lvl_data: LevelData) -> void:
+func apply_world_theme(lvl_data: LevelData, player: Node2D = null) -> void:
 	var theme_info = WorldThemeRegistry.get_theme(lvl_data.world_theme)
 	var bg_path: String = theme_info.get("background", "res://Sprite/ENV/setting screen.png")
-	if bg_texture_rect and ResourceLoader.exists(bg_path):
-		bg_texture_rect.texture = load(bg_path)
+	if ResourceLoader.exists(bg_path):
+		var bg_tex = load(bg_path)
+		if player and player.has_node("Camera2D/TextureRect"):
+			var p_bg = player.get_node("Camera2D/TextureRect") as TextureRect
+			if p_bg:
+				p_bg.texture = bg_tex
+				p_bg.z_index = -100
+				p_bg.z_as_relative = false
 
 func setup_hud(lvl_data: LevelData) -> void:
 	var theme_info = WorldThemeRegistry.get_theme(lvl_data.world_theme)

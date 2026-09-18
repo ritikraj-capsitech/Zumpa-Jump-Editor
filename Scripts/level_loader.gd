@@ -19,6 +19,16 @@ static func load_level(level_data: LevelData, container: Node) -> CharacterBody2
 	player.z_index = 10
 	player.position = level_data.player_start
 
+	# Apply world theme background texture to Player's Camera2D/TextureRect
+	if player.has_node("Camera2D/TextureRect"):
+		var bg_path: String = theme_info.get("background", "res://Sprite/ENV/setting screen.png")
+		if ResourceLoader.exists(bg_path):
+			var p_bg = player.get_node("Camera2D/TextureRect") as TextureRect
+			if p_bg:
+				p_bg.texture = load(bg_path)
+				p_bg.z_index = -100
+				p_bg.z_as_relative = false
+
 	# Determine fall threshold (lowest Y position in level + padding)
 	var lowest_y: float = level_data.player_start.y + 800.0
 	for obj in level_data.objects:
