@@ -26,3 +26,46 @@ script = ExtResource("1_lvl")
 level_name = "Level 1 - Forest Hills"
 level_size = Vector2(1080, 3000)
 objects = Array[ExtResource("2_obj")]([SubResource("Resource_06sw6"), SubResource("Resource_lvtey"), SubResource("Resource_t7hda")])
+tile_data = Array[Dictionary]([{
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 3,
+"y": 12
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 4,
+"y": 12
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 5,
+"y": 12
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 5,
+"y": 13
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 4,
+"y": 13
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 3,
+"y": 13
+}, {
+"atlas_x": 7,
+"atlas_y": 1,
+"source_id": 0,
+"x": 5,
+"y": 14
+}])

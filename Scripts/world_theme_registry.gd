@@ -8,7 +8,8 @@ static var _themes: Dictionary = {
 		"name": "World 1 - Forest Hills",
 		"background": "res://Sprite/ENV/setting screen.png",
 		"wall_texture": "res://Sprite/LVLFrames/Union.png",
-		"platform_texture": "res://Sprite/ENV/RecPlatform.png",
+		"platform_texture": "res://tiles/Terrain (16x16).png",
+		"default_atlas_coords": Vector2i(1, 1),
 		"theme_color": Color(0.2, 0.8, 0.4, 1.0)
 	},
 	"world_2": {
@@ -16,7 +17,8 @@ static var _themes: Dictionary = {
 		"name": "World 2 - Desert Sunset",
 		"background": "res://Sprite/ENV/setting screen-1.png",
 		"wall_texture": "res://Sprite/LVLFrames/Union (2).png",
-		"platform_texture": "res://Sprite/ENV/Group 215.png",
+		"platform_texture": "res://tiles/Terrain (16x16).png",
+		"default_atlas_coords": Vector2i(7, 1),
 		"theme_color": Color(0.9, 0.6, 0.2, 1.0)
 	},
 	"world_3": {
@@ -24,7 +26,8 @@ static var _themes: Dictionary = {
 		"name": "World 3 - Cyber Night",
 		"background": "res://Sprite/ENV/setting screen-2.png",
 		"wall_texture": "res://Sprite/LVLFrames/Union (3).png",
-		"platform_texture": "res://Sprite/ENV/Group 217.png",
+		"platform_texture": "res://tiles/Terrain (16x16).png",
+		"default_atlas_coords": Vector2i(11, 1),
 		"theme_color": Color(0.2, 0.6, 1.0, 1.0)
 	}
 }
@@ -40,34 +43,41 @@ static func get_theme(theme_id: String) -> Dictionary:
 static func create_tileset_for_theme(theme_id: String) -> TileSet:
 	var theme_info = get_theme(theme_id)
 	var tileset := TileSet.new()
-	tileset.tile_size = Vector2i(64, 64)
+	tileset.tile_size = Vector2i(16, 16)
 
 	# 1. Add physics collision layer FIRST
 	tileset.add_physics_layer(0)
 	tileset.set_physics_layer_collision_layer(0, 1)
 	tileset.set_physics_layer_collision_mask(0, 1)
 
-	var tex_path: String = theme_info.get("platform_texture", "res://Sprite/ENV/RecPlatform.png")
+	var tex_path: String = theme_info.get("platform_texture", "res://tiles/Terrain (16x16).png")
 	if ResourceLoader.exists(tex_path):
 		var tex: Texture2D = load(tex_path)
 		var atlas_source := TileSetAtlasSource.new()
 		atlas_source.texture = tex
-		atlas_source.texture_region_size = Vector2i(64, 64)
+		atlas_source.texture_region_size = Vector2i(16, 16)
 
-		# 2. Add atlas source to TileSet FIRST so physics layer index 0 is known
+		# 2. Add atlas source to TileSet FIRST
 		tileset.add_source(atlas_source, 0)
 
-		# 3. Create tile and assign collision polygon
-		atlas_source.create_tile(Vector2i(0, 0))
-		var tile_data = atlas_source.get_tile_data(Vector2i(0, 0), 0)
-		if tile_data:
-			var poly = PackedVector2Array([
-				Vector2(-32, -32),
-				Vector2(32, -32),
-				Vector2(32, 32),
-				Vector2(-32, 32)
-			])
-			tile_data.add_collision_polygon(0)
-			tile_data.set_collision_polygon_points(0, 0, poly)
+		# 3. Populate tiles across the texture sheet
+		var tex_size = tex.get_size()
+		var cols = int(tex_size.x / 16)
+		var rows = int(tex_size.y / 16)
+
+		for y in range(rows):
+			for x in range(cols):
+				var coords := Vector2i(x, y)
+				atlas_source.create_tile(coords)
+				var tile_data = atlas_source.get_tile_data(coords, 0)
+				if tile_data:
+					var poly = PackedVector2Array([
+						Vector2(-8, -8),
+						Vector2(8, -8),
+						Vector2(8, 8),
+						Vector2(-8, 8)
+					])
+					tile_data.add_collision_polygon(0)
+					tile_data.set_collision_polygon_points(0, 0, poly)
 
 	return tileset

@@ -101,7 +101,7 @@ static func ensure_default_levels() -> void:
 			file_name = dir.get_next()
 		dir.list_dir_end()
 
-	# Only generate a starter level_001.tres if res://Levels/ is completely empty
+	# Only generate starter level_001.tres if res://Levels/ is completely empty
 	if not has_levels:
 		var l1 = create_default_level_1()
 		save_level_data(l1, "res://Levels/level_001.tres")
@@ -114,9 +114,9 @@ static func create_default_level_1() -> LevelData:
 	lvl.player_start = Vector2(529, 1135)
 	lvl.level_size = Vector2(1080, 3000)
 
-	# Platform
-	var plt := ObjectData.new("platform", Vector2(540, 1839), 0.0, Vector2(1, 1))
-	lvl.add_object(plt)
+	# Pre-built TileMap Ground Platform
+	for cell_x in range(6, 17):
+		lvl.tile_data.append({"x": cell_x, "y": 25, "source_id": 0, "atlas_x": 1, "atlas_y": 1})
 
 	# Obs1
 	var obs := ObjectData.new("obs_1", Vector2(785, 519), 0.0, Vector2(1, 1), {"rotation_speed": 2.0})
@@ -136,9 +136,9 @@ static func create_default_level_2() -> LevelData:
 	lvl.player_start = Vector2(529, 1135)
 	lvl.level_size = Vector2(1080, 3500)
 
-	# Platform
-	var plt := ObjectData.new("platform", Vector2(540, 1839), 0.0, Vector2(1, 1))
-	lvl.add_object(plt)
+	# Pre-built TileMap Ground Platform
+	for cell_x in range(5, 18):
+		lvl.tile_data.append({"x": cell_x, "y": 25, "source_id": 0, "atlas_x": 7, "atlas_y": 1})
 
 	# Obs1 (Rotating)
 	var obs1 := ObjectData.new("obs_1", Vector2(300, 800), 0.0, Vector2(1, 1), {"rotation_speed": 2.5})
@@ -162,9 +162,9 @@ static func create_default_level_3() -> LevelData:
 	lvl.player_start = Vector2(529, 1135)
 	lvl.level_size = Vector2(1080, 3500)
 
-	# Platform
-	var plt := ObjectData.new("platform", Vector2(540, 1839), 0.0, Vector2(1, 1))
-	lvl.add_object(plt)
+	# Pre-built TileMap Ground Platform
+	for cell_x in range(4, 19):
+		lvl.tile_data.append({"x": cell_x, "y": 25, "source_id": 0, "atlas_x": 11, "atlas_y": 1})
 
 	# Obs2 (Moving & Rotating Obstacle)
 	var obs2 := ObjectData.new("obs_2", Vector2(369, 204), 0.0, Vector2(1, 1), {"rotation_speed": 2.0, "move_speed": 100.0, "move_distance": 200.0})

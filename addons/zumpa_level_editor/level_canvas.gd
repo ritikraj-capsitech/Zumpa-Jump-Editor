@@ -45,11 +45,16 @@ func refresh_canvas() -> void:
 
 	update_canvas_size()
 
+	var theme_info = WorldThemeRegistry.get_theme(level_data.world_theme)
+	var def_atlas: Vector2i = theme_info.get("default_atlas_coords", Vector2i(1, 1))
+
 	# Create TileMapLayer Preview on Canvas
 	canvas_tilemap = TileMapLayer.new()
 	canvas_tilemap.name = "CanvasTileMap"
 	canvas_tilemap.tile_set = WorldThemeRegistry.create_tileset_for_theme(level_data.world_theme)
 	canvas_tilemap.position = origin_offset
+	canvas_tilemap.scale = Vector2(3.0, 3.0) # 16px * 3 = 48px tile size
+	canvas_tilemap.z_index = 2
 	add_child(canvas_tilemap)
 
 	# Render saved TileMap cells
@@ -57,8 +62,9 @@ func refresh_canvas() -> void:
 		for cell in level_data.tile_data:
 			var coords := Vector2i(cell.get("x", 0), cell.get("y", 0))
 			var source_id: int = cell.get("source_id", 0)
-			var atlas_coords := Vector2i(cell.get("atlas_x", 0), cell.get("atlas_y", 0))
-			canvas_tilemap.set_cell(coords, source_id, atlas_coords)
+			var atlas_x: int = cell.get("atlas_x", def_atlas.x)
+			var atlas_y: int = cell.get("atlas_y", def_atlas.y)
+			canvas_tilemap.set_cell(coords, source_id, Vector2i(atlas_x, atlas_y))
 
 	# Create Player Start Marker preview
 	var p_start_node := Node2D.new()
@@ -113,8 +119,12 @@ func snap_pos(w_pos: Vector2) -> Vector2:
 func place_tile_at(w_pos: Vector2) -> void:
 	if not level_data:
 		return
-	var cell_x = int(floor(w_pos.x / 64.0))
-	var cell_y = int(floor(w_pos.y / 64.0))
+	var theme_info = WorldThemeRegistry.get_theme(level_data.world_theme)
+	var def_atlas: Vector2i = theme_info.get("default_atlas_coords", Vector2i(1, 1))
+
+	# 48px tile size (16px * 3.0 scale)
+	var cell_x = int(floor(w_pos.x / 48.0))
+	var cell_y = int(floor(w_pos.y / 48.0))
 
 	# Check if tile already exists
 	for cell in level_data.tile_data:
@@ -125,8 +135,8 @@ func place_tile_at(w_pos: Vector2) -> void:
 		"x": cell_x,
 		"y": cell_y,
 		"source_id": 0,
-		"atlas_x": 0,
-		"atlas_y": 0
+		"atlas_x": def_atlas.x,
+		"atlas_y": def_atlas.y
 	})
 	refresh_canvas()
 	emit_signal("level_data_modified")
@@ -134,8 +144,8 @@ func place_tile_at(w_pos: Vector2) -> void:
 func erase_tile_at(w_pos: Vector2) -> void:
 	if not level_data:
 		return
-	var cell_x = int(floor(w_pos.x / 64.0))
-	var cell_y = int(floor(w_pos.y / 64.0))
+	var cell_x = int(floor(w_pos.x / 48.0))
+	var cell_y = int(floor(w_pos.y / 48.0))
 
 	for i in range(level_data.tile_data.size() - 1, -1, -1):
 		var cell = level_data.tile_data[i]

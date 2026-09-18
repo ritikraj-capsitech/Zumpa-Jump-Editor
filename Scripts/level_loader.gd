@@ -41,17 +41,23 @@ static func load_level(level_data: LevelData, container: Node) -> CharacterBody2
 	return player
 
 static func spawn_world_tilemap(level_data: LevelData, container: Node) -> Node:
+	var theme_info = WorldThemeRegistry.get_theme(level_data.world_theme)
+	var def_atlas: Vector2i = theme_info.get("default_atlas_coords", Vector2i(1, 1))
+
 	var tilemap_layer := TileMapLayer.new()
 	tilemap_layer.name = "WorldTileMap"
 	tilemap_layer.tile_set = WorldThemeRegistry.create_tileset_for_theme(level_data.world_theme)
+	tilemap_layer.scale = Vector2(3.0, 3.0) # 16px * 3 = 48px tile size
+	tilemap_layer.z_index = 2
 
 	# Render saved tile map cells
 	if level_data.tile_data.size() > 0:
 		for cell in level_data.tile_data:
 			var coords := Vector2i(cell.get("x", 0), cell.get("y", 0))
 			var source_id: int = cell.get("source_id", 0)
-			var atlas_coords := Vector2i(cell.get("atlas_x", 0), cell.get("atlas_y", 0))
-			tilemap_layer.set_cell(coords, source_id, atlas_coords)
+			var atlas_x: int = cell.get("atlas_x", def_atlas.x)
+			var atlas_y: int = cell.get("atlas_y", def_atlas.y)
+			tilemap_layer.set_cell(coords, source_id, Vector2i(atlas_x, atlas_y))
 
 	container.add_child(tilemap_layer)
 	return tilemap_layer
