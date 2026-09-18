@@ -11,7 +11,7 @@ signal level_data_modified()
 
 var level_data: LevelData = null
 var selected_object: ObjectData = null
-var active_placement_id: String = "" # "" for select mode, "player_start", "tile_brush", or object_id
+var active_placement_id: String = "" # "" for select mode, "player_start", "tile_brush", "tile_eraser", or object_id
 
 var is_dragging: bool = false
 var drag_offset: Vector2 = Vector2.ZERO
@@ -21,6 +21,7 @@ var player_start_preview: Node2D = null
 var canvas_tilemap: TileMapLayer = null
 
 var current_tile_atlas: Vector2i = Vector2i(1, 1)
+var hover_cell: Vector2i = Vector2i(-9999, -9999)
 
 # Canvas offset mapping: World (0,0) is at Canvas (100, 2000)
 var origin_offset: Vector2 = Vector2(100, 2000)
@@ -220,8 +221,10 @@ func _gui_input(event: InputEvent) -> void:
 
 	elif event is InputEventMouseMotion:
 		var mm := event as InputEventMouseMotion
+		var w_pos = canvas_to_world(mm.position)
+		hover_cell = Vector2i(int(floor(w_pos.x / 48.0)), int(floor(w_pos.y / 48.0)))
+
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-			var w_pos = canvas_to_world(mm.position)
 			if active_placement_id == "tile_brush":
 				place_tile_at(w_pos)
 			elif active_placement_id == "tile_eraser":
@@ -234,7 +237,8 @@ func _gui_input(event: InputEvent) -> void:
 					preview_nodes[selected_object].position = world_to_canvas(selected_object.position)
 
 				emit_signal("object_moved", selected_object)
-				queue_redraw()
+		
+		queue_redraw()
 
 func find_object_at_canvas_pos(c_pos: Vector2) -> ObjectData:
 	var w_pos = canvas_to_world(c_pos)
@@ -270,15 +274,36 @@ func _draw() -> void:
 	draw_line(Vector2(left_c_x, top_c_y), Vector2(right_c_x, top_c_y), Color(1.0, 0.3, 0.3, 0.8), 3.0) # Top Goal boundary
 	draw_line(Vector2(left_c_x, bot_c_y), Vector2(right_c_x, bot_c_y), Color(1.0, 0.8, 0.2, 0.8), 3.0) # Bottom threshold boundary
 
-	# Draw Grid Overlay if enabled
-	if grid_snap and grid_size > 0:
-		var g_color := Color(1.0, 1.0, 1.0, 0.08)
-		var start_x = int(left_c_x)
-		var end_x = int(right_c_x)
-		for x in range(start_x, end_x + 1, grid_size):
-			draw_line(Vector2(x, top_c_y), Vector2(x, bot_c_y), g_color, 1.0)
-		for y in range(int(top_c_y), int(bot_c_y) + 1, grid_size):
-			draw_line(Vector2(left_c_x, y), Vector2(right_c_x, y), g_color, 1.0)
+	# Draw 48px Tile Grid Overlay aligned mathematically with cell coordinates
+	var is_tile_tool = (active_placement_id == "tile_brush" or active_placement_id == "tile_eraser")
+	if grid_snap or is_tile_tool:
+		var tile_step: float = 48.0 if is_tile_tool else float(grid_size)
+		var g_color := Color(1.0, 1.0, 1.0, 0.22) if is_tile_tool else Color(1.0, 1.0, 1.0, 0.08)
+
+		var min_cx = int(floor(0.0 / tile_step))
+		var max_cx = int(ceil(1080.0 / tile_step))
+		for cx in range(min_cx, max_cx + 1):
+			var line_c_x = cx * tile_step + origin_offset.x
+			draw_line(Vector2(line_c_x, top_c_y), Vector2(line_c_x, bot_c_y), g_color, 1.0)
+
+		var min_cy = int(floor(-level_data.level_size.y / tile_step)) - 1
+		var max_cy = int(ceil(2000.0 / tile_step)) + 1
+		for cy in range(min_cy, max_cy + 1):
+			var line_c_y = cy * tile_step + origin_offset.y
+			draw_line(Vector2(left_c_x, line_c_y), Vector2(right_c_x, line_c_y), g_color, 1.0)
+
+	# Draw Tile Brush / Eraser Mouse Cursor Grid Box Highlight
+	if is_tile_tool and hover_cell != Vector2i(-9999, -9999):
+		var cell_w_pos = Vector2(hover_cell.x * 48.0, hover_cell.y * 48.0)
+		var cell_c_pos = world_to_canvas(cell_w_pos)
+		var cell_rect := Rect2(cell_c_pos, Vector2(48, 48))
+
+		if active_placement_id == "tile_brush":
+			draw_rect(cell_rect, Color(0.2, 1.0, 0.5, 0.35))
+			draw_rect(cell_rect, Color(0.2, 1.0, 0.5, 0.9), false, 2.0)
+		elif active_placement_id == "tile_eraser":
+			draw_rect(cell_rect, Color(1.0, 0.3, 0.3, 0.35))
+			draw_rect(cell_rect, Color(1.0, 0.3, 0.3, 0.9), false, 2.0)
 
 	# Draw Selection Outline around selected object
 	if selected_object and preview_nodes.has(selected_object):
