@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://cdw63f0f48u1u"]
+
+[ext_resource type="Script" uid="uid://bjbj2600glukb" path="res://Scripts/game_play.gd" id="1_gp"]
+[ext_resource type="Texture2D" uid="uid://jlkaipb6s1jj" path="res://Sprite/ENV/setting screen.png" id="2_bg"]
+
+[node name="GamePlay" type="Control" unique_id=134252221]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gp")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1837485233]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1372.0
+offset_top = -5000.0
+offset_right = 1372.0
+offset_bottom = 1000.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bg")
+
+[node name="LevelRoot" type="Node2D" parent="." unique_id=987654321]

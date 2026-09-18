@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://cmbhkrdatxo3i"]
+
+[ext_resource type="Script" uid="uid://duog4ubo06jj2" path="res://Scripts/object_data.gd" id="1_2ksvs"]
+[ext_resource type="Script" uid="uid://bjdghriqpswf0" path="res://Scripts/level_data.gd" id="2_pmejl"]
+
+[sub_resource type="Resource" id="Resource_yoce0"]
+script = ExtResource("1_2ksvs")
+object_id = "platform"
+position = Vector2(540, 1839)
+
+[sub_resource type="Resource" id="Resource_ysrwp"]
+script = ExtResource("1_2ksvs")
+object_id = "obs_1"
+position = Vector2(300, 800)
+properties = {
+"rotation_speed": 2.5
+}
+
+[sub_resource type="Resource" id="Resource_1hli8"]
+script = ExtResource("1_2ksvs")
+object_id = "obs_2"
+position = Vector2(540, 100)
+properties = {
+"move_distance": 250.0,
+"move_speed": 120.0,
+"rotation_speed": 2.0
+}
+
+[sub_resource type="Resource" id="Resource_dwjgb"]
+script = ExtResource("1_2ksvs")
+object_id = "win_area"
+position = Vector2(571, -800)
+
+[resource]
+script = ExtResource("2_pmejl")
+level_id = "level_002"
+level_name = "Level 2 - Moving Obstacle Challenge"
+level_size = Vector2(1080, 3500)
+objects = Array[ExtResource("1_2ksvs")]([SubResource("Resource_yoce0"), SubResource("Resource_ysrwp"), SubResource("Resource_1hli8"), SubResource("Resource_dwjgb")])

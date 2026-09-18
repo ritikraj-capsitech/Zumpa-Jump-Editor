@@ -1,0 +1,382 @@
+[gd_scene format=3 uid="uid://ct3d10hctosr7"]
+
+[ext_resource type="Script" uid="uid://dccu8u74rggu4" path="res://addons/zumpa_level_editor/level_editor.gd" id="1_ed"]
+[ext_resource type="Script" uid="uid://dyjituoi57nhl" path="res://addons/zumpa_level_editor/level_canvas.gd" id="2_cv"]
+
+[node name="LevelEditor" type="Control" unique_id=1578408495]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_ed")
+
+[node name="MainVBox" type="VBoxContainer" parent="." unique_id=56333071]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopBarPanel" type="PanelContainer" parent="MainVBox" unique_id=81378314]
+layout_mode = 2
+
+[node name="TopBar" type="HBoxContainer" parent="MainVBox/TopBarPanel" unique_id=2100257227]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="MainVBox/TopBarPanel/TopBar" unique_id=465307556]
+layout_mode = 2
+text = " ZUMPA LEVEL EDITOR "
+
+[node name="VSeparator" type="VSeparator" parent="MainVBox/TopBarPanel/TopBar" unique_id=1141180962]
+layout_mode = 2
+
+[node name="NewBtn" type="Button" parent="MainVBox/TopBarPanel/TopBar" unique_id=11101]
+unique_name_in_owner = true
+layout_mode = 2
+text = " New "
+
+[node name="SaveBtn" type="Button" parent="MainVBox/TopBarPanel/TopBar" unique_id=11102]
+unique_name_in_owner = true
+layout_mode = 2
+text = " Save "
+
+[node name="LoadBtn" type="Button" parent="MainVBox/TopBarPanel/TopBar" unique_id=11103]
+unique_name_in_owner = true
+layout_mode = 2
+text = " Load "
+
+[node name="LevelSelectOpt" type="OptionButton" parent="MainVBox/TopBarPanel/TopBar" unique_id=11110]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PlayBtn" type="Button" parent="MainVBox/TopBarPanel/TopBar" unique_id=11104]
+unique_name_in_owner = true
+layout_mode = 2
+text = " ▶ Play / Preview "
+
+[node name="VSeparator2" type="VSeparator" parent="MainVBox/TopBarPanel/TopBar" unique_id=43335771]
+layout_mode = 2
+
+[node name="CenterViewBtn" type="Button" parent="MainVBox/TopBarPanel/TopBar" unique_id=11109]
+unique_name_in_owner = true
+layout_mode = 2
+text = " 🎯 Center View "
+
+[node name="DeleteBtn" type="Button" parent="MainVBox/TopBarPanel/TopBar" unique_id=11105]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = " Delete "
+
+[node name="DuplicateBtn" type="Button" parent="MainVBox/TopBarPanel/TopBar" unique_id=11106]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = " Duplicate "
+
+[node name="VSeparator3" type="VSeparator" parent="MainVBox/TopBarPanel/TopBar" unique_id=1087576134]
+layout_mode = 2
+
+[node name="SnapCheck" type="CheckBox" parent="MainVBox/TopBarPanel/TopBar" unique_id=11107]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Snap Grid"
+
+[node name="GridSizeOpt" type="OptionButton" parent="MainVBox/TopBarPanel/TopBar" unique_id=11108]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 1
+item_count = 4
+popup/item_0/text = "16 px"
+popup/item_0/id = 16
+popup/item_1/text = "32 px"
+popup/item_1/id = 32
+popup/item_2/text = "64 px"
+popup/item_2/id = 64
+popup/item_3/text = "128 px"
+popup/item_3/id = 128
+
+[node name="ContentHBox" type="HBoxContainer" parent="MainVBox" unique_id=271009707]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LeftPanel" type="PanelContainer" parent="MainVBox/ContentHBox" unique_id=2134968110]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="MainVBox/ContentHBox/LeftPanel" unique_id=985894983]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="MainVBox/ContentHBox/LeftPanel/Scroll" unique_id=679354272]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MainVBox/ContentHBox/LeftPanel/Scroll/VBox" unique_id=1104411735]
+layout_mode = 2
+text = "OBSTACLES & ITEMS"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MainVBox/ContentHBox/LeftPanel/Scroll/VBox" unique_id=373106943]
+layout_mode = 2
+
+[node name="PaletteContainer" type="VBoxContainer" parent="MainVBox/ContentHBox/LeftPanel/Scroll/VBox" unique_id=11201]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainVBox/ContentHBox" unique_id=11301]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_vertical = 2459
+
+[node name="Canvas" type="Control" parent="MainVBox/ContentHBox/ScrollContainer" unique_id=11302]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(1280, 4920)
+layout_mode = 2
+script = ExtResource("2_cv")
+
+[node name="InspectorPanel" type="PanelContainer" parent="MainVBox/ContentHBox" unique_id=11401]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel" unique_id=39558721]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1993687637]
+layout_mode = 2
+text = "SELECTED OBJECT"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1690495357]
+layout_mode = 2
+
+[node name="TypeRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1102346277]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/TypeRow" unique_id=904529403]
+layout_mode = 2
+text = "Type: "
+
+[node name="TypeLabel" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/TypeRow" unique_id=11402]
+unique_name_in_owner = true
+layout_mode = 2
+text = "None Selected"
+
+[node name="PosXRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1291381863]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PosXRow" unique_id=691728351]
+layout_mode = 2
+text = "Pos X: "
+
+[node name="PosXSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PosXRow" unique_id=11403]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -5000.0
+max_value = 5000.0
+editable = false
+
+[node name="PosYRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1451166185]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PosYRow" unique_id=323326096]
+layout_mode = 2
+text = "Pos Y: "
+
+[node name="PosYSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PosYRow" unique_id=11404]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -20000.0
+max_value = 20000.0
+editable = false
+
+[node name="RotRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=2079737215]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/RotRow" unique_id=1002046986]
+layout_mode = 2
+text = "Rotation: "
+
+[node name="RotSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/RotRow" unique_id=11405]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -360.0
+max_value = 360.0
+editable = false
+
+[node name="ScaleXRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=899745424]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/ScaleXRow" unique_id=899041425]
+layout_mode = 2
+text = "Scale X: "
+
+[node name="ScaleXSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/ScaleXRow" unique_id=11406]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+step = 0.1
+value = 1.0
+editable = false
+
+[node name="ScaleYRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=300293661]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/ScaleYRow" unique_id=1911204454]
+layout_mode = 2
+text = "Scale Y: "
+
+[node name="ScaleYSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/ScaleYRow" unique_id=11407]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+step = 0.1
+value = 1.0
+editable = false
+
+[node name="PropSpeedRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=11408]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PropSpeedRow" unique_id=1426953077]
+layout_mode = 2
+text = "Rot Speed: "
+
+[node name="RotSpeedSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PropSpeedRow" unique_id=11409]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+step = 0.1
+value = 2.0
+
+[node name="PropMoveSpeedRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=11411]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PropMoveSpeedRow" unique_id=1426953078]
+layout_mode = 2
+text = "Move Speed: "
+
+[node name="MoveSpeedSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PropMoveSpeedRow" unique_id=11412]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 2000.0
+step = 1.0
+value = 100.0
+
+[node name="PropMoveDistRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=11413]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PropMoveDistRow" unique_id=1426953079]
+layout_mode = 2
+text = "Move Dist: "
+
+[node name="MoveDistSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PropMoveDistRow" unique_id=11414]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 5000.0
+step = 5.0
+value = 200.0
+
+[node name="ApplyBtn" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=11410]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Apply Changes"
+
+[node name="BottomBarPanel" type="PanelContainer" parent="MainVBox" unique_id=1376739543]
+layout_mode = 2
+
+[node name="BottomBar" type="HBoxContainer" parent="MainVBox/BottomBarPanel" unique_id=1724860751]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="IDLbl" type="Label" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=1982985013]
+layout_mode = 2
+text = "Level ID:"
+
+[node name="LevelIDEdit" type="LineEdit" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=11501]
+unique_name_in_owner = true
+layout_mode = 2
+text = "level_001"
+
+[node name="NameLbl" type="Label" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=1085531705]
+layout_mode = 2
+text = "Name:"
+
+[node name="LevelNameEdit" type="LineEdit" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=11502]
+unique_name_in_owner = true
+layout_mode = 2
+text = "New Level"
+
+[node name="WidthLbl" type="Label" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=562263494]
+layout_mode = 2
+text = "Width:"
+
+[node name="WidthSpin" type="SpinBox" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=11503]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 500.0
+max_value = 5000.0
+value = 1080.0
+
+[node name="HeightLbl" type="Label" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=563048284]
+layout_mode = 2
+text = "Height:"
+
+[node name="HeightSpin" type="SpinBox" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=11504]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1000.0
+max_value = 50000.0
+value = 1920.0
+
+[node name="StartXLbl" type="Label" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=844287538]
+layout_mode = 2
+text = "Start X:"
+
+[node name="PlayerXSpin" type="SpinBox" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=11505]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1080.0
+value = 500.0
+
+[node name="StartYLbl" type="Label" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=669520698]
+layout_mode = 2
+text = "Start Y:"
+
+[node name="PlayerYSpin" type="SpinBox" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=11506]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = -20000.0
+max_value = 20000.0
+value = 1384.0
+
+[node name="SaveDialog" type="FileDialog" parent="." unique_id=11601]
+unique_name_in_owner = true
+filters = PackedStringArray("*.tres ; Godot Resource File")
+
+[node name="LoadDialog" type="FileDialog" parent="." unique_id=11602]
+unique_name_in_owner = true
+title = "Open a File"
+file_mode = 0
+filters = PackedStringArray("*.tres ; Godot Resource File")

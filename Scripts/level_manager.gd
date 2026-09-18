@@ -1,0 +1,141 @@
+@tool
+class_name LevelManager
+extends RefCounted
+
+static var current_level_data: LevelData = null
+static var active_level_path: String = "res://Levels/level_001.tres"
+
+static func load_level_data(path: String) -> LevelData:
+	if ResourceLoader.exists(path):
+		var res = ResourceLoader.load(path)
+		if res is LevelData:
+			current_level_data = res
+			active_level_path = path
+			return res
+	push_warning("LevelManager: Failed to load level data at path: '%s'" % path)
+	return null
+
+static func save_level_data(level_data: LevelData, path: String) -> bool:
+	if not level_data:
+		return false
+
+	# Ensure directory exists
+	var dir_path = path.get_base_dir()
+	if not DirAccess.dir_exists_absolute(dir_path):
+		DirAccess.make_dir_recursive_absolute(dir_path)
+
+	var err = ResourceSaver.save(level_data, path)
+	if err == OK:
+		active_level_path = path
+		current_level_data = level_data
+		return true
+	else:
+		push_error("LevelManager: Failed to save level to '%s', error code: %d" % [path, err])
+		return false
+
+static func get_all_level_paths() -> Array[String]:
+	var paths: Array[String] = []
+	var dir_path := "res://Levels"
+
+	# Ensure default levels exist first
+	ensure_default_levels()
+
+	if DirAccess.dir_exists_absolute(dir_path):
+		var dir := DirAccess.open(dir_path)
+		if dir:
+			dir.list_dir_begin()
+			var file_name = dir.get_next()
+			while file_name != "":
+				if not dir.current_is_dir() and file_name.ends_with(".tres"):
+					paths.append(dir_path + "/" + file_name)
+				file_name = dir.get_next()
+			dir.list_dir_end()
+
+	paths.sort()
+	return paths
+
+static func get_next_level_path(current_path: String = "") -> String:
+	if current_path == "":
+		current_path = active_level_path
+
+	var all_levels = get_all_level_paths()
+	var current_idx = all_levels.find(current_path)
+
+	if current_idx != -1 and current_idx + 1 < all_levels.size():
+		return all_levels[current_idx + 1]
+
+	return ""
+
+static func load_next_level() -> LevelData:
+	var next_path = get_next_level_path(active_level_path)
+	if next_path != "":
+		return load_level_data(next_path)
+	return null
+
+static func get_default_level() -> LevelData:
+	ensure_default_levels()
+	if current_level_data:
+		return current_level_data
+	var loaded = load_level_data("res://Levels/level_001.tres")
+	if loaded:
+		return loaded
+	return create_default_level_1()
+
+static func ensure_default_levels() -> void:
+	if not DirAccess.dir_exists_absolute("res://Levels"):
+		DirAccess.make_dir_recursive_absolute("res://Levels")
+
+	if not ResourceLoader.exists("res://Levels/level_001.tres"):
+		var l1 = create_default_level_1()
+		save_level_data(l1, "res://Levels/level_001.tres")
+
+	if not ResourceLoader.exists("res://Levels/level_002.tres"):
+		var l2 = create_default_level_2()
+		save_level_data(l2, "res://Levels/level_002.tres")
+
+static func create_default_level_1() -> LevelData:
+	var lvl := LevelData.new()
+	lvl.level_id = "level_001"
+	lvl.level_name = "Level 1 - Beginning"
+	lvl.player_start = Vector2(529, 1135)
+	lvl.level_size = Vector2(1080, 3000)
+
+	# Platform
+	var plt := ObjectData.new("platform", Vector2(540, 1839), 0.0, Vector2(1, 1))
+	lvl.add_object(plt)
+
+	# Obs1
+	var obs := ObjectData.new("obs_1", Vector2(785, 519), 0.0, Vector2(1, 1), {"rotation_speed": 2.0})
+	lvl.add_object(obs)
+
+	# WinArea
+	var win := ObjectData.new("win_area", Vector2(571, -627), 0.0, Vector2(1, 1))
+	lvl.add_object(win)
+
+	return lvl
+
+static func create_default_level_2() -> LevelData:
+	var lvl := LevelData.new()
+	lvl.level_id = "level_002"
+	lvl.level_name = "Level 2 - Moving Obstacle Challenge"
+	lvl.player_start = Vector2(529, 1135)
+	lvl.level_size = Vector2(1080, 3500)
+
+	# Platform
+	var plt := ObjectData.new("platform", Vector2(540, 1839), 0.0, Vector2(1, 1))
+	lvl.add_object(plt)
+
+	# Obs1 (Rotating)
+	var obs1 := ObjectData.new("obs_1", Vector2(300, 800), 0.0, Vector2(1, 1), {"rotation_speed": 2.5})
+	lvl.add_object(obs1)
+
+	# Obs2 (Moving & Rotating Obstacle)
+	var obs2 := ObjectData.new("obs_2", Vector2(540, 100), 0.0, Vector2(1, 1), {"rotation_speed": 2.0, "move_speed": 120.0, "move_distance": 250.0})
+	lvl.add_object(obs2)
+
+	# WinArea
+	var win := ObjectData.new("win_area", Vector2(571, -800), 0.0, Vector2(1, 1))
+	lvl.add_object(win)
+
+	return lvl
+

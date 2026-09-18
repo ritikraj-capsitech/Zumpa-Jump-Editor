@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bwinarebbba"]
+
+[ext_resource type="Script" uid="uid://c8a4k0qde84r5" path="res://Scenes/WinArea.gd" id="1_win"]
+[ext_resource type="Texture2D" uid="uid://b670355ojamxj" path="res://Sprite/Obstacles/Group 193.png" id="2_win"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_win"]
+size = Vector2(1039, 120)
+
+[node name="WinArea" type="Area2D"]
+script = ExtResource("1_win")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.33254078, 0.30921042)
+texture = ExtResource("2_win")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -50)
+shape = SubResource("RectangleShape2D_win")

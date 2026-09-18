@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://c4223jbhvrbly"]
+
+[ext_resource type="Script" uid="uid://b2ybiutvfxso0" path="res://Scripts/obs_1.gd" id="1_sdk17"]
+[ext_resource type="Texture2D" uid="uid://ddxl1miskniag" path="res://Sprite/Obstacles/Group 175.png" id="2_ht3qq"]
+
+[node name="Obs1" type="StaticBody2D" unique_id=1868731217 groups=["obstacle"]]
+script = ExtResource("1_sdk17")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=538245184]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_ht3qq")
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="." unique_id=517796333]
+polygon = PackedVector2Array(-168, 5, -127, -22, -154, -70, -88, -76, -90, -144, -42, -120, -17, -166, 23, -119, 80, -149, 82, -94, 136, -99, 110, -38, 169, -6, 126, 22, 154, 69, 90, 79, 89, 146, 43, 121, 18, 168, -20, 115, -80, 147, -81, 99, -139, 101, -110, 38)
