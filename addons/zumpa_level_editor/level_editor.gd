@@ -37,6 +37,11 @@ extends Control
 @onready var atlas_x_spin: SpinBox = %AtlasXSpin
 @onready var atlas_y_spin: SpinBox = %AtlasYSpin
 @onready var atlas_picker: AtlasPalettePicker = %AtlasPicker
+@onready var zoom_out_btn: Button = %ZoomOutBtn
+@onready var zoom_label: Label = %ZoomLabel
+@onready var zoom_in_btn: Button = %ZoomInBtn
+@onready var zoom_fit_btn: Button = %ZoomFitBtn
+@onready var atlas_scroll_container: ScrollContainer = %AtlasScrollContainer
 @onready var tile_preview_rect: TextureRect = %TilePreviewRect
 @onready var btn_grass_top: Button = %BtnGrassTop
 @onready var btn_grass_left: Button = %BtnGrassLeft
@@ -209,6 +214,29 @@ func connect_signals() -> void:
 	# Tile Palette signals
 	if atlas_picker:
 		atlas_picker.tile_selected.connect(on_atlas_tile_selected)
+		atlas_picker.zoom_changed.connect(func(z):
+			if zoom_label:
+				zoom_label.text = "%.1fx" % z
+		)
+
+	if zoom_out_btn:
+		zoom_out_btn.pressed.connect(func():
+			if atlas_picker:
+				atlas_picker.zoom_scale -= 0.5
+		)
+	if zoom_in_btn:
+		zoom_in_btn.pressed.connect(func():
+			if atlas_picker:
+				atlas_picker.zoom_scale += 0.5
+		)
+	if zoom_fit_btn:
+		zoom_fit_btn.pressed.connect(func():
+			if atlas_picker and atlas_scroll_container and atlas_picker.texture:
+				var cols = atlas_picker._get_cols()
+				var avail_w = atlas_scroll_container.size.x - 10
+				if cols > 0 and avail_w > 0:
+					atlas_picker.zoom_scale = max(0.5, avail_w / (cols * 16.0))
+		)
 
 	atlas_x_spin.value_changed.connect(func(_v): update_tile_preview())
 	atlas_y_spin.value_changed.connect(func(_v): update_tile_preview())
@@ -267,6 +295,7 @@ func set_tile_atlas(ax: int, ay: int) -> void:
 	atlas_y_spin.value = ay
 	if atlas_picker:
 		atlas_picker.selected_coords = Vector2i(ax, ay)
+		atlas_picker.ensure_selected_visible(atlas_scroll_container)
 	update_tile_preview()
 
 func update_tile_preview() -> void:

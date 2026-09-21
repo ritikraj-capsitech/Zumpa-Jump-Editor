@@ -357,9 +357,39 @@ value = 1.0
 layout_mode = 2
 text = "Select Tile from Atlas Sheet:"
 
-[node name="AtlasPicker" type="Control" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11435]
+[node name="ZoomBar" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11441]
+layout_mode = 2
+
+[node name="ZoomOutBtn" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/ZoomBar" unique_id=11436]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+text = " ➖ "
+
+[node name="ZoomLabel" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/ZoomBar" unique_id=11437]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "2.0x"
+horizontal_alignment = 1
+
+[node name="ZoomInBtn" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/ZoomBar" unique_id=11438]
+unique_name_in_owner = true
+layout_mode = 2
+text = " ➕ "
+
+[node name="ZoomFitBtn" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/ZoomBar" unique_id=11439]
+unique_name_in_owner = true
+layout_mode = 2
+text = " Fit "
+
+[node name="AtlasScrollContainer" type="ScrollContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11440]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+
+[node name="AtlasPicker" type="Control" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/AtlasScrollContainer" unique_id=11435]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(230, 120)
 layout_mode = 2
 script = ExtResource("4_ap")
 
