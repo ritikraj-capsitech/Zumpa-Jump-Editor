@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dccu8u74rggu4" path="res://addons/zumpa_level_editor/level_editor.gd" id="1_ed"]
 [ext_resource type="Script" uid="uid://dyjituoi57nhl" path="res://addons/zumpa_level_editor/level_canvas.gd" id="2_cv"]
 [ext_resource type="Texture2D" uid="uid://cby3hk6go46de" path="res://tiles/Terrain (16x16).png" id="3_xtt1v"]
+[ext_resource type="Script" path="res://addons/zumpa_level_editor/atlas_palette_picker.gd" id="4_ap"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xtt1v"]
 atlas = ExtResource("3_xtt1v")
@@ -157,38 +158,43 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 
-[node name="VBox" type="VBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel" unique_id=39558721]
+[node name="InspectorScroll" type="ScrollContainer" parent="MainVBox/ContentHBox/InspectorPanel"]
 layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="VBox" type="VBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll" unique_id=39558721]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="Header" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1993687637]
+[node name="Header" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=1993687637]
 layout_mode = 2
 text = "SELECTED OBJECT"
 horizontal_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1690495357]
+[node name="HSeparator" type="HSeparator" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=1690495357]
 layout_mode = 2
 
-[node name="TypeRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1102346277]
+[node name="TypeRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=1102346277]
 layout_mode = 2
 
-[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/TypeRow" unique_id=904529403]
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/TypeRow" unique_id=904529403]
 layout_mode = 2
 text = "Type: "
 
-[node name="TypeLabel" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/TypeRow" unique_id=11402]
+[node name="TypeLabel" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/TypeRow" unique_id=11402]
 unique_name_in_owner = true
 layout_mode = 2
 text = "None Selected"
 
-[node name="PosXRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1291381863]
+[node name="PosXRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=1291381863]
 layout_mode = 2
 
-[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PosXRow" unique_id=691728351]
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PosXRow" unique_id=691728351]
 layout_mode = 2
 text = "Pos X: "
 
-[node name="PosXSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PosXRow" unique_id=11403]
+[node name="PosXSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PosXRow" unique_id=11403]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -196,14 +202,14 @@ min_value = -5000.0
 max_value = 5000.0
 editable = false
 
-[node name="PosYRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1451166185]
+[node name="PosYRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=1451166185]
 layout_mode = 2
 
-[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PosYRow" unique_id=323326096]
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PosYRow" unique_id=323326096]
 layout_mode = 2
 text = "Pos Y: "
 
-[node name="PosYSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PosYRow" unique_id=11404]
+[node name="PosYSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PosYRow" unique_id=11404]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -211,14 +217,14 @@ min_value = -20000.0
 max_value = 20000.0
 editable = false
 
-[node name="RotRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=2079737215]
+[node name="RotRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=2079737215]
 layout_mode = 2
 
-[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/RotRow" unique_id=1002046986]
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/RotRow" unique_id=1002046986]
 layout_mode = 2
 text = "Rotation: "
 
-[node name="RotSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/RotRow" unique_id=11405]
+[node name="RotSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/RotRow" unique_id=11405]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -226,14 +232,14 @@ min_value = -360.0
 max_value = 360.0
 editable = false
 
-[node name="ScaleXRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=899745424]
+[node name="ScaleXRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=899745424]
 layout_mode = 2
 
-[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/ScaleXRow" unique_id=899041425]
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/ScaleXRow" unique_id=899041425]
 layout_mode = 2
 text = "Scale X: "
 
-[node name="ScaleXSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/ScaleXRow" unique_id=11406]
+[node name="ScaleXSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/ScaleXRow" unique_id=11406]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -241,14 +247,14 @@ step = 0.1
 value = 1.0
 editable = false
 
-[node name="ScaleYRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=300293661]
+[node name="ScaleYRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=300293661]
 layout_mode = 2
 
-[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/ScaleYRow" unique_id=1911204454]
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/ScaleYRow" unique_id=1911204454]
 layout_mode = 2
 text = "Scale Y: "
 
-[node name="ScaleYSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/ScaleYRow" unique_id=11407]
+[node name="ScaleYSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/ScaleYRow" unique_id=11407]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -256,48 +262,48 @@ step = 0.1
 value = 1.0
 editable = false
 
-[node name="PropSpeedRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=11408]
+[node name="PropSpeedRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11408]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PropSpeedRow" unique_id=1426953077]
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropSpeedRow" unique_id=1426953077]
 layout_mode = 2
 text = "Rot Speed: "
 
-[node name="RotSpeedSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PropSpeedRow" unique_id=11409]
+[node name="RotSpeedSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropSpeedRow" unique_id=11409]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 step = 0.1
 value = 2.0
 
-[node name="PropMoveSpeedRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=11411]
+[node name="PropMoveSpeedRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11411]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PropMoveSpeedRow" unique_id=1426953078]
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropMoveSpeedRow" unique_id=1426953078]
 layout_mode = 2
 text = "Move Speed: "
 
-[node name="MoveSpeedSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PropMoveSpeedRow" unique_id=11412]
+[node name="MoveSpeedSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropMoveSpeedRow" unique_id=11412]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 2000.0
 value = 100.0
 
-[node name="PropMoveDistRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=11413]
+[node name="PropMoveDistRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11413]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PropMoveDistRow" unique_id=1426953079]
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropMoveDistRow" unique_id=1426953079]
 layout_mode = 2
 text = "Move Dist: "
 
-[node name="MoveDistSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PropMoveDistRow" unique_id=11414]
+[node name="MoveDistSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropMoveDistRow" unique_id=11414]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -305,52 +311,62 @@ max_value = 5000.0
 step = 5.0
 value = 200.0
 
-[node name="ApplyBtn" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=11410]
+[node name="ApplyBtn" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11410]
 unique_name_in_owner = true
 layout_mode = 2
 disabled = true
 text = "Apply Changes"
 
-[node name="HSeparator2" type="HSeparator" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1690495358]
+[node name="HSeparator2" type="HSeparator" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=1690495358]
 layout_mode = 2
 
-[node name="TileHeader" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1993687638]
+[node name="TileHeader" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=1993687638]
 layout_mode = 2
 text = "TILE PALETTE"
 horizontal_alignment = 1
 
-[node name="AtlasXRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1291381864]
+[node name="AtlasXRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=1291381864]
 layout_mode = 2
 
-[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/AtlasXRow" unique_id=691728352]
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/AtlasXRow" unique_id=691728352]
 layout_mode = 2
 text = "Atlas X: "
 
-[node name="AtlasXSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/AtlasXRow" unique_id=11420]
+[node name="AtlasXSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/AtlasXRow" unique_id=11420]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 30.0
 value = 1.0
 
-[node name="AtlasYRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1451166186]
+[node name="AtlasYRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=1451166186]
 layout_mode = 2
 
-[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox/AtlasYRow" unique_id=323326097]
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/AtlasYRow" unique_id=323326097]
 layout_mode = 2
 text = "Atlas Y: "
 
-[node name="AtlasYSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/VBox/AtlasYRow" unique_id=11421]
+[node name="AtlasYSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/AtlasYRow" unique_id=11421]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 30.0
 value = 1.0
 
-[node name="PreviewCenter" type="CenterContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=11422]
+[node name="AtlasPickerLabel" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=1993687640]
+layout_mode = 2
+text = "Select Tile from Atlas Sheet:"
+
+[node name="AtlasPicker" type="Control" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11435]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+script = ExtResource("4_ap")
+
+[node name="PreviewCenter" type="CenterContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11422]
 layout_mode = 2
 
-[node name="TilePreviewRect" type="TextureRect" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PreviewCenter" unique_id=11423]
+[node name="TilePreviewRect" type="TextureRect" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PreviewCenter" unique_id=11423]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
@@ -358,45 +374,45 @@ texture = SubResource("AtlasTexture_xtt1v")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="PresetsLabel" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=1993687639]
+[node name="PresetsLabel" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=1993687639]
 layout_mode = 2
 text = "Quick Presets:"
 
-[node name="PresetGrid" type="GridContainer" parent="MainVBox/ContentHBox/InspectorPanel/VBox" unique_id=11424]
+[node name="PresetGrid" type="GridContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11424]
 layout_mode = 2
 columns = 2
 
-[node name="BtnGrassTop" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PresetGrid" unique_id=11425]
+[node name="BtnGrassTop" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PresetGrid" unique_id=11425]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "🟩 Grass Top"
 
-[node name="BtnGrassLeft" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PresetGrid" unique_id=11426]
+[node name="BtnGrassLeft" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PresetGrid" unique_id=11426]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "↖️ Grass Left"
 
-[node name="BtnGrassRight" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PresetGrid" unique_id=11427]
+[node name="BtnGrassRight" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PresetGrid" unique_id=11427]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "↗️ Grass Right"
 
-[node name="BtnDirt" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PresetGrid" unique_id=11428]
+[node name="BtnDirt" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PresetGrid" unique_id=11428]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "🟫 Dirt"
 
-[node name="BtnSand" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PresetGrid" unique_id=11429]
+[node name="BtnSand" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PresetGrid" unique_id=11429]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "🏜️ Sand"
 
-[node name="BtnStone" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/VBox/PresetGrid" unique_id=11430]
+[node name="BtnStone" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PresetGrid" unique_id=11430]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

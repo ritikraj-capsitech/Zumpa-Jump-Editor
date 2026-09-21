@@ -36,6 +36,7 @@ extends Control
 # Tile Palette Inspector
 @onready var atlas_x_spin: SpinBox = %AtlasXSpin
 @onready var atlas_y_spin: SpinBox = %AtlasYSpin
+@onready var atlas_picker: AtlasPalettePicker = %AtlasPicker
 @onready var tile_preview_rect: TextureRect = %TilePreviewRect
 @onready var btn_grass_top: Button = %BtnGrassTop
 @onready var btn_grass_left: Button = %BtnGrassLeft
@@ -206,6 +207,9 @@ func connect_signals() -> void:
 	apply_btn.pressed.connect(apply_inspector_changes)
 
 	# Tile Palette signals
+	if atlas_picker:
+		atlas_picker.tile_selected.connect(on_atlas_tile_selected)
+
 	atlas_x_spin.value_changed.connect(func(_v): update_tile_preview())
 	atlas_y_spin.value_changed.connect(func(_v): update_tile_preview())
 
@@ -253,9 +257,16 @@ func connect_signals() -> void:
 	save_dialog.file_selected.connect(save_level_to_file)
 	load_dialog.file_selected.connect(load_level_from_file)
 
+func on_atlas_tile_selected(coords: Vector2i) -> void:
+	set_tile_atlas(coords.x, coords.y)
+	if tool_buttons.has("tile_brush"):
+		set_active_tool("tile_brush", tool_buttons["tile_brush"])
+
 func set_tile_atlas(ax: int, ay: int) -> void:
 	atlas_x_spin.value = ax
 	atlas_y_spin.value = ay
+	if atlas_picker:
+		atlas_picker.selected_coords = Vector2i(ax, ay)
 	update_tile_preview()
 
 func update_tile_preview() -> void:
@@ -263,9 +274,21 @@ func update_tile_preview() -> void:
 	var ay = int(atlas_y_spin.value)
 	canvas.current_tile_atlas = Vector2i(ax, ay)
 
-	if ResourceLoader.exists("res://tiles/Terrain (16x16).png"):
+	var theme_id = "world_1"
+	if current_level:
+		theme_id = current_level.world_theme
+	var theme_info = WorldThemeRegistry.get_theme(theme_id)
+	var tex_path: String = theme_info.get("platform_texture", "res://tiles/Terrain (16x16).png")
+
+	if ResourceLoader.exists(tex_path):
+		var tex: Texture2D = load(tex_path)
+		if atlas_picker:
+			if atlas_picker.texture != tex:
+				atlas_picker.texture = tex
+			atlas_picker.selected_coords = Vector2i(ax, ay)
+
 		var atlas_tex := AtlasTexture.new()
-		atlas_tex.atlas = load("res://tiles/Terrain (16x16).png")
+		atlas_tex.atlas = tex
 		atlas_tex.region = Rect2(ax * 16, ay * 16, 16, 16)
 		tile_preview_rect.texture = atlas_tex
 

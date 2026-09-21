@@ -77,10 +77,19 @@ script = ExtResource("1_06sw6")
 object_id = "wall"
 position = Vector2(-16, -433)
 
+[sub_resource type="Resource" id="Resource_k0vcn"]
+script = ExtResource("1_06sw6")
+object_id = "obs_1"
+position = Vector2(499, -1455)
+properties = {
+"rotation_speed": 2.0
+}
+
 [resource]
 script = ExtResource("2_lvtey")
+player_start = Vector2(540, 1135)
 level_size = Vector2(1080, 3000)
-objects = Array[ExtResource("1_06sw6")]([SubResource("Resource_t7hda"), SubResource("Resource_pej4d"), SubResource("Resource_5esd3"), SubResource("Resource_dgi6h"), SubResource("Resource_06sw6"), SubResource("Resource_lvtey"), SubResource("Resource_syybk"), SubResource("Resource_aanc0"), SubResource("Resource_w7dne"), SubResource("Resource_kk30f"), SubResource("Resource_oktjj"), SubResource("Resource_w4ctq")])
+objects = Array[ExtResource("1_06sw6")]([SubResource("Resource_t7hda"), SubResource("Resource_pej4d"), SubResource("Resource_5esd3"), SubResource("Resource_dgi6h"), SubResource("Resource_06sw6"), SubResource("Resource_lvtey"), SubResource("Resource_syybk"), SubResource("Resource_aanc0"), SubResource("Resource_w7dne"), SubResource("Resource_kk30f"), SubResource("Resource_oktjj"), SubResource("Resource_w4ctq"), SubResource("Resource_k0vcn")])
 tile_data = Array[Dictionary]([{
 "atlas_x": 1,
 "atlas_y": 1,
@@ -93,4 +102,88 @@ tile_data = Array[Dictionary]([{
 "source_id": 0,
 "x": 5,
 "y": 17
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 4,
+"y": -18
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 5,
+"y": -18
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 6,
+"y": -18
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 7,
+"y": -18
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 4,
+"y": -19
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 5,
+"y": -19
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 6,
+"y": -19
+}, {
+"atlas_x": 1,
+"atlas_y": 1,
+"source_id": 0,
+"x": 7,
+"y": -19
+}, {
+"atlas_x": 6,
+"atlas_y": 0,
+"source_id": 0,
+"x": 3,
+"y": 31
+}, {
+"atlas_x": 6,
+"atlas_y": 0,
+"source_id": 0,
+"x": 4,
+"y": 31
+}, {
+"atlas_x": 6,
+"atlas_y": 0,
+"source_id": 0,
+"x": 5,
+"y": 31
+}, {
+"atlas_x": 6,
+"atlas_y": 0,
+"source_id": 0,
+"x": 6,
+"y": 31
+}, {
+"atlas_x": 6,
+"atlas_y": 0,
+"source_id": 0,
+"x": 7,
+"y": 31
+}, {
+"atlas_x": 6,
+"atlas_y": 0,
+"source_id": 0,
+"x": 7,
+"y": 32
 }])
