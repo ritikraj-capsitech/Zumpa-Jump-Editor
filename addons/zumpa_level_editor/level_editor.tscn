@@ -3,9 +3,9 @@
 [ext_resource type="Script" uid="uid://dccu8u74rggu4" path="res://addons/zumpa_level_editor/level_editor.gd" id="1_ed"]
 [ext_resource type="Script" uid="uid://dyjituoi57nhl" path="res://addons/zumpa_level_editor/level_canvas.gd" id="2_cv"]
 [ext_resource type="Texture2D" uid="uid://cby3hk6go46de" path="res://tiles/Terrain (16x16).png" id="3_xtt1v"]
-[ext_resource type="Script" path="res://addons/zumpa_level_editor/atlas_palette_picker.gd" id="4_ap"]
+[ext_resource type="Script" uid="uid://cg2g0w41okk2a" path="res://addons/zumpa_level_editor/atlas_palette_picker.gd" id="4_ap"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xtt1v"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_vy7eb"]
 atlas = ExtResource("3_xtt1v")
 region = Rect2(16, 16, 16, 16)
 
@@ -61,9 +61,15 @@ text = " Load "
 unique_name_in_owner = true
 layout_mode = 2
 selected = 0
-item_count = 1
-popup/item_0/text = "level_001.tres (Unsaved)"
+item_count = 4
+popup/item_0/text = "level_001.tres"
 popup/item_0/id = 0
+popup/item_1/text = "level_002.tres"
+popup/item_1/id = 1
+popup/item_2/text = "level_003.tres"
+popup/item_2/id = 2
+popup/item_3/text = "level_004.tres"
+popup/item_3/id = 3
 
 [node name="PlayBtn" type="Button" parent="MainVBox/TopBarPanel/TopBar" unique_id=11104]
 unique_name_in_owner = true
@@ -117,7 +123,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="LeftPanel" type="PanelContainer" parent="MainVBox/ContentHBox" unique_id=2134968110]
-custom_minimum_size = Vector2(220, 0)
+custom_minimum_size = Vector2(165, 0)
 layout_mode = 2
 
 [node name="Scroll" type="ScrollContainer" parent="MainVBox/ContentHBox/LeftPanel" unique_id=985894983]
@@ -155,10 +161,10 @@ script = ExtResource("2_cv")
 
 [node name="InspectorPanel" type="PanelContainer" parent="MainVBox/ContentHBox" unique_id=11401]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(260, 0)
+custom_minimum_size = Vector2(210, 0)
 layout_mode = 2
 
-[node name="InspectorScroll" type="ScrollContainer" parent="MainVBox/ContentHBox/InspectorPanel"]
+[node name="InspectorScroll" type="ScrollContainer" parent="MainVBox/ContentHBox/InspectorPanel" unique_id=1084193992]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
@@ -386,11 +392,15 @@ text = " Fit "
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 220)
 layout_mode = 2
+scroll_horizontal = 48
 
 [node name="AtlasPicker" type="Control" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/AtlasScrollContainer" unique_id=11435]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(230, 120)
+texture_filter = 1
+clip_contents = true
+custom_minimum_size = Vector2(704, 352)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 script = ExtResource("4_ap")
 
 [node name="PreviewCenter" type="CenterContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11422]
@@ -400,7 +410,7 @@ layout_mode = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-texture = SubResource("AtlasTexture_xtt1v")
+texture = SubResource("AtlasTexture_vy7eb")
 expand_mode = 1
 stretch_mode = 5
 
@@ -519,7 +529,7 @@ text = "Start X:"
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 1080.0
-value = 529.0
+value = 540.0
 
 [node name="StartYLbl" type="Label" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=669520698]
 layout_mode = 2

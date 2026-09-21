@@ -155,6 +155,8 @@ func setup_palette() -> void:
 		var btn := Button.new()
 		btn.text = "+ " + entry.get("name", id)
 		btn.toggle_mode = true
+		btn.clip_text = true
+		btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		btn.pressed.connect(func(): set_active_tool(id, btn))
 		palette_container.add_child(btn)
 		tool_buttons[id] = btn

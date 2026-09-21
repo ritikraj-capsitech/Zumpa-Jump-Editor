@@ -17,7 +17,7 @@ static var _themes: Dictionary = {
 		"name": "World 2 - Desert Sunset",
 		"background": "res://Sprite/ENV/setting screen (1).png",
 		"wall_texture": "res://Sprite/LVLFrames/Union.png",
-		"platform_texture": "res://tiles/Terrain (16x16).png",
+		"platform_texture": "res://tiles/image.png",
 		"default_atlas_coords": Vector2i(7, 1),
 		"theme_color": Color(0.9, 0.6, 0.2, 1.0)
 	},
