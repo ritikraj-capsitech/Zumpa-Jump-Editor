@@ -5,13 +5,40 @@ extends RefCounted
 static var current_level_data: LevelData = null
 static var active_level_path: String = "res://Levels/level_001.tres"
 
+static func set_active_level_path(path: String) -> void:
+	active_level_path = path
+	var f := FileAccess.open("user://active_level_path.txt", FileAccess.WRITE)
+	if f:
+		f.store_string(path)
+		f.close()
+
+static func get_active_level_path() -> String:
+	if FileAccess.file_exists("user://active_level_path.txt"):
+		var f := FileAccess.open("user://active_level_path.txt", FileAccess.READ)
+		if f:
+			var saved_path = f.get_as_text().strip_edges()
+			f.close()
+			if saved_path != "" and (ResourceLoader.exists(saved_path) or FileAccess.file_exists(saved_path)):
+				active_level_path = saved_path
+				return saved_path
+	return active_level_path
+
 static func load_level_data(path: String) -> LevelData:
 	if ResourceLoader.exists(path):
 		var res = ResourceLoader.load(path)
 		if res is LevelData:
 			current_level_data = res
-			active_level_path = path
+			set_active_level_path(path)
 			return res
+
+	# Fallback for mobile file paths or direct user:// paths
+	if FileAccess.file_exists(path):
+		var res = ResourceLoader.load(path)
+		if res is LevelData:
+			current_level_data = res
+			set_active_level_path(path)
+			return res
+
 	push_warning("LevelManager: Failed to load level data at path: '%s'" % path)
 	return null
 
@@ -19,14 +46,13 @@ static func save_level_data(level_data: LevelData, path: String) -> bool:
 	if not level_data:
 		return false
 
-	# Ensure directory exists
 	var dir_path = path.get_base_dir()
 	if not DirAccess.dir_exists_absolute(dir_path):
 		DirAccess.make_dir_recursive_absolute(dir_path)
 
 	var err = ResourceSaver.save(level_data, path)
 	if err == OK:
-		active_level_path = path
+		set_active_level_path(path)
 		current_level_data = level_data
 		return true
 	else:
@@ -34,56 +60,107 @@ static func save_level_data(level_data: LevelData, path: String) -> bool:
 		return false
 
 static func get_all_level_paths() -> Array[String]:
-	var paths: Array[String] = []
-	var dir_path := "res://Levels"
+	var paths_map: Dictionary = {}
 
-	if DirAccess.dir_exists_absolute(dir_path):
-		var dir := DirAccess.open(dir_path)
+	# 1. Scan res://Levels (handles desktop and exported APK .remap / .import extensions)
+	var res_dir_path := "res://Levels"
+	if DirAccess.dir_exists_absolute(res_dir_path):
+		var dir := DirAccess.open(res_dir_path)
 		if dir:
 			dir.list_dir_begin()
 			var file_name = dir.get_next()
 			while file_name != "":
-				if not dir.current_is_dir() and file_name.ends_with(".tres"):
-					paths.append(dir_path + "/" + file_name)
+				if not dir.current_is_dir():
+					var clean_name = file_name.trim_suffix(".remap").trim_suffix(".import")
+					if clean_name.ends_with(".tres"):
+						var full_path = res_dir_path + "/" + clean_name
+						paths_map[clean_name] = full_path
 				file_name = dir.get_next()
 			dir.list_dir_end()
 
-	paths.sort()
-	return paths
+	# 2. Scan user://Levels (for custom levels saved at runtime on mobile/desktop)
+	var user_dir_path := "user://Levels"
+	if DirAccess.dir_exists_absolute(user_dir_path):
+		var udir := DirAccess.open(user_dir_path)
+		if udir:
+			udir.list_dir_begin()
+			var file_name = udir.get_next()
+			while file_name != "":
+				if not udir.current_is_dir():
+					var clean_name = file_name.trim_suffix(".remap").trim_suffix(".import")
+					if clean_name.ends_with(".tres"):
+						var full_path = user_dir_path + "/" + clean_name
+						paths_map[clean_name] = full_path
+				file_name = udir.get_next()
+			udir.list_dir_end()
+
+	var result: Array[String] = []
+	for key in paths_map:
+		result.append(paths_map[key])
+
+	result.sort_custom(func(a, b): return a.get_file() < b.get_file())
+
+	if result.size() == 0:
+		ensure_default_level_files()
+		return get_all_level_paths()
+
+	return result
+
+static func ensure_default_level_files() -> void:
+	var user_dir := "user://Levels"
+	if not DirAccess.dir_exists_absolute(user_dir):
+		DirAccess.make_dir_recursive_absolute(user_dir)
+
+	var p1 = user_dir + "/level_001.tres"
+	if not ResourceLoader.exists(p1) and not FileAccess.file_exists(p1):
+		save_level_data(create_default_level_1(), p1)
+
+	var p2 = user_dir + "/level_002.tres"
+	if not ResourceLoader.exists(p2) and not FileAccess.file_exists(p2):
+		save_level_data(create_default_level_2(), p2)
+
+	var p3 = user_dir + "/level_003.tres"
+	if not ResourceLoader.exists(p3) and not FileAccess.file_exists(p3):
+		save_level_data(create_default_level_3(), p3)
 
 static func get_next_level_path(current_path: String = "") -> String:
 	if current_path == "":
-		current_path = active_level_path
+		current_path = get_active_level_path()
 
 	var all_levels = get_all_level_paths()
-	var current_idx = all_levels.find(current_path)
+	var current_file = current_path.get_file()
 
-	if current_idx != -1 and current_idx + 1 < all_levels.size():
-		return all_levels[current_idx + 1]
+	for i in range(all_levels.size()):
+		if all_levels[i].get_file() == current_file:
+			if i + 1 < all_levels.size():
+				return all_levels[i + 1]
+			break
 
 	return ""
 
 static func load_next_level() -> LevelData:
-	var next_path = get_next_level_path(active_level_path)
+	var next_path = get_next_level_path(get_active_level_path())
 	if next_path != "":
 		return load_level_data(next_path)
 	return null
 
 static func get_default_level() -> LevelData:
-	if current_level_data:
-		return current_level_data
+	var active_path = get_active_level_path()
+	if active_path != "" and ResourceLoader.exists(active_path):
+		var loaded = load_level_data(active_path)
+		if loaded:
+			return loaded
+
 	var all_paths = get_all_level_paths()
 	if all_paths.size() > 0:
 		var loaded = load_level_data(all_paths[0])
 		if loaded:
 			return loaded
+
 	return create_default_level_1()
 
 static func ensure_default_levels() -> void:
-	# Retained for API compatibility without auto-saving to disk
-	var dir_path := "res://Levels"
-	if not DirAccess.dir_exists_absolute(dir_path):
-		DirAccess.make_dir_recursive_absolute(dir_path)
+	ensure_default_level_files()
 
 static func create_default_level_1() -> LevelData:
 	var lvl := LevelData.new()
@@ -151,19 +228,15 @@ static func create_default_level_2() -> LevelData:
 	lvl.player_start = Vector2(529, 1135)
 	lvl.level_size = Vector2(1080, 3500)
 
-	# Pre-built TileMap Ground Platform
 	for cell_x in range(5, 18):
 		lvl.tile_data.append({"x": cell_x, "y": 25, "source_id": 0, "atlas_x": 7, "atlas_y": 1})
 
-	# Obs1 (Rotating)
 	var obs1 := ObjectData.new("obs_1", Vector2(300, 800), 0.0, Vector2(1, 1), {"rotation_speed": 2.5})
 	lvl.add_object(obs1)
 
-	# Obs2 (Moving & Rotating Obstacle)
 	var obs2 := ObjectData.new("obs_2", Vector2(540, 100), 0.0, Vector2(1, 1), {"rotation_speed": 2.0, "move_speed": 120.0, "move_distance": 250.0})
 	lvl.add_object(obs2)
 
-	# WinArea
 	var win := ObjectData.new("win_area", Vector2(571, -800), 0.0, Vector2(1, 1))
 	lvl.add_object(win)
 
@@ -177,19 +250,15 @@ static func create_default_level_3() -> LevelData:
 	lvl.player_start = Vector2(529, 1135)
 	lvl.level_size = Vector2(1080, 3500)
 
-	# Pre-built TileMap Ground Platform
 	for cell_x in range(4, 19):
 		lvl.tile_data.append({"x": cell_x, "y": 25, "source_id": 0, "atlas_x": 11, "atlas_y": 1})
 
-	# Obs2 (Moving & Rotating Obstacle)
 	var obs2 := ObjectData.new("obs_2", Vector2(369, 204), 0.0, Vector2(1, 1), {"rotation_speed": 2.0, "move_speed": 100.0, "move_distance": 200.0})
 	lvl.add_object(obs2)
 
-	# Obs1 (Rotating)
 	var obs1 := ObjectData.new("obs_1", Vector2(569, 684), 0.0, Vector2(1, 1), {"rotation_speed": 2.0})
 	lvl.add_object(obs1)
 
-	# WinArea
 	var win := ObjectData.new("win_area", Vector2(571, -627), 0.0, Vector2(1, 1))
 	lvl.add_object(win)
 

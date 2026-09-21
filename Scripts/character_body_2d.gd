@@ -259,12 +259,25 @@ func show_restart_button() -> void:
 
 	# Create button
 	var button := Button.new()
-	button.text = "RESTART LEVEL"
-	button.custom_minimum_size = Vector2(200, 50)
+	button.text = "🔄 RESTART LEVEL"
+	button.custom_minimum_size = Vector2(200, 45)
 	button.process_mode = Node.PROCESS_MODE_ALWAYS
 	vbox.add_child(button)
-
 	button.pressed.connect(restart_level)
+
+	var select_btn := Button.new()
+	select_btn.text = "📋 LEVEL SELECT"
+	select_btn.custom_minimum_size = Vector2(200, 45)
+	select_btn.process_mode = Node.PROCESS_MODE_ALWAYS
+	vbox.add_child(select_btn)
+	select_btn.pressed.connect(func():
+		canvas_layer.queue_free()
+		var scene = get_tree().current_scene
+		if scene and scene.has_method("open_level_select_panel"):
+			scene.call("open_level_select_panel")
+		else:
+			get_tree().paused = false
+	)
 
 	# Pause game
 	get_tree().paused = true
@@ -322,11 +335,25 @@ func show_win_ui() -> void:
 		)
 
 	var retry_btn := Button.new()
-	retry_btn.text = "RESTART THIS LEVEL"
+	retry_btn.text = "🔄 RESTART THIS LEVEL"
 	retry_btn.custom_minimum_size = Vector2(220, 40)
 	retry_btn.process_mode = Node.PROCESS_MODE_ALWAYS
 	vbox.add_child(retry_btn)
 	retry_btn.pressed.connect(restart_level)
+
+	var select_btn := Button.new()
+	select_btn.text = "📋 LEVEL SELECT"
+	select_btn.custom_minimum_size = Vector2(220, 40)
+	select_btn.process_mode = Node.PROCESS_MODE_ALWAYS
+	vbox.add_child(select_btn)
+	select_btn.pressed.connect(func():
+		canvas_layer.queue_free()
+		var scene = get_tree().current_scene
+		if scene and scene.has_method("open_level_select_panel"):
+			scene.call("open_level_select_panel")
+		else:
+			get_tree().paused = false
+	)
 
 	# Pause game
 	get_tree().paused = true

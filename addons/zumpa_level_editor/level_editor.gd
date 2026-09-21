@@ -512,7 +512,15 @@ func load_level_from_file(path: String) -> void:
 		load_level(loaded, path)
 
 func on_play_pressed() -> void:
-	on_save_pressed()
+	if current_level and current_level_path != "":
+		save_level_to_file(current_level_path)
+		LevelManager.set_active_level_path(current_level_path)
+		LevelManager.current_level_data = current_level
+	elif current_level:
+		on_save_pressed()
+		LevelManager.set_active_level_path(current_level_path)
+		LevelManager.current_level_data = current_level
+
 	if Engine.is_editor_hint():
 		EditorInterface.play_main_scene()
 	else:
