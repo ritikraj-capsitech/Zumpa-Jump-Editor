@@ -169,7 +169,6 @@ properties = {
 script = ExtResource("2_1lym8")
 level_id = "level_005"
 level_name = "Level 5"
-world_theme = "world_2"
 player_start = Vector2(524, 1445)
 level_size = Vector2(2000, 2000)
 objects = Array[ExtResource("1_ioiok")]([SubResource("Resource_4gqyi"), SubResource("Resource_8km7a"), SubResource("Resource_ioiok"), SubResource("Resource_1lym8"), SubResource("Resource_nd8l8"), SubResource("Resource_ef62a"), SubResource("Resource_0tmer"), SubResource("Resource_tgv0m"), SubResource("Resource_gooac"), SubResource("Resource_whong"), SubResource("Resource_h4qcy"), SubResource("Resource_jenkf"), SubResource("Resource_wqmkb"), SubResource("Resource_jatgb"), SubResource("Resource_ef1at"), SubResource("Resource_nfwws"), SubResource("Resource_rxacv")])

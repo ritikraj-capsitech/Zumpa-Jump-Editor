@@ -1,6 +1,6 @@
 @tool
-class_name WorldThemeRegistry
 extends RefCounted
+class_name WorldThemeRegistry
 
 static var _themes: Dictionary = {
 	"world_1": {
@@ -16,11 +16,11 @@ static var _themes: Dictionary = {
 	"world_2": {
 		"id": "world_2",
 		"name": "World 2 - Desert Sunset",
-		"background": "res://tiles/Bg.png",
+		"background": "res://tiles/bg1.png",
 		"wall_texture": "res://tiles/ChatGPT Image Sep 22, 2026, 12_39_12 PM.png",
-		"platform_texture": "res://tiles/image.png",
-		"tile_size": Vector2i(16, 16),
-		"default_atlas_coords": Vector2i(7, 1),
+		"platform_texture": "res://tiles/Section 23.png",
+		"tile_size": Vector2i(32, 32),
+		"default_atlas_coords": Vector2i(1, 1),
 		"theme_color": Color(0.9, 0.6, 0.2, 1.0)
 	},
 	"world_3": {
@@ -28,7 +28,7 @@ static var _themes: Dictionary = {
 		"name": "World 3 - Cyber Night",
 		"background": "res://Sprite/ENV/setting screen-3.png",
 		"wall_texture": "res://Sprite/LVLFrames/Union.png",
-		"platform_texture": "res://tiles/Terrain (16x16).png",
+		"platform_texture": "res://tiles/image.png",
 		"tile_size": Vector2i(16, 16),
 		"default_atlas_coords": Vector2i(11, 1),
 		"theme_color": Color(0.2, 0.6, 1.0, 1.0)
@@ -73,6 +73,12 @@ static func create_tileset_for_theme(theme_id: String) -> TileSet:
 	var tex_path: String = theme_info.get("platform_texture", "res://tiles/Terrain (16x16).png")
 	if ResourceLoader.exists(tex_path):
 		var tex: Texture2D = load(tex_path)
+		var img: Image = null
+		if tex:
+			img = tex.get_image()
+			if img and img.is_compressed():
+				img.decompress()
+
 		var atlas_source := TileSetAtlasSource.new()
 		atlas_source.texture = tex
 		atlas_source.texture_region_size = t_size
@@ -94,13 +100,73 @@ static func create_tileset_for_theme(theme_id: String) -> TileSet:
 				atlas_source.create_tile(coords)
 				var tile_data = atlas_source.get_tile_data(coords, 0)
 				if tile_data:
-					var poly = PackedVector2Array([
-						Vector2(-half_w, -half_h),
-						Vector2(half_w, -half_h),
-						Vector2(half_w, half_h),
-						Vector2(-half_w, half_h)
-					])
-					tile_data.add_collision_polygon(0)
-					tile_data.set_collision_polygon_points(0, 0, poly)
+					var poly = get_tile_collision_polygon(img, coords, t_size, half_w, half_h)
+					if poly.size() >= 3:
+						tile_data.add_collision_polygon(0)
+						tile_data.set_collision_polygon_points(0, 0, poly)
 
 	return tileset
+
+static func get_tile_collision_polygon(img: Image, coords: Vector2i, t_size: Vector2i, half_w: float, half_h: float) -> PackedVector2Array:
+	if not img:
+		return PackedVector2Array([
+			Vector2(-half_w, -half_h), Vector2(half_w, -half_h),
+			Vector2(half_w, half_h), Vector2(-half_w, half_h)
+		])
+
+	var start_x = coords.x * t_size.x
+	var start_y = coords.y * t_size.y
+
+	if start_x + t_size.x > img.get_width() or start_y + t_size.y > img.get_height():
+		return PackedVector2Array()
+
+	# Sample transparency & color at key points inside tile cell
+	var margin = int(clamp(float(t_size.x) * 0.15, 1.0, 4.0))
+	var tl_solid = is_pixel_solid(img, start_x + margin, start_y + margin)
+	var tr_solid = is_pixel_solid(img, start_x + t_size.x - 1 - margin, start_y + margin)
+	var bl_solid = is_pixel_solid(img, start_x + margin, start_y + t_size.y - 1 - margin)
+	var br_solid = is_pixel_solid(img, start_x + t_size.x - 1 - margin, start_y + t_size.y - 1 - margin)
+	var tm_solid = is_pixel_solid(img, start_x + t_size.x / 2, start_y + margin)
+
+	var solid_count = (1 if tl_solid else 0) + (1 if tr_solid else 0) + (1 if bl_solid else 0) + (1 if br_solid else 0)
+
+	if solid_count == 0:
+		return PackedVector2Array() # Blank transparent tile -> No collision
+
+	# Detect Triangle Collision Shapes:
+	# 1. Top-Right Ascending Slope Triangle (bottom-left transparent)
+	if tr_solid and bl_solid and br_solid and not tl_solid:
+		return PackedVector2Array([Vector2(-half_w, half_h), Vector2(half_w, -half_h), Vector2(half_w, half_h)])
+
+	# 2. Top-Left Descending Slope Triangle (top-right transparent)
+	if tl_solid and bl_solid and br_solid and not tr_solid:
+		return PackedVector2Array([Vector2(-half_w, -half_h), Vector2(-half_w, half_h), Vector2(half_w, half_h)])
+
+	# 3. Inverted Top-Right Slope Triangle (bottom-right transparent)
+	if tl_solid and tr_solid and bl_solid and not br_solid:
+		return PackedVector2Array([Vector2(-half_w, -half_h), Vector2(half_w, -half_h), Vector2(-half_w, half_h)])
+
+	# 4. Inverted Top-Left Slope Triangle (bottom-left transparent)
+	if tl_solid and tr_solid and br_solid and not bl_solid:
+		return PackedVector2Array([Vector2(-half_w, -half_h), Vector2(half_w, -half_h), Vector2(half_w, half_h)])
+
+	# 5. Upward Peak / Roof Triangle (tm_solid, bl_solid, br_solid)
+	if tm_solid and bl_solid and br_solid and not tl_solid and not tr_solid:
+		return PackedVector2Array([Vector2(0, -half_h), Vector2(half_w, half_h), Vector2(-half_w, half_h)])
+
+	# Default: Full Square
+	return PackedVector2Array([
+		Vector2(-half_w, -half_h), Vector2(half_w, -half_h),
+		Vector2(half_w, half_h), Vector2(-half_w, half_h)
+	])
+
+static func is_pixel_solid(img: Image, px: int, py: int) -> bool:
+	if px < 0 or px >= img.get_width() or py < 0 or py >= img.get_height():
+		return false
+	var color = img.get_pixel(px, py)
+	if color.a < 0.15:
+		return false
+	# Dark gray background check (RGB ~ 0.2, 0.2, 0.2)
+	if color.r > 0.15 and color.r < 0.35 and color.g > 0.15 and color.g < 0.35 and color.b > 0.15 and color.b < 0.35:
+		return false
+	return true

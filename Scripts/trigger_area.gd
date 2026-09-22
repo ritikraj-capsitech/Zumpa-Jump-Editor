@@ -2,9 +2,22 @@
 extends Area2D
 class_name TriggerArea
 
-@export var trigger_tag: String = "trap_1"
-@export var area_width: float = 200.0
-@export var area_height: float = 150.0
+@export var trigger_tag: String = "trap_1":
+	set(v):
+		trigger_tag = v
+		queue_redraw()
+
+@export var area_width: float = 200.0:
+	set(v):
+		area_width = max(10.0, v)
+		update_shape_size()
+		queue_redraw()
+
+@export var area_height: float = 150.0:
+	set(v):
+		area_height = max(10.0, v)
+		update_shape_size()
+		queue_redraw()
 
 var triggered: bool = false
 
@@ -18,7 +31,11 @@ func _ready() -> void:
 
 func update_shape_size() -> void:
 	var col = get_node_or_null("CollisionShape2D") as CollisionShape2D
-	if col and col.shape is RectangleShape2D:
+	if col:
+		if not col.shape or not col.shape is RectangleShape2D:
+			col.shape = RectangleShape2D.new()
+		elif col.shape.resource_local_to_scene == false:
+			col.shape = col.shape.duplicate()
 		(col.shape as RectangleShape2D).size = Vector2(area_width, area_height)
 
 func _physics_process(_delta: float) -> void:
@@ -43,10 +60,9 @@ func activate_triggers() -> void:
 					node.trigger()
 
 func _draw() -> void:
-	if Engine.is_editor_hint():
-		var rect = Rect2(-Vector2(area_width, area_height) / 2.0, Vector2(area_width, area_height))
-		draw_rect(rect, Color(1.0, 0.8, 0.1, 0.35), true)
-		draw_rect(rect, Color(1.0, 0.8, 0.1, 0.9), false, 2.5)
-		var font = ThemeDB.fallback_font
-		if font:
-			draw_string(font, Vector2(-area_width / 2.0 + 10, 5), "TRIGGER: " + trigger_tag, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color(1, 1, 1, 1))
+	var rect = Rect2(-Vector2(area_width, area_height) / 2.0, Vector2(area_width, area_height))
+	draw_rect(rect, Color(1.0, 0.8, 0.1, 0.35), true)
+	draw_rect(rect, Color(1.0, 0.8, 0.1, 0.9), false, 2.5)
+	var font = ThemeDB.fallback_font
+	if font:
+		draw_string(font, Vector2(-area_width / 2.0 + 10, 5), "TRIGGER: " + trigger_tag, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color(1, 1, 1, 1))

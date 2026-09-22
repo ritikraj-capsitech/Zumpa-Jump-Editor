@@ -91,6 +91,10 @@ static func spawn_object(obj_data: ObjectData, container: Node) -> Node2D:
 	for prop_name in obj_data.properties:
 		if prop_name in node:
 			node.set(prop_name, obj_data.properties[prop_name])
+	if node.has_method("update_shape_size"):
+		node.call("update_shape_size")
+	if node.has_method("update_components"):
+		node.call("update_components")
 
 	container.add_child(node)
 	return node

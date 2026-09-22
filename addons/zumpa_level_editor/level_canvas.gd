@@ -100,6 +100,18 @@ func refresh_canvas() -> void:
 			node.position = world_to_canvas(obj_data.position)
 			node.rotation_degrees = obj_data.rotation
 			node.scale = obj_data.scale * zoom_scale
+
+			# Apply custom properties to preview node so area_width and area_height update visually on canvas!
+			for prop_name in obj_data.properties:
+				if prop_name in node:
+					node.set(prop_name, obj_data.properties[prop_name])
+			if node.has_method("update_shape_size"):
+				node.call("update_shape_size")
+			if node.has_method("update_components"):
+				node.call("update_components")
+			if node.has_method("queue_redraw"):
+				node.queue_redraw()
+
 			add_child(node)
 			preview_nodes[obj_data] = node
 
