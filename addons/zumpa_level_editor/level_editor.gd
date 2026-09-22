@@ -40,6 +40,16 @@ extends Control
 @onready var prop_move_dist_row: HBoxContainer = %PropMoveDistRow
 @onready var prop_move_dir_row: HBoxContainer = %PropMoveDirRow
 @onready var move_dir_opt: OptionButton = %MoveDirOpt
+@onready var prop_trigger_tag_row: HBoxContainer = %PropTriggerTagRow
+@onready var trigger_tag_edit: LineEdit = %TriggerTagEdit
+@onready var prop_fall_speed_row: HBoxContainer = %PropFallSpeedRow
+@onready var fall_speed_spin: SpinBox = %FallSpeedSpin
+@onready var prop_area_width_row: HBoxContainer = %PropAreaWidthRow
+@onready var area_width_spin: SpinBox = %AreaWidthSpin
+@onready var prop_area_height_row: HBoxContainer = %PropAreaHeightRow
+@onready var area_height_spin: SpinBox = %AreaHeightSpin
+@onready var prop_trigger_dist_row: HBoxContainer = %PropTriggerDistRow
+@onready var trigger_dist_spin: SpinBox = %TriggerDistSpin
 @onready var apply_btn: Button = %ApplyBtn
 
 # Tile Palette Inspector
@@ -489,6 +499,11 @@ func on_object_selected(obj: ObjectData) -> void:
 		prop_move_speed_row.visible = false
 		prop_move_dist_row.visible = false
 		prop_move_dir_row.visible = false
+		prop_trigger_tag_row.visible = false
+		prop_fall_speed_row.visible = false
+		prop_area_width_row.visible = false
+		prop_area_height_row.visible = false
+		prop_trigger_dist_row.visible = false
 		apply_btn.disabled = true
 		delete_btn.disabled = true
 		duplicate_btn.disabled = true
@@ -540,6 +555,36 @@ func update_inspector_values(obj: ObjectData) -> void:
 	else:
 		prop_move_dir_row.visible = false
 
+	if obj.properties.has("trigger_tag"):
+		prop_trigger_tag_row.visible = true
+		trigger_tag_edit.text = str(obj.properties["trigger_tag"])
+	else:
+		prop_trigger_tag_row.visible = false
+
+	if obj.properties.has("fall_speed"):
+		prop_fall_speed_row.visible = true
+		fall_speed_spin.value = float(obj.properties["fall_speed"])
+	else:
+		prop_fall_speed_row.visible = false
+
+	if obj.properties.has("area_width"):
+		prop_area_width_row.visible = true
+		area_width_spin.value = float(obj.properties["area_width"])
+	else:
+		prop_area_width_row.visible = false
+
+	if obj.properties.has("area_height"):
+		prop_area_height_row.visible = true
+		area_height_spin.value = float(obj.properties["area_height"])
+	else:
+		prop_area_height_row.visible = false
+
+	if obj.properties.has("trigger_distance_y"):
+		prop_trigger_dist_row.visible = true
+		trigger_dist_spin.value = float(obj.properties["trigger_distance_y"])
+	else:
+		prop_trigger_dist_row.visible = false
+
 func apply_inspector_changes() -> void:
 	if not canvas.selected_object:
 		return
@@ -557,6 +602,16 @@ func apply_inspector_changes() -> void:
 	if prop_move_dir_row.visible:
 		var selected_id = move_dir_opt.get_selected_id()
 		obj.properties["move_direction"] = "Y" if selected_id == 1 else "X"
+	if prop_trigger_tag_row.visible:
+		obj.properties["trigger_tag"] = trigger_tag_edit.text
+	if prop_fall_speed_row.visible:
+		obj.properties["fall_speed"] = fall_speed_spin.value
+	if prop_area_width_row.visible:
+		obj.properties["area_width"] = area_width_spin.value
+	if prop_area_height_row.visible:
+		obj.properties["area_height"] = area_height_spin.value
+	if prop_trigger_dist_row.visible:
+		obj.properties["trigger_distance_y"] = trigger_dist_spin.value
 
 	canvas.refresh_canvas()
 

@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://c6f24k9f8w1ab"]
+
+[ext_resource type="Script" uid="uid://b8m33k1p9n2xa" path="res://Scripts/falling_stone.gd" id="1_fs"]
+[ext_resource type="Texture2D" uid="uid://ddxl1miskniag" path="res://Sprite/Obstacles/Group 175.png" id="2_st"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_f8k1a"]
+radius = 55.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_a82bc"]
+radius = 60.0
+
+[node name="FallingStone" type="CharacterBody2D" unique_id=194827104 groups=["falling_stone", "obstacle", "triggerable"]]
+z_index = 10
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_fs")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=837194022]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_st")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=918237461]
+shape = SubResource("CircleShape2D_f8k1a")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=582910471]
+collision_layer = 2
+
+[node name="AreaCollision" type="CollisionShape2D" parent="Area2D" unique_id=391048271]
+shape = SubResource("CircleShape2D_a82bc")

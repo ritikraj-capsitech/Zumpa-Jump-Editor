@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cam81k2w7a4db"]
+
+[ext_resource type="Script" uid="uid://b7m21k8w9a2fc" path="res://Scripts/falling_stone_trap.gd" id="1_fst"]
+[ext_resource type="PackedScene" uid="uid://c6f24k9f8w1ab" path="res://Obstacle/falling_stone.tscn" id="2_fsn"]
+[ext_resource type="PackedScene" uid="uid://d3m78k2q1a5fc" path="res://Obstacle/trigger_area.tscn" id="3_tan"]
+
+[node name="FallingStoneTrap" type="Node2D" unique_id=748291034]
+script = ExtResource("1_fst")
+
+[node name="FallingStone" parent="." instance=ExtResource("2_fsn")]
+unique_name_in_owner = true
+
+[node name="TriggerArea" parent="." instance=ExtResource("3_tan")]
+unique_name_in_owner = true
+position = Vector2(0, 300)

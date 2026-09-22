@@ -379,6 +379,89 @@ popup/item_0/id = 0
 popup/item_1/text = "Y (Vertical)"
 popup/item_1/id = 1
 
+[node name="PropTriggerTagRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11417]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropTriggerTagRow" unique_id=1426953081]
+layout_mode = 2
+text = "Trigger Tag: "
+
+[node name="TriggerTagEdit" type="LineEdit" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropTriggerTagRow" unique_id=11418]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "trap_1"
+
+[node name="PropFallSpeedRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11419]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropFallSpeedRow" unique_id=1426953082]
+layout_mode = 2
+text = "Fall Speed: "
+
+[node name="FallSpeedSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropFallSpeedRow" unique_id=11420]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 5000.0
+step = 25.0
+value = 600.0
+
+[node name="PropAreaWidthRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11421]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropAreaWidthRow" unique_id=1426953083]
+layout_mode = 2
+text = "Area Width: "
+
+[node name="AreaWidthSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropAreaWidthRow" unique_id=11422]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 2000.0
+step = 10.0
+value = 200.0
+
+[node name="PropAreaHeightRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11423]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropAreaHeightRow" unique_id=1426953084]
+layout_mode = 2
+text = "Area Height: "
+
+[node name="AreaHeightSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropAreaHeightRow" unique_id=11424]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 2000.0
+step = 10.0
+value = 150.0
+
+[node name="PropTriggerDistRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11425]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropTriggerDistRow" unique_id=1426953085]
+layout_mode = 2
+text = "Trig Dist Y: "
+
+[node name="TriggerDistSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropTriggerDistRow" unique_id=11426]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 5000.0
+step = 10.0
+value = 300.0
+
 [node name="ApplyBtn" type="Button" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11410]
 unique_name_in_owner = true
 layout_mode = 2

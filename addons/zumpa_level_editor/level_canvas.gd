@@ -364,3 +364,66 @@ func _draw() -> void:
 		var box_size = Vector2(120, 120) * selected_object.scale * zoom_scale
 		var rect := Rect2(n_pos - box_size / 2.0, box_size)
 		draw_rect(rect, Color(1.0, 0.9, 0.1, 0.9), false, 2.5)
+
+	# Draw X & Y Coordinate Scale / Rulers
+	draw_canvas_rulers(left_c_x, right_c_x, top_c_y, bot_c_y)
+
+func draw_canvas_rulers(left_c_x: float, right_c_x: float, top_c_y: float, bot_c_y: float) -> void:
+	if not level_data:
+		return
+
+	var font = ThemeDB.fallback_font
+	var font_size = int(clamp(11 * zoom_scale, 9, 14))
+	var ruler_color = Color(0.9, 0.95, 1.0, 0.85)
+	var tick_color = Color(0.2, 0.8, 1.0, 0.7)
+
+	# 1. X-Axis Scale Labels & Ticks (along Top & Bottom boundaries)
+	var x_step: float = 100.0
+	if zoom_scale < 0.6:
+		x_step = 200.0
+
+	var cur_wx: float = 0.0
+	while cur_wx <= level_data.level_size.x:
+		var c_x = world_to_canvas(Vector2(cur_wx, 0)).x
+
+		draw_line(Vector2(c_x, top_c_y), Vector2(c_x, top_c_y - 12 * zoom_scale), tick_color, 1.5)
+		draw_line(Vector2(c_x, bot_c_y), Vector2(c_x, bot_c_y + 12 * zoom_scale), tick_color, 1.5)
+
+		var label_str = str(int(cur_wx))
+		if font:
+			draw_string(font, Vector2(c_x - 20, top_c_y - 15 * zoom_scale), label_str, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, ruler_color)
+			draw_string(font, Vector2(c_x - 20, bot_c_y + 25 * zoom_scale), label_str, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, ruler_color)
+
+		cur_wx += x_step
+
+	# 2. Y-Axis Scale Labels & Ticks (along Left & Right boundaries)
+	var y_step: float = 200.0
+	if zoom_scale < 0.6:
+		y_step = 400.0
+
+	var min_wy: float = -level_data.level_size.y
+	var max_wy: float = 2000.0
+
+	var cur_wy: float = min_wy
+	while cur_wy <= max_wy:
+		var c_y = world_to_canvas(Vector2(0, cur_wy)).y
+
+		draw_line(Vector2(left_c_x, c_y), Vector2(left_c_x - 12 * zoom_scale, c_y), tick_color, 1.5)
+		draw_line(Vector2(right_c_x, c_y), Vector2(right_c_x + 12 * zoom_scale, c_y), tick_color, 1.5)
+
+		var label_str = str(int(cur_wy))
+		if font:
+			draw_string(font, Vector2(left_c_x - 55 * zoom_scale, c_y + 4), label_str, HORIZONTAL_ALIGNMENT_RIGHT, -1, font_size, ruler_color)
+			draw_string(font, Vector2(right_c_x + 16 * zoom_scale, c_y + 4), label_str, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, ruler_color)
+
+		cur_wy += y_step
+
+	# 3. Real-time Cursor Coordinates Tooltip HUD
+	if hover_cell != Vector2i(-9999, -9999):
+		var w_mouse = canvas_to_world(get_local_mouse_position())
+		var hud_text = " X: %d  Y: %d " % [int(w_mouse.x), int(w_mouse.y)]
+		if font:
+			var box_pos = get_local_mouse_position() + Vector2(18, 18)
+			draw_rect(Rect2(box_pos, Vector2(115, 24)), Color(0.05, 0.05, 0.1, 0.85), true)
+			draw_rect(Rect2(box_pos, Vector2(115, 24)), Color(0.2, 0.8, 1.0, 0.9), false, 1.2)
+			draw_string(font, box_pos + Vector2(8, 17), hud_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color(1, 1, 1, 1))

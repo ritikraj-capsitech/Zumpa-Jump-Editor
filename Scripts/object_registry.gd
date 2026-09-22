@@ -49,6 +49,30 @@ static var _registry: Dictionary = {
 		"category": "Walls",
 		"default_properties": {},
 		"default_scale": Vector2(1, 1)
+	},
+	"falling_stone": {
+		"id": "falling_stone",
+		"name": "Falling Stone",
+		"scene_path": "res://Obstacle/falling_stone.tscn",
+		"category": "Obstacles",
+		"default_properties": {"trigger_tag": "trap_1", "fall_speed": 600.0, "rotation_speed": 4.0},
+		"default_scale": Vector2(1, 1)
+	},
+	"trigger_area": {
+		"id": "trigger_area",
+		"name": "Trigger Area",
+		"scene_path": "res://Obstacle/trigger_area.tscn",
+		"category": "Triggers",
+		"default_properties": {"trigger_tag": "trap_1", "area_width": 200.0, "area_height": 150.0},
+		"default_scale": Vector2(1, 1)
+	},
+	"falling_stone_trap": {
+		"id": "falling_stone_trap",
+		"name": "Falling Stone Trap",
+		"scene_path": "res://Obstacle/falling_stone_trap.tscn",
+		"category": "Obstacles",
+		"default_properties": {"trigger_distance_y": 300.0, "fall_speed": 600.0, "trigger_width": 200.0},
+		"default_scale": Vector2(1, 1)
 	}
 }
 
