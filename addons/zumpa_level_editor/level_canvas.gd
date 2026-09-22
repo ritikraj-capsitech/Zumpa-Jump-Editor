@@ -104,9 +104,11 @@ func refresh_canvas() -> void:
 
 func update_canvas_size() -> void:
 	var h: float = 4000.0
+	var w: float = 1280.0
 	if level_data:
 		h = level_data.level_size.y + 3000.0
-	custom_minimum_size = Vector2(1280, h)
+		w = max(1280.0, level_data.level_size.x + origin_offset.x * 2.0)
+	custom_minimum_size = Vector2(w, h)
 
 func world_to_canvas(w_pos: Vector2) -> Vector2:
 	return Vector2(w_pos.x + origin_offset.x, w_pos.y + origin_offset.y)
@@ -258,17 +260,17 @@ func _draw() -> void:
 	if not level_data:
 		return
 
-	# Draw Portrait Boundary Guides (0 to 1080 in world X)
+	# Draw Playable Boundary Guides (0 to level_size.x in world X)
 	var top_c_y = world_to_canvas(Vector2(0, -level_data.level_size.y)).y
 	var bot_c_y = world_to_canvas(Vector2(0, 2000)).y
 	var left_c_x = world_to_canvas(Vector2(0, 0)).x
-	var right_c_x = world_to_canvas(Vector2(1080, 0)).x
+	var right_c_x = world_to_canvas(Vector2(level_data.level_size.x, 0)).x
 
-	# Fill portrait playable corridor with subtle theme tint
+	# Fill playable corridor with subtle theme tint
 	var theme_info = WorldThemeRegistry.get_theme(level_data.world_theme)
 	var t_color: Color = theme_info.get("theme_color", Color(0.1, 0.1, 0.2, 0.15))
 	var fill_color := Color(t_color.r, t_color.g, t_color.b, 0.12)
-	draw_rect(Rect2(Vector2(left_c_x, top_c_y), Vector2(1080, bot_c_y - top_c_y)), fill_color)
+	draw_rect(Rect2(Vector2(left_c_x, top_c_y), Vector2(level_data.level_size.x, bot_c_y - top_c_y)), fill_color)
 
 	# Boundary side lines
 	draw_line(Vector2(left_c_x, top_c_y), Vector2(left_c_x, bot_c_y), Color(0.2, 0.8, 1.0, 0.8), 3.0)
@@ -283,7 +285,7 @@ func _draw() -> void:
 		var g_color := Color(1.0, 1.0, 1.0, 0.22) if is_tile_tool else Color(1.0, 1.0, 1.0, 0.08)
 
 		var min_cx = int(floor(0.0 / tile_step))
-		var max_cx = int(ceil(1080.0 / tile_step))
+		var max_cx = int(ceil(level_data.level_size.x / tile_step))
 		for cx in range(min_cx, max_cx + 1):
 			var line_c_x = cx * tile_step + origin_offset.x
 			draw_line(Vector2(line_c_x, top_c_y), Vector2(line_c_x, bot_c_y), g_color, 1.0)

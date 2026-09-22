@@ -279,6 +279,7 @@ func connect_signals() -> void:
 	width_spin.value_changed.connect(func(v):
 		if current_level:
 			current_level.level_size.x = v
+			player_x_spin.max_value = max(5000.0, v)
 			canvas.update_canvas_size()
 			canvas.queue_redraw()
 	)
@@ -408,6 +409,7 @@ func load_level(lvl: LevelData, path: String) -> void:
 
 	width_spin.value = lvl.level_size.x
 	height_spin.value = lvl.level_size.y
+	player_x_spin.max_value = max(5000.0, lvl.level_size.x)
 	player_x_spin.value = lvl.player_start.x
 	player_y_spin.value = lvl.player_start.y
 
