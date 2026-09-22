@@ -17,7 +17,7 @@ static var _themes: Dictionary = {
 		"id": "world_2",
 		"name": "World 2 - Desert Sunset",
 		"background": "res://tiles/Bg.png",
-		"wall_texture": "res://Sprite/LVLFrames/Union.png",
+		"wall_texture": "res://tiles/ChatGPT Image Sep 22, 2026, 12_39_12 PM.png",
 		"platform_texture": "res://tiles/image.png",
 		"tile_size": Vector2i(16, 16),
 		"default_atlas_coords": Vector2i(7, 1),

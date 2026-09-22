@@ -5,9 +5,11 @@ signal object_selected(obj_data: ObjectData)
 signal object_moved(obj_data: ObjectData)
 signal player_start_changed(pos: Vector2)
 signal level_data_modified()
+signal zoom_changed(new_zoom: float)
 
 @export var grid_snap: bool = false
 @export var grid_size: int = 32
+@export var zoom_scale: float = 1.0
 
 var level_data: LevelData = null
 var selected_object: ObjectData = null
@@ -56,9 +58,9 @@ func refresh_canvas() -> void:
 	canvas_tilemap = TileMapLayer.new()
 	canvas_tilemap.name = "CanvasTileMap"
 	canvas_tilemap.tile_set = WorldThemeRegistry.create_tileset_for_theme(level_data.world_theme)
-	canvas_tilemap.position = origin_offset
+	canvas_tilemap.position = origin_offset * zoom_scale
 	var scale_factor: float = 48.0 / float(t_size.x) if t_size.x > 0 else 3.0
-	canvas_tilemap.scale = Vector2(scale_factor, scale_factor)
+	canvas_tilemap.scale = Vector2(scale_factor * zoom_scale, scale_factor * zoom_scale)
 	canvas_tilemap.z_index = 2
 	add_child(canvas_tilemap)
 
@@ -75,6 +77,7 @@ func refresh_canvas() -> void:
 	var p_start_node := Node2D.new()
 	p_start_node.name = "PlayerStartMarker"
 	p_start_node.position = world_to_canvas(level_data.player_start)
+	p_start_node.scale = Vector2(zoom_scale, zoom_scale)
 
 	var p_sprite := Sprite2D.new()
 	if ResourceLoader.exists("res://Sprite/Player.png"):
@@ -96,25 +99,25 @@ func refresh_canvas() -> void:
 		if node:
 			node.position = world_to_canvas(obj_data.position)
 			node.rotation_degrees = obj_data.rotation
-			node.scale = obj_data.scale
+			node.scale = obj_data.scale * zoom_scale
 			add_child(node)
 			preview_nodes[obj_data] = node
 
 	queue_redraw()
 
 func update_canvas_size() -> void:
-	var h: float = 4000.0
-	var w: float = 1280.0
+	var h: float = 4000.0 * zoom_scale
+	var w: float = 1280.0 * zoom_scale
 	if level_data:
-		h = level_data.level_size.y + 3000.0
-		w = max(1280.0, level_data.level_size.x + origin_offset.x * 2.0)
+		h = (level_data.level_size.y + 3000.0) * zoom_scale
+		w = max(1280.0 * zoom_scale, (level_data.level_size.x + origin_offset.x * 2.0) * zoom_scale)
 	custom_minimum_size = Vector2(w, h)
 
 func world_to_canvas(w_pos: Vector2) -> Vector2:
-	return Vector2(w_pos.x + origin_offset.x, w_pos.y + origin_offset.y)
+	return Vector2((w_pos.x + origin_offset.x) * zoom_scale, (w_pos.y + origin_offset.y) * zoom_scale)
 
 func canvas_to_world(c_pos: Vector2) -> Vector2:
-	return Vector2(c_pos.x - origin_offset.x, c_pos.y - origin_offset.y)
+	return Vector2((c_pos.x / zoom_scale) - origin_offset.x, (c_pos.y / zoom_scale) - origin_offset.y)
 
 func snap_pos(w_pos: Vector2) -> Vector2:
 	if not grid_snap or grid_size <= 0:
@@ -122,6 +125,40 @@ func snap_pos(w_pos: Vector2) -> Vector2:
 	var sx = snapped(w_pos.x, grid_size)
 	var sy = snapped(w_pos.y, grid_size)
 	return Vector2(sx, sy)
+
+func zoom_at_point(zoom_factor: float, pivot_canvas_pos: Vector2, scroll_container: ScrollContainer = null) -> void:
+	var old_zoom = zoom_scale
+	var new_zoom = clamp(zoom_scale * zoom_factor, 0.25, 4.0)
+	if is_equal_approx(old_zoom, new_zoom):
+		return
+
+	var pivot_world = Vector2(
+		(pivot_canvas_pos.x / old_zoom) - origin_offset.x,
+		(pivot_canvas_pos.y / old_zoom) - origin_offset.y
+	)
+
+	zoom_scale = new_zoom
+	refresh_canvas()
+	emit_signal("zoom_changed", zoom_scale)
+
+	if scroll_container:
+		var new_pivot_canvas = world_to_canvas(pivot_world)
+		var delta_canvas = new_pivot_canvas - pivot_canvas_pos
+		scroll_container.scroll_horizontal += int(delta_canvas.x)
+		scroll_container.scroll_vertical += int(delta_canvas.y)
+
+func zoom_at_center(zoom_factor: float, scroll_container: ScrollContainer) -> void:
+	if not scroll_container:
+		return
+	var center_c_x = scroll_container.scroll_horizontal + scroll_container.size.x / 2.0
+	var center_c_y = scroll_container.scroll_vertical + scroll_container.size.y / 2.0
+	zoom_at_point(zoom_factor, Vector2(center_c_x, center_c_y), scroll_container)
+
+func set_zoom_level(target_zoom: float, scroll_container: ScrollContainer) -> void:
+	if not scroll_container or is_equal_approx(zoom_scale, target_zoom):
+		return
+	var factor = target_zoom / zoom_scale
+	zoom_at_center(factor, scroll_container)
 
 func place_tile_at(w_pos: Vector2) -> void:
 	if not level_data:
@@ -172,6 +209,17 @@ func _gui_input(event: InputEvent) -> void:
 
 	if event is InputEventMouseButton:
 		var mb := event as InputEventMouseButton
+		if mb.button_index == MOUSE_BUTTON_WHEEL_UP and mb.pressed:
+			var parent_scroll = get_parent() as ScrollContainer
+			zoom_at_point(1.15, mb.position, parent_scroll)
+			get_viewport().set_input_as_handled()
+			return
+		elif mb.button_index == MOUSE_BUTTON_WHEEL_DOWN and mb.pressed:
+			var parent_scroll = get_parent() as ScrollContainer
+			zoom_at_point(1.0 / 1.15, mb.position, parent_scroll)
+			get_viewport().set_input_as_handled()
+			return
+
 		if mb.button_index == MOUSE_BUTTON_LEFT:
 			if mb.pressed:
 				var c_pos = mb.position
@@ -270,13 +318,13 @@ func _draw() -> void:
 	var theme_info = WorldThemeRegistry.get_theme(level_data.world_theme)
 	var t_color: Color = theme_info.get("theme_color", Color(0.1, 0.1, 0.2, 0.15))
 	var fill_color := Color(t_color.r, t_color.g, t_color.b, 0.12)
-	draw_rect(Rect2(Vector2(left_c_x, top_c_y), Vector2(level_data.level_size.x, bot_c_y - top_c_y)), fill_color)
+	draw_rect(Rect2(Vector2(left_c_x, top_c_y), Vector2(level_data.level_size.x * zoom_scale, bot_c_y - top_c_y)), fill_color)
 
 	# Boundary side lines
-	draw_line(Vector2(left_c_x, top_c_y), Vector2(left_c_x, bot_c_y), Color(0.2, 0.8, 1.0, 0.8), 3.0)
-	draw_line(Vector2(right_c_x, top_c_y), Vector2(right_c_x, bot_c_y), Color(0.2, 0.8, 1.0, 0.8), 3.0)
-	draw_line(Vector2(left_c_x, top_c_y), Vector2(right_c_x, top_c_y), Color(1.0, 0.3, 0.3, 0.8), 3.0) # Top Goal boundary
-	draw_line(Vector2(left_c_x, bot_c_y), Vector2(right_c_x, bot_c_y), Color(1.0, 0.8, 0.2, 0.8), 3.0) # Bottom threshold boundary
+	draw_line(Vector2(left_c_x, top_c_y), Vector2(left_c_x, bot_c_y), Color(0.2, 0.8, 1.0, 0.8), 3.0 * zoom_scale)
+	draw_line(Vector2(right_c_x, top_c_y), Vector2(right_c_x, bot_c_y), Color(0.2, 0.8, 1.0, 0.8), 3.0 * zoom_scale)
+	draw_line(Vector2(left_c_x, top_c_y), Vector2(right_c_x, top_c_y), Color(1.0, 0.3, 0.3, 0.8), 3.0 * zoom_scale) # Top Goal boundary
+	draw_line(Vector2(left_c_x, bot_c_y), Vector2(right_c_x, bot_c_y), Color(1.0, 0.8, 0.2, 0.8), 3.0 * zoom_scale) # Bottom threshold boundary
 
 	# Draw 48px Tile Grid Overlay aligned mathematically with cell coordinates
 	var is_tile_tool = (active_placement_id == "tile_brush" or active_placement_id == "tile_eraser")
@@ -287,20 +335,20 @@ func _draw() -> void:
 		var min_cx = int(floor(0.0 / tile_step))
 		var max_cx = int(ceil(level_data.level_size.x / tile_step))
 		for cx in range(min_cx, max_cx + 1):
-			var line_c_x = cx * tile_step + origin_offset.x
+			var line_c_x = world_to_canvas(Vector2(cx * tile_step, 0)).x
 			draw_line(Vector2(line_c_x, top_c_y), Vector2(line_c_x, bot_c_y), g_color, 1.0)
 
 		var min_cy = int(floor(-level_data.level_size.y / tile_step)) - 1
 		var max_cy = int(ceil(2000.0 / tile_step)) + 1
 		for cy in range(min_cy, max_cy + 1):
-			var line_c_y = cy * tile_step + origin_offset.y
+			var line_c_y = world_to_canvas(Vector2(0, cy * tile_step)).y
 			draw_line(Vector2(left_c_x, line_c_y), Vector2(right_c_x, line_c_y), g_color, 1.0)
 
 	# Draw Tile Brush / Eraser Mouse Cursor Grid Box Highlight
 	if is_tile_tool and hover_cell != Vector2i(-9999, -9999):
 		var cell_w_pos = Vector2(hover_cell.x * 48.0, hover_cell.y * 48.0)
 		var cell_c_pos = world_to_canvas(cell_w_pos)
-		var cell_rect := Rect2(cell_c_pos, Vector2(48, 48))
+		var cell_rect := Rect2(cell_c_pos, Vector2(48.0 * zoom_scale, 48.0 * zoom_scale))
 
 		if active_placement_id == "tile_brush":
 			draw_rect(cell_rect, Color(0.2, 1.0, 0.5, 0.35))
@@ -313,6 +361,6 @@ func _draw() -> void:
 	if selected_object and preview_nodes.has(selected_object):
 		var node = preview_nodes[selected_object]
 		var n_pos = node.position
-		var box_size = Vector2(120, 120) * selected_object.scale
+		var box_size = Vector2(120, 120) * selected_object.scale * zoom_scale
 		var rect := Rect2(n_pos - box_size / 2.0, box_size)
 		draw_rect(rect, Color(1.0, 0.9, 0.1, 0.9), false, 2.5)

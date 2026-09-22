@@ -16,6 +16,10 @@ extends Control
 @onready var duplicate_btn: Button = %DuplicateBtn
 @onready var snap_check: CheckBox = %SnapCheck
 @onready var grid_size_opt: OptionButton = %GridSizeOpt
+@onready var canvas_zoom_out_btn: Button = %CanvasZoomOutBtn
+@onready var canvas_zoom_label: Label = %CanvasZoomLabel
+@onready var canvas_zoom_in_btn: Button = %CanvasZoomInBtn
+@onready var canvas_zoom_reset_btn: Button = %CanvasZoomResetBtn
 
 # Right Inspector
 @onready var inspector_panel: PanelContainer = %InspectorPanel
@@ -210,6 +214,28 @@ func connect_signals() -> void:
 		canvas.queue_redraw()
 	)
 
+	if canvas:
+		canvas.zoom_changed.connect(func(z):
+			if canvas_zoom_label:
+				canvas_zoom_label.text = " %d%% " % int(z * 100)
+		)
+
+	if canvas_zoom_out_btn:
+		canvas_zoom_out_btn.pressed.connect(func():
+			if canvas and scroll_container:
+				canvas.zoom_at_center(1.0 / 1.2, scroll_container)
+		)
+	if canvas_zoom_in_btn:
+		canvas_zoom_in_btn.pressed.connect(func():
+			if canvas and scroll_container:
+				canvas.zoom_at_center(1.2, scroll_container)
+		)
+	if canvas_zoom_reset_btn:
+		canvas_zoom_reset_btn.pressed.connect(func():
+			if canvas and scroll_container:
+				canvas.set_zoom_level(1.0, scroll_container)
+		)
+
 	canvas.object_selected.connect(on_object_selected)
 	canvas.object_moved.connect(update_inspector_values)
 	canvas.player_start_changed.connect(on_player_start_changed)
@@ -282,6 +308,7 @@ func connect_signals() -> void:
 			player_x_spin.max_value = max(5000.0, v)
 			canvas.update_canvas_size()
 			canvas.queue_redraw()
+			call_deferred("center_view_on_player")
 	)
 	height_spin.value_changed.connect(func(v):
 		if current_level:
@@ -372,15 +399,16 @@ func new_level() -> void:
 	current_level.level_id = new_id
 	current_level.level_name = "Level %d" % new_num
 	current_level.world_theme = "world_1"
-	current_level.player_start = Vector2(529, 1135)
 	current_level.level_size = Vector2(1080, 3000)
+	var center_x = current_level.level_size.x / 2.0
+	current_level.player_start = Vector2(center_x, 1135)
 
-	# Add default platform
-	var plt := ObjectData.new("platform", Vector2(540, 1839))
+	# Add default platform at center
+	var plt := ObjectData.new("platform", Vector2(center_x, 1839))
 	current_level.add_object(plt)
 
-	# Add default win area
-	var win := ObjectData.new("win_area", Vector2(571, -627))
+	# Add default win area at center
+	var win := ObjectData.new("win_area", Vector2(center_x, -627))
 	current_level.add_object(win)
 
 	var target_path = "res://Levels/%s.tres" % new_id
@@ -420,9 +448,12 @@ func load_level(lvl: LevelData, path: String) -> void:
 func center_view_on_player() -> void:
 	if not current_level or not scroll_container or not canvas:
 		return
+	var target_c_x = canvas.world_to_canvas(current_level.player_start).x
 	var target_c_y = canvas.world_to_canvas(current_level.player_start).y
-	var scroll_val = int(target_c_y - scroll_container.size.y / 2.0)
-	scroll_container.scroll_vertical = max(0, scroll_val)
+	var scroll_val_x = int(target_c_x - scroll_container.size.x / 2.0)
+	var scroll_val_y = int(target_c_y - scroll_container.size.y / 2.0)
+	scroll_container.scroll_horizontal = max(0, scroll_val_x)
+	scroll_container.scroll_vertical = max(0, scroll_val_y)
 
 func on_object_selected(obj: ObjectData) -> void:
 	if not obj:
@@ -573,4 +604,16 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		elif ke.keycode == KEY_S and ke.ctrl_pressed:
 			on_save_pressed()
+			get_viewport().set_input_as_handled()
+		elif ke.ctrl_pressed and (ke.keycode == KEY_EQUAL or ke.keycode == KEY_KP_ADD or ke.keycode == KEY_PLUS):
+			if canvas and scroll_container:
+				canvas.zoom_at_center(1.2, scroll_container)
+			get_viewport().set_input_as_handled()
+		elif ke.ctrl_pressed and (ke.keycode == KEY_MINUS or ke.keycode == KEY_KP_SUBTRACT):
+			if canvas and scroll_container:
+				canvas.zoom_at_center(1.0 / 1.2, scroll_container)
+			get_viewport().set_input_as_handled()
+		elif ke.ctrl_pressed and (ke.keycode == KEY_0 or ke.keycode == KEY_KP_0):
+			if canvas and scroll_container:
+				canvas.set_zoom_level(1.0, scroll_container)
 			get_viewport().set_input_as_handled()

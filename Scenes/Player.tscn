@@ -13,21 +13,11 @@ script = ExtResource("1_ij6vw")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=382123635]
 position = Vector2(0, -584)
-
-[node name="TextureRect" type="TextureRect" parent="Camera2D" unique_id=1577740208]
-z_index = -100
-z_as_relative = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -687.0
-offset_top = -1041.0
-offset_right = 694.0
-offset_bottom = 1049.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_gntrk")
-expand_mode = 1
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.5
+drag_top_margin = 0.6
+drag_right_margin = 0.5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=138880409]
 position = Vector2(0, 13)
@@ -37,3 +27,20 @@ shape = SubResource("RectangleShape2D_44cfe")
 z_index = 10
 scale = Vector2(0.07, 0.07)
 texture = ExtResource("2_ghijl")
+
+[node name="BgAnchor" type="Node2D" parent="." unique_id=1609102450]
+
+[node name="TextureRect" type="TextureRect" parent="BgAnchor" unique_id=289537115]
+z_index = -100
+z_as_relative = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -687.0
+offset_top = -1084.0
+offset_right = 694.0
+offset_bottom = 1006.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_gntrk")
+expand_mode = 1

@@ -155,6 +155,26 @@ const JUMP_FORCE = -500.0
 
 var level_ended := false
 
+# Background follows the camera's actual (deadzone/drag-adjusted) view,
+# not the player's raw position, so it only shifts once the player
+# actually pushes the camera past its drag margins.
+@onready var camera: Camera2D = $Camera2D
+@onready var bg_anchor: Node2D = $BgAnchor
+
+
+func _ready() -> void:
+	# Avoid a one-frame pop before the first _process runs.
+	if bg_anchor and camera:
+		bg_anchor.global_position = camera.get_screen_center_position()
+
+
+func _process(_delta: float) -> void:
+	if level_ended:
+		return
+
+	if bg_anchor and camera:
+		bg_anchor.global_position = camera.get_screen_center_position()
+
 
 func _physics_process(delta: float) -> void:
 	if level_ended:

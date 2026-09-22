@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bfuhrw3onqfpi"
-path="res://.godot/imported/Union (22).png-21a70cb45757bfb7ef938be1fc53c1d9.ctex"
+uid="uid://cab1eebbu0unp"
+path="res://.godot/imported/ChatGPT Image Sep 22, 2026, 12_39_12 PM.png-3cc865acfedf7ed39850eedd3b9af4e9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprite/LVLFrames/Union (22).png"
-dest_files=["res://.godot/imported/Union (22).png-21a70cb45757bfb7ef938be1fc53c1d9.ctex"]
+source_file="res://tiles/ChatGPT Image Sep 22, 2026, 12_39_12 PM.png"
+dest_files=["res://.godot/imported/ChatGPT Image Sep 22, 2026, 12_39_12 PM.png-3cc865acfedf7ed39850eedd3b9af4e9.ctex"]
 
 [params]
 

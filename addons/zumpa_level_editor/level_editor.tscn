@@ -118,6 +118,29 @@ popup/item_2/id = 64
 popup/item_3/text = "128 px"
 popup/item_3/id = 128
 
+[node name="VSeparator4" type="VSeparator" parent="MainVBox/TopBarPanel/TopBar" unique_id=238910481]
+layout_mode = 2
+
+[node name="CanvasZoomOutBtn" type="Button" parent="MainVBox/TopBarPanel/TopBar" unique_id=11111]
+unique_name_in_owner = true
+layout_mode = 2
+text = " ➖ "
+
+[node name="CanvasZoomLabel" type="Label" parent="MainVBox/TopBarPanel/TopBar" unique_id=11112]
+unique_name_in_owner = true
+layout_mode = 2
+text = " 100% "
+
+[node name="CanvasZoomInBtn" type="Button" parent="MainVBox/TopBarPanel/TopBar" unique_id=11113]
+unique_name_in_owner = true
+layout_mode = 2
+text = " ➕ "
+
+[node name="CanvasZoomResetBtn" type="Button" parent="MainVBox/TopBarPanel/TopBar" unique_id=11114]
+unique_name_in_owner = true
+layout_mode = 2
+text = " 🔍 1:1 "
+
 [node name="ContentHBox" type="HBoxContainer" parent="MainVBox" unique_id=271009707]
 layout_mode = 2
 size_flags_vertical = 3
