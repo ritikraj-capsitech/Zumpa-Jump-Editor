@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://ct86by8iiwofk"]
+
+[ext_resource type="Script" uid="uid://duog4ubo06jj2" path="res://Scripts/object_data.gd" id="1_1oxrs"]
+[ext_resource type="Script" uid="uid://bjdghriqpswf0" path="res://Scripts/level_data.gd" id="2_ph5n5"]
+
+[sub_resource type="Resource" id="Resource_l5yx7"]
+script = ExtResource("1_1oxrs")
+object_id = "platform"
+position = Vector2(540, 1839)
+
+[sub_resource type="Resource" id="Resource_ddgk6"]
+script = ExtResource("1_1oxrs")
+object_id = "win_area"
+position = Vector2(540, -627)
+
+[resource]
+script = ExtResource("2_ph5n5")
+level_id = "level_007"
+level_name = "Level 7"
+player_start = Vector2(540, 1135)
+level_size = Vector2(1080, 3000)
+objects = Array[ExtResource("1_1oxrs")]([SubResource("Resource_l5yx7"), SubResource("Resource_ddgk6")])

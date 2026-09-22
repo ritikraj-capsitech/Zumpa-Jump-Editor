@@ -26,6 +26,17 @@ func _physics_process(_delta: float) -> void:
 		update_components()
 		queue_redraw()
 
-func _draw() -> void:
+func is_in_editor() -> bool:
 	if Engine.is_editor_hint():
+		return true
+	var n: Node = self
+	while n:
+		if n.name == "LevelEditor" or n.name == "LevelCanvas" or n.has_method("new_level") or n.is_in_group("level_editor"):
+			return true
+		n = n.get_parent()
+	return false
+
+func _draw() -> void:
+	if is_in_editor():
 		draw_line(Vector2.ZERO, Vector2(0, trigger_distance_y), Color(1.0, 0.4, 0.4, 0.8), 2.0)
+

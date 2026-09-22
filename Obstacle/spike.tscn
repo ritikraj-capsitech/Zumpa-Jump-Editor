@@ -1,22 +1,20 @@
 [gd_scene format=3 uid="uid://kpsl6tyqofik"]
 
 [ext_resource type="Script" uid="uid://cdi6aq6ict6g4" path="res://Scripts/SpikeController.gd" id="1_y64fm"]
-[ext_resource type="Texture2D" uid="uid://d3psekx4rja0x" path="res://Sprite/Obstacles/Group 167.png" id="2_mmbyc"]
+[ext_resource type="Texture2D" uid="uid://d2v116k84o3cc" path="res://tiles/Spike.png" id="2_mmbyc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_46ixr"]
-size = Vector2(259, 49.5)
+size = Vector2(96, 20)
 
 [node name="Spike" type="Area2D" unique_id=29770724 groups=["obstacle"]]
 z_index = 100
 collision_layer = 2
 script = ExtResource("1_y64fm")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=853520994]
-position = Vector2(134, 24.000002)
-rotation = 1.5707964
-scale = Vector2(0.07547443, 0.0714699)
-texture = ExtResource("2_mmbyc")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=322224644]
-position = Vector2(131.5, 21.25)
+position = Vector2(-1, -1)
 shape = SubResource("RectangleShape2D_46ixr")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=853520994]
+scale = Vector2(0.7652353, 0.72546524)
+texture = ExtResource("2_mmbyc")

@@ -59,7 +59,20 @@ func activate_triggers() -> void:
 				if node.has_method("trigger"):
 					node.trigger()
 
+func is_in_editor() -> bool:
+	if Engine.is_editor_hint():
+		return true
+	var n: Node = self
+	while n:
+		if n.name == "LevelEditor" or n.name == "LevelCanvas" or n.has_method("new_level") or n.is_in_group("level_editor"):
+			return true
+		n = n.get_parent()
+	return false
+
 func _draw() -> void:
+	if not is_in_editor():
+		return
+
 	var rect = Rect2(-Vector2(area_width, area_height) / 2.0, Vector2(area_width, area_height))
 	draw_rect(rect, Color(1.0, 0.8, 0.1, 0.35), true)
 	draw_rect(rect, Color(1.0, 0.8, 0.1, 0.9), false, 2.5)
