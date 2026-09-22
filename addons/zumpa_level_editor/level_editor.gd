@@ -20,6 +20,9 @@ extends Control
 @onready var canvas_zoom_label: Label = %CanvasZoomLabel
 @onready var canvas_zoom_in_btn: Button = %CanvasZoomInBtn
 @onready var canvas_zoom_reset_btn: Button = %CanvasZoomResetBtn
+@onready var toggle_left_btn: Button = %ToggleLeftBtn
+@onready var toggle_right_btn: Button = %ToggleRightBtn
+@onready var left_panel: PanelContainer = %LeftPanel
 
 # Right Inspector
 @onready var inspector_panel: PanelContainer = %InspectorPanel
@@ -236,6 +239,20 @@ func connect_signals() -> void:
 				canvas.set_zoom_level(1.0, scroll_container)
 		)
 
+	if toggle_left_btn and left_panel:
+		toggle_left_btn.toggled.connect(func(pressed):
+			left_panel.visible = pressed
+		)
+
+	if toggle_right_btn and inspector_panel:
+		toggle_right_btn.toggled.connect(func(pressed):
+			inspector_panel.visible = pressed
+		)
+
+	resized.connect(on_container_resized)
+	if scroll_container:
+		scroll_container.resized.connect(on_container_resized)
+
 	canvas.object_selected.connect(on_object_selected)
 	canvas.object_moved.connect(update_inspector_values)
 	canvas.player_start_changed.connect(on_player_start_changed)
@@ -444,6 +461,11 @@ func load_level(lvl: LevelData, path: String) -> void:
 	populate_level_selector()
 	on_object_selected(null)
 	call_deferred("center_view_on_player")
+
+func on_container_resized() -> void:
+	if canvas:
+		canvas.update_canvas_size()
+		canvas.queue_redraw()
 
 func center_view_on_player() -> void:
 	if not current_level or not scroll_container or not canvas:

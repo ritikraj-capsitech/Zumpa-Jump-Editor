@@ -31,15 +31,33 @@ grow_vertical = 2
 [node name="TopBarPanel" type="PanelContainer" parent="MainVBox" unique_id=81378314]
 layout_mode = 2
 
-[node name="TopBar" type="HBoxContainer" parent="MainVBox/TopBarPanel" unique_id=2100257227]
+[node name="TopBar" type="HFlowContainer" parent="MainVBox/TopBarPanel" unique_id=2100257227]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
 
 [node name="Label" type="Label" parent="MainVBox/TopBarPanel/TopBar" unique_id=465307556]
 layout_mode = 2
 text = " ZUMPA LEVEL EDITOR "
 
 [node name="VSeparator" type="VSeparator" parent="MainVBox/TopBarPanel/TopBar" unique_id=1141180962]
+layout_mode = 2
+
+[node name="ToggleLeftBtn" type="Button" parent="MainVBox/TopBarPanel/TopBar" unique_id=11115]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+text = " ◀ Items "
+
+[node name="ToggleRightBtn" type="Button" parent="MainVBox/TopBarPanel/TopBar" unique_id=11116]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+text = " Inspector ▶ "
+
+[node name="VSeparator0" type="VSeparator" parent="MainVBox/TopBarPanel/TopBar" unique_id=98721034]
 layout_mode = 2
 
 [node name="NewBtn" type="Button" parent="MainVBox/TopBarPanel/TopBar" unique_id=11101]
@@ -146,6 +164,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="LeftPanel" type="PanelContainer" parent="MainVBox/ContentHBox" unique_id=2134968110]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(165, 0)
 layout_mode = 2
 
@@ -526,9 +545,10 @@ text = "🪨 Stone"
 [node name="BottomBarPanel" type="PanelContainer" parent="MainVBox" unique_id=1376739543]
 layout_mode = 2
 
-[node name="BottomBar" type="HBoxContainer" parent="MainVBox/BottomBarPanel" unique_id=1724860751]
+[node name="BottomBar" type="HFlowContainer" parent="MainVBox/BottomBarPanel" unique_id=1724860751]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
 
 [node name="IDLbl" type="Label" parent="MainVBox/BottomBarPanel/BottomBar" unique_id=1982985013]
 layout_mode = 2
