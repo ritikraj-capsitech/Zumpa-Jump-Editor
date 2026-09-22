@@ -15,7 +15,15 @@ static var _registry: Dictionary = {
 		"name": "Moving & Rotating Obstacle 2",
 		"scene_path": "res://Obstacle/obs_2.tscn",
 		"category": "Obstacles",
-		"default_properties": {"rotation_speed": 2.0, "move_speed": 100.0, "move_distance": 200.0},
+		"default_properties": {"rotation_speed": 2.0, "move_speed": 100.0, "move_distance": 200.0, "move_direction": "X"},
+		"default_scale": Vector2(1, 1)
+	},
+	"spike": {
+		"id": "spike",
+		"name": "Spike Trap",
+		"scene_path": "res://Obstacle/spike.tscn",
+		"category": "Obstacles",
+		"default_properties": {"rotation_speed": 0.0},
 		"default_scale": Vector2(1, 1)
 	},
 	"platform": {

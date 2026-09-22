@@ -31,11 +31,14 @@ extends Control
 @onready var prop_move_speed_row: HBoxContainer = %PropMoveSpeedRow
 @onready var move_dist_spin: SpinBox = %MoveDistSpin
 @onready var prop_move_dist_row: HBoxContainer = %PropMoveDistRow
+@onready var prop_move_dir_row: HBoxContainer = %PropMoveDirRow
+@onready var move_dir_opt: OptionButton = %MoveDirOpt
 @onready var apply_btn: Button = %ApplyBtn
 
 # Tile Palette Inspector
 @onready var atlas_x_spin: SpinBox = %AtlasXSpin
 @onready var atlas_y_spin: SpinBox = %AtlasYSpin
+@onready var tile_size_opt: OptionButton = %TileSizeOpt
 @onready var atlas_picker: AtlasPalettePicker = %AtlasPicker
 @onready var zoom_out_btn: Button = %ZoomOutBtn
 @onready var zoom_label: Label = %ZoomLabel
@@ -243,6 +246,18 @@ func connect_signals() -> void:
 	atlas_x_spin.value_changed.connect(func(_v): update_tile_preview())
 	atlas_y_spin.value_changed.connect(func(_v): update_tile_preview())
 
+	if tile_size_opt:
+		tile_size_opt.item_selected.connect(func(idx):
+			var ts_id = tile_size_opt.get_item_id(idx)
+			var theme_id = "world_1"
+			if current_level:
+				theme_id = current_level.world_theme
+			WorldThemeRegistry.set_theme_tile_size(theme_id, Vector2i(ts_id, ts_id))
+			update_tile_preview()
+			if canvas:
+				canvas.refresh_canvas()
+		)
+
 	btn_grass_top.pressed.connect(func(): set_tile_atlas(1, 1))
 	btn_grass_left.pressed.connect(func(): set_tile_atlas(0, 1))
 	btn_grass_right.pressed.connect(func(): set_tile_atlas(2, 1))
@@ -310,17 +325,25 @@ func update_tile_preview() -> void:
 		theme_id = current_level.world_theme
 	var theme_info = WorldThemeRegistry.get_theme(theme_id)
 	var tex_path: String = theme_info.get("platform_texture", "res://tiles/Terrain (16x16).png")
+	var t_size: Vector2i = theme_info.get("tile_size", Vector2i(16, 16))
+
+	if tile_size_opt:
+		for i in range(tile_size_opt.item_count):
+			if tile_size_opt.get_item_id(i) == t_size.x:
+				tile_size_opt.select(i)
+				break
 
 	if ResourceLoader.exists(tex_path):
 		var tex: Texture2D = load(tex_path)
 		if atlas_picker:
+			atlas_picker.tile_size = t_size
 			if atlas_picker.texture != tex:
 				atlas_picker.texture = tex
 			atlas_picker.selected_coords = Vector2i(ax, ay)
 
 		var atlas_tex := AtlasTexture.new()
 		atlas_tex.atlas = tex
-		atlas_tex.region = Rect2(ax * 16, ay * 16, 16, 16)
+		atlas_tex.region = Rect2(ax * t_size.x, ay * t_size.y, t_size.x, t_size.y)
 		tile_preview_rect.texture = atlas_tex
 
 func on_level_selected_from_opt(idx: int) -> void:
@@ -410,6 +433,7 @@ func on_object_selected(obj: ObjectData) -> void:
 		prop_speed_row.visible = false
 		prop_move_speed_row.visible = false
 		prop_move_dist_row.visible = false
+		prop_move_dir_row.visible = false
 		apply_btn.disabled = true
 		delete_btn.disabled = true
 		duplicate_btn.disabled = true
@@ -454,6 +478,13 @@ func update_inspector_values(obj: ObjectData) -> void:
 	else:
 		prop_move_dist_row.visible = false
 
+	if obj.properties.has("move_direction") or obj.properties.has("move_distance"):
+		prop_move_dir_row.visible = true
+		var dir = obj.properties.get("move_direction", "X")
+		move_dir_opt.select(1 if dir == "Y" else 0)
+	else:
+		prop_move_dir_row.visible = false
+
 func apply_inspector_changes() -> void:
 	if not canvas.selected_object:
 		return
@@ -468,6 +499,9 @@ func apply_inspector_changes() -> void:
 		obj.properties["move_speed"] = move_speed_spin.value
 	if prop_move_dist_row.visible:
 		obj.properties["move_distance"] = move_dist_spin.value
+	if prop_move_dir_row.visible:
+		var selected_id = move_dir_opt.get_selected_id()
+		obj.properties["move_direction"] = "Y" if selected_id == 1 else "X"
 
 	canvas.refresh_canvas()
 

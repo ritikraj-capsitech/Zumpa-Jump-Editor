@@ -50,13 +50,15 @@ func refresh_canvas() -> void:
 
 	var theme_info = WorldThemeRegistry.get_theme(level_data.world_theme)
 	var def_atlas: Vector2i = theme_info.get("default_atlas_coords", Vector2i(1, 1))
+	var t_size: Vector2i = theme_info.get("tile_size", Vector2i(16, 16))
 
 	# Create TileMapLayer Preview on Canvas
 	canvas_tilemap = TileMapLayer.new()
 	canvas_tilemap.name = "CanvasTileMap"
 	canvas_tilemap.tile_set = WorldThemeRegistry.create_tileset_for_theme(level_data.world_theme)
 	canvas_tilemap.position = origin_offset
-	canvas_tilemap.scale = Vector2(3.0, 3.0) # 16px * 3 = 48px tile size
+	var scale_factor: float = 48.0 / float(t_size.x) if t_size.x > 0 else 3.0
+	canvas_tilemap.scale = Vector2(scale_factor, scale_factor)
 	canvas_tilemap.z_index = 2
 	add_child(canvas_tilemap)
 
