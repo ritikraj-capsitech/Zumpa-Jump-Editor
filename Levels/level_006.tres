@@ -213,14 +213,124 @@ properties = {
 "rotation_speed": 0.0
 }
 
+[sub_resource type="Resource" id="Resource_2jtbb"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(2328, 704)
+
+[sub_resource type="Resource" id="Resource_ilqam"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(2332, 1596)
+
+[sub_resource type="Resource" id="Resource_thtgm"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(2324, -180)
+
+[sub_resource type="Resource" id="Resource_px1og"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(2328, -976)
+
+[sub_resource type="Resource" id="Resource_o1fgc"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(2604, -532)
+
+[sub_resource type="Resource" id="Resource_8llei"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(2788, -540)
+rotation = 180.0
+
+[sub_resource type="Resource" id="Resource_ytkiw"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(2568, -2100)
+rotation = 90.0
+
+[sub_resource type="Resource" id="Resource_7vj1j"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(1668, -2108)
+rotation = 90.0
+
+[sub_resource type="Resource" id="Resource_gat15"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(2868, -2300)
+rotation = 90.0
+
+[sub_resource type="Resource" id="Resource_kniux"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(1960, -2292)
+rotation = 90.0
+
+[sub_resource type="Resource" id="Resource_gjesj"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(2560, -2556)
+rotation = 90.0
+
+[sub_resource type="Resource" id="Resource_qbiu5"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(1712, -2548)
+rotation = 90.0
+
+[sub_resource type="Resource" id="Resource_hbbda"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(1116, -2296)
+rotation = 90.0
+
+[sub_resource type="Resource" id="Resource_38cu5"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(972, -2540)
+rotation = 90.0
+
+[sub_resource type="Resource" id="Resource_kswg2"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(988, -2060)
+rotation = 90.0
+
+[sub_resource type="Resource" id="Resource_fuuuj"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(784, -1552)
+
+[sub_resource type="Resource" id="Resource_qxrhu"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(788, -688)
+
+[sub_resource type="Resource" id="Resource_s13bm"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(824, 1112)
+
+[sub_resource type="Resource" id="Resource_kkkw6"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(824, 228)
+
+[sub_resource type="Resource" id="Resource_2eroy"]
+script = ExtResource("1_syhfj")
+object_id = "wall"
+position = Vector2(820, 1572)
+
 [resource]
 script = ExtResource("2_uc083")
 level_id = "level_006"
 level_name = "Level 6"
 world_theme = "world_2"
 player_start = Vector2(1500, 1500)
-level_size = Vector2(3000, 4000)
-objects = Array[ExtResource("1_syhfj")]([SubResource("Resource_syhfj"), SubResource("Resource_uc083"), SubResource("Resource_bb08s"), SubResource("Resource_55w5j"), SubResource("Resource_duy3p"), SubResource("Resource_ospbc"), SubResource("Resource_1jbyx"), SubResource("Resource_mmkb2"), SubResource("Resource_8gjau"), SubResource("Resource_rpjs7"), SubResource("Resource_4rcw8"), SubResource("Resource_8tiah"), SubResource("Resource_bi2bp"), SubResource("Resource_grclr"), SubResource("Resource_upcv4"), SubResource("Resource_ugs3f"), SubResource("Resource_54crs"), SubResource("Resource_1dfir"), SubResource("Resource_tksvi"), SubResource("Resource_uqrma"), SubResource("Resource_ln4nl"), SubResource("Resource_7ld8e"), SubResource("Resource_atds0")])
+level_size = Vector2(3000, 3000)
+objects = Array[ExtResource("1_syhfj")]([SubResource("Resource_syhfj"), SubResource("Resource_uc083"), SubResource("Resource_bb08s"), SubResource("Resource_55w5j"), SubResource("Resource_duy3p"), SubResource("Resource_ospbc"), SubResource("Resource_1jbyx"), SubResource("Resource_mmkb2"), SubResource("Resource_8gjau"), SubResource("Resource_rpjs7"), SubResource("Resource_4rcw8"), SubResource("Resource_8tiah"), SubResource("Resource_bi2bp"), SubResource("Resource_grclr"), SubResource("Resource_upcv4"), SubResource("Resource_ugs3f"), SubResource("Resource_54crs"), SubResource("Resource_1dfir"), SubResource("Resource_tksvi"), SubResource("Resource_uqrma"), SubResource("Resource_ln4nl"), SubResource("Resource_7ld8e"), SubResource("Resource_atds0"), SubResource("Resource_2jtbb"), SubResource("Resource_ilqam"), SubResource("Resource_thtgm"), SubResource("Resource_px1og"), SubResource("Resource_o1fgc"), SubResource("Resource_8llei"), SubResource("Resource_ytkiw"), SubResource("Resource_7vj1j"), SubResource("Resource_gat15"), SubResource("Resource_kniux"), SubResource("Resource_gjesj"), SubResource("Resource_qbiu5"), SubResource("Resource_hbbda"), SubResource("Resource_38cu5"), SubResource("Resource_kswg2"), SubResource("Resource_fuuuj"), SubResource("Resource_qxrhu"), SubResource("Resource_s13bm"), SubResource("Resource_kkkw6"), SubResource("Resource_2eroy")])
 tile_data = Array[Dictionary]([{
 "atlas_x": 1,
 "atlas_y": 0,
@@ -369,30 +479,6 @@ tile_data = Array[Dictionary]([{
 "atlas_x": 1,
 "atlas_y": 0,
 "source_id": 0,
-"x": 44,
-"y": 41
-}, {
-"atlas_x": 1,
-"atlas_y": 0,
-"source_id": 0,
-"x": 45,
-"y": 41
-}, {
-"atlas_x": 1,
-"atlas_y": 0,
-"source_id": 0,
-"x": 46,
-"y": 41
-}, {
-"atlas_x": 1,
-"atlas_y": 0,
-"source_id": 0,
-"x": 47,
-"y": 41
-}, {
-"atlas_x": 1,
-"atlas_y": 0,
-"source_id": 0,
 "x": 20,
 "y": 40
 }, {
@@ -579,24 +665,6 @@ tile_data = Array[Dictionary]([{
 "atlas_x": 1,
 "atlas_y": 0,
 "source_id": 0,
-"x": 44,
-"y": 38
-}, {
-"atlas_x": 1,
-"atlas_y": 0,
-"source_id": 0,
-"x": 45,
-"y": 38
-}, {
-"atlas_x": 1,
-"atlas_y": 0,
-"source_id": 0,
-"x": 46,
-"y": 38
-}, {
-"atlas_x": 1,
-"atlas_y": 0,
-"source_id": 0,
 "x": 21,
 "y": 39
 }, {
@@ -731,42 +799,6 @@ tile_data = Array[Dictionary]([{
 "source_id": 0,
 "x": 43,
 "y": 39
-}, {
-"atlas_x": 1,
-"atlas_y": 0,
-"source_id": 0,
-"x": 44,
-"y": 39
-}, {
-"atlas_x": 1,
-"atlas_y": 0,
-"source_id": 0,
-"x": 45,
-"y": 39
-}, {
-"atlas_x": 1,
-"atlas_y": 0,
-"source_id": 0,
-"x": 46,
-"y": 39
-}, {
-"atlas_x": 1,
-"atlas_y": 0,
-"source_id": 0,
-"x": 46,
-"y": 40
-}, {
-"atlas_x": 1,
-"atlas_y": 0,
-"source_id": 0,
-"x": 45,
-"y": 40
-}, {
-"atlas_x": 1,
-"atlas_y": 0,
-"source_id": 0,
-"x": 44,
-"y": 40
 }, {
 "atlas_x": 1,
 "atlas_y": 0,
@@ -6231,12 +6263,6 @@ tile_data = Array[Dictionary]([{
 "atlas_x": 4,
 "atlas_y": 0,
 "source_id": 0,
-"x": 63,
-"y": -26
-}, {
-"atlas_x": 4,
-"atlas_y": 0,
-"source_id": 0,
 "x": 60,
 "y": -26
 }, {
@@ -9298,18 +9324,6 @@ tile_data = Array[Dictionary]([{
 "atlas_y": 0,
 "source_id": 0,
 "x": 62,
-"y": -39
-}, {
-"atlas_x": 4,
-"atlas_y": 0,
-"source_id": 0,
-"x": 63,
-"y": -38
-}, {
-"atlas_x": 4,
-"atlas_y": 0,
-"source_id": 0,
-"x": 63,
 "y": -39
 }, {
 "atlas_x": 4,
@@ -9864,12 +9878,6 @@ tile_data = Array[Dictionary]([{
 "x": 22,
 "y": 26
 }, {
-"atlas_x": 5,
-"atlas_y": 1,
-"source_id": 0,
-"x": 48,
-"y": 29
-}, {
 "atlas_x": 4,
 "atlas_y": 0,
 "source_id": 0,
@@ -10293,12 +10301,6 @@ tile_data = Array[Dictionary]([{
 "atlas_x": 4,
 "atlas_y": 0,
 "source_id": 0,
-"x": 63,
-"y": -21
-}, {
-"atlas_x": 4,
-"atlas_y": 0,
-"source_id": 0,
 "x": 62,
 "y": -22
 }, {
@@ -10491,72 +10493,6 @@ tile_data = Array[Dictionary]([{
 "atlas_x": 4,
 "atlas_y": 0,
 "source_id": 0,
-"x": 48,
-"y": -43
-}, {
-"atlas_x": 4,
-"atlas_y": 0,
-"source_id": 0,
-"x": 47,
-"y": -43
-}, {
-"atlas_x": 4,
-"atlas_y": 0,
-"source_id": 0,
-"x": 46,
-"y": -43
-}, {
-"atlas_x": 4,
-"atlas_y": 0,
-"source_id": 0,
-"x": 45,
-"y": -43
-}, {
-"atlas_x": 4,
-"atlas_y": 0,
-"source_id": 0,
-"x": 44,
-"y": -43
-}, {
-"atlas_x": 4,
-"atlas_y": 0,
-"source_id": 0,
-"x": 43,
-"y": -43
-}, {
-"atlas_x": 4,
-"atlas_y": 0,
-"source_id": 0,
-"x": 42,
-"y": -43
-}, {
-"atlas_x": 4,
-"atlas_y": 0,
-"source_id": 0,
-"x": 41,
-"y": -43
-}, {
-"atlas_x": 4,
-"atlas_y": 0,
-"source_id": 0,
-"x": 40,
-"y": -43
-}, {
-"atlas_x": 4,
-"atlas_y": 0,
-"source_id": 0,
-"x": 39,
-"y": -43
-}, {
-"atlas_x": 4,
-"atlas_y": 0,
-"source_id": 0,
-"x": 38,
-"y": -43
-}, {
-"atlas_x": 4,
-"atlas_y": 0,
-"source_id": 0,
 "x": 41,
 "y": -42
 }, {
@@ -10733,4 +10669,250 @@ tile_data = Array[Dictionary]([{
 "source_id": 0,
 "x": 18,
 "y": -42
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 62,
+"y": -42
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 2
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 3
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 4
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 5
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 6
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 7
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 8
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 9
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 10
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 11
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 12
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 13
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 14
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 15
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 16
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 17
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 18
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 19
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 20
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 21
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 22
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 23
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 24
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 25
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 26
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 27
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 28
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 29
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 30
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 31
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 32
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 33
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 34
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 35
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 36
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 37
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 38
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 39
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 40
+}, {
+"atlas_x": 5,
+"atlas_y": 0,
+"source_id": 0,
+"x": 44,
+"y": 41
 }])

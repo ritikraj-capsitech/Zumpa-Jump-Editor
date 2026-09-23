@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://k5jp2vn2phbs"]
+[gd_resource type="Resource" script_class="LevelData" format=3]
 
-[ext_resource type="Script" uid="uid://duog4ubo06jj2" path="res://Scripts/object_data.gd" id="1_06sw6"]
-[ext_resource type="Script" uid="uid://bjdghriqpswf0" path="res://Scripts/level_data.gd" id="2_lvtey"]
+[ext_resource type="Script" path="res://Scripts/object_data.gd" id="1_06sw6"]
+[ext_resource type="Script" path="res://Scripts/level_data.gd" id="2_lvtey"]
 
 [sub_resource type="Resource" id="Resource_t7hda"]
 script = ExtResource("1_06sw6")
@@ -69,7 +69,7 @@ rotation = 180.0
 [sub_resource type="Resource" id="Resource_oktjj"]
 script = ExtResource("1_06sw6")
 object_id = "wall"
-position = Vector2(1066, -1441)
+position = Vector2(819.4038, -737.8369)
 rotation = 180.0
 
 [sub_resource type="Resource" id="Resource_w4ctq"]

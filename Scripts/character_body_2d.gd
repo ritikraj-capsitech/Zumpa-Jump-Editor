@@ -176,6 +176,21 @@ func _process(_delta: float) -> void:
 		bg_anchor.global_position = camera.get_screen_center_position()
 
 
+func set_background_texture(tex: Texture2D) -> void:
+	var p_bg: TextureRect = null
+	if has_node("BgAnchor/TextureRect"):
+		p_bg = get_node("BgAnchor/TextureRect") as TextureRect
+	elif has_node("Camera2D/TextureRect"):
+		p_bg = get_node("Camera2D/TextureRect") as TextureRect
+	elif has_node("TextureRect"):
+		p_bg = get_node("TextureRect") as TextureRect
+
+	if p_bg and tex:
+		p_bg.texture = tex
+		p_bg.z_index = -100
+		p_bg.z_as_relative = false
+
+
 func _physics_process(delta: float) -> void:
 	if level_ended:
 		return

@@ -34,9 +34,17 @@ func _ready() -> void:
 func set_level_data(p_data: LevelData) -> void:
 	level_data = p_data
 	selected_object = null
+	update_origin_offset()
 	refresh_canvas()
 
+func update_origin_offset() -> void:
+	if level_data:
+		origin_offset.y = level_data.level_size.y + 500.0
+	else:
+		origin_offset.y = 2000.0
+
 func refresh_canvas() -> void:
+	update_origin_offset()
 	# Clear existing preview nodes
 	for child in get_children():
 		child.queue_free()
@@ -118,12 +126,14 @@ func refresh_canvas() -> void:
 	queue_redraw()
 
 func update_canvas_size() -> void:
+	update_origin_offset()
 	var h: float = 4000.0 * zoom_scale
 	var w: float = 1280.0 * zoom_scale
 	if level_data:
 		h = (level_data.level_size.y + 3000.0) * zoom_scale
 		w = max(1280.0 * zoom_scale, (level_data.level_size.x + origin_offset.x * 2.0) * zoom_scale)
 	custom_minimum_size = Vector2(w, h)
+
 
 func world_to_canvas(w_pos: Vector2) -> Vector2:
 	return Vector2((w_pos.x + origin_offset.x) * zoom_scale, (w_pos.y + origin_offset.y) * zoom_scale)

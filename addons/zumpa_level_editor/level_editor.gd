@@ -339,9 +339,12 @@ func connect_signals() -> void:
 	)
 	height_spin.value_changed.connect(func(v):
 		if current_level:
+			var old_h = current_level.level_size.y
 			current_level.level_size.y = v
-			canvas.update_canvas_size()
-			canvas.queue_redraw()
+			canvas.refresh_canvas()
+			if scroll_container and canvas:
+				var delta_h = (v - old_h) * canvas.zoom_scale
+				scroll_container.scroll_vertical += int(delta_h)
 	)
 	player_x_spin.value_changed.connect(func(v):
 		if current_level:

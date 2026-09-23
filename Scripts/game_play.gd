@@ -24,12 +24,20 @@ func apply_world_theme(lvl_data: LevelData, player: Node2D = null) -> void:
 	var bg_path: String = theme_info.get("background", "res://Sprite/ENV/setting screen.png")
 	if ResourceLoader.exists(bg_path):
 		var bg_tex = load(bg_path)
-		if player and player.has_node("Camera2D/TextureRect"):
-			var p_bg = player.get_node("Camera2D/TextureRect") as TextureRect
-			if p_bg:
-				p_bg.texture = bg_tex
-				p_bg.z_index = -100
-				p_bg.z_as_relative = false
+		if player:
+			if player.has_method("set_background_texture"):
+				player.call("set_background_texture", bg_tex)
+			else:
+				var p_bg: TextureRect = null
+				if player.has_node("BgAnchor/TextureRect"):
+					p_bg = player.get_node("BgAnchor/TextureRect") as TextureRect
+				elif player.has_node("Camera2D/TextureRect"):
+					p_bg = player.get_node("Camera2D/TextureRect") as TextureRect
+				if p_bg:
+					p_bg.texture = bg_tex
+					p_bg.z_index = -100
+					p_bg.z_as_relative = false
+
 
 func setup_hud(lvl_data: LevelData) -> void:
 	if hud_canvas and is_instance_valid(hud_canvas):
