@@ -300,6 +300,21 @@ static func set_node_owner_recursive(node: Node, root_node: Node) -> void:
 			set_node_owner_recursive(child, root_node)
 
 
+static func bake_level_to_res(lvl_data: LevelData, save_path: String) -> Error:
+	if not lvl_data:
+		return ERR_INVALID_DATA
+	var dir_path = save_path.get_base_dir()
+	if not DirAccess.dir_exists_absolute(dir_path):
+		DirAccess.make_dir_recursive_absolute(dir_path)
+
+	var err = ResourceSaver.save(lvl_data, save_path, ResourceSaver.FLAG_COMPRESS)
+	if err == OK:
+		print("LevelManager: Successfully exported binary .res to '%s'" % save_path)
+	else:
+		push_error("LevelManager: Failed to save binary .res to '%s', error: %d" % [save_path, err])
+	return err
+
+
 static func bake_all_levels_to_tscn() -> void:
 	var paths = get_all_level_paths()
 	for p in paths:
@@ -307,4 +322,5 @@ static func bake_all_levels_to_tscn() -> void:
 		if lvl:
 			var tscn_p = p.get_basename() + ".tscn"
 			bake_level_to_tscn(lvl, tscn_p)
+
 

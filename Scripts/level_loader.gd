@@ -102,11 +102,21 @@ static func spawn_object(obj_data: ObjectData, container: Node) -> Node2D:
 			node.set(prop_name, obj_data.properties[prop_name])
 	if node.has_method("update_shape_size"):
 		node.call("update_shape_size")
-	if node.has_method("update_components"):
-		node.call("update_components")
+	# Generate a clean, unique Godot node name without '@' or invalid characters
+	var raw_name = obj_data.object_id.capitalize().replace(" ", "").replace("_", "")
+	if raw_name == "":
+		raw_name = "Object"
 
+	var clean_name = raw_name
+	var count = 1
+	while container.has_node(clean_name):
+		count += 1
+		clean_name = "%s_%d" % [raw_name, count]
+
+	node.name = clean_name
 	container.add_child(node)
 	return node
+
 
 # static func spawn_boundaries(level_data: LevelData, container: Node, theme_info: Dictionary) -> void:
 # 	var wall_path: String = theme_info.get("wall_texture", "res://Sprite/LVLFrames/Union.png")

@@ -93,11 +93,11 @@ tile_set = SubResource("TileSet_a5y3p")
 position = Vector2(1243.5552, 1763.9172)
 rotation = 3.1415927
 
-[node name="@Area2D@37256" parent="." unique_id=1586389321 instance=ExtResource("9_p6vcx")]
+[node name="_Area2D_37256" parent="." unique_id=1586389321 instance=ExtResource("9_p6vcx")]
 position = Vector2(1145.2103, 1764.1432)
 rotation = 3.1415927
 
-[node name="@Area2D@37257" parent="." unique_id=298594257 instance=ExtResource("9_p6vcx")]
+[node name="_Area2D_37257" parent="." unique_id=298594257 instance=ExtResource("9_p6vcx")]
 position = Vector2(1093.5569, 1764.3691)
 rotation = 3.1415927
 
@@ -109,7 +109,7 @@ rotation = 3.1415927
 position = Vector2(1879.4949, 1764.5948)
 rotation = 3.1415927
 
-[node name="@Area2D@37260" parent="." unique_id=219438000 instance=ExtResource("9_p6vcx")]
+[node name="_Area2D_37260" parent="." unique_id=219438000 instance=ExtResource("9_p6vcx")]
 position = Vector2(1927.4497, 1764.8207)
 rotation = 3.1415927
 

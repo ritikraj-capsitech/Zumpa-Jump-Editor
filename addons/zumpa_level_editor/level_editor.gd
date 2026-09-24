@@ -9,7 +9,10 @@ extends Control
 @onready var new_btn: Button = %NewBtn
 @onready var save_btn: Button = %SaveBtn
 @onready var load_btn: Button = %LoadBtn
+@onready var export_res_btn: Button = %ExportResBtn if has_node("%ExportResBtn") else null
+@onready var export_tscn_btn: Button = %ExportTscnBtn if has_node("%ExportTscnBtn") else null
 @onready var level_select_opt: OptionButton = %LevelSelectOpt
+
 @onready var play_btn: Button = %PlayBtn
 @onready var center_view_btn: Button = %CenterViewBtn
 @onready var delete_btn: Button = %DeleteBtn
@@ -212,11 +215,16 @@ func connect_signals() -> void:
 	new_btn.pressed.connect(new_level)
 	save_btn.pressed.connect(on_save_pressed)
 	load_btn.pressed.connect(on_load_pressed)
+	if export_res_btn:
+		export_res_btn.pressed.connect(on_export_res_pressed)
+	if export_tscn_btn:
+		export_tscn_btn.pressed.connect(on_export_tscn_pressed)
 	play_btn.pressed.connect(on_play_pressed)
 	center_view_btn.pressed.connect(center_view_on_player)
 	delete_btn.pressed.connect(delete_selected)
 	duplicate_btn.pressed.connect(duplicate_selected)
 	level_select_opt.item_selected.connect(on_level_selected_from_opt)
+
 
 	snap_check.toggled.connect(func(toggled):
 		canvas.grid_snap = toggled
@@ -658,11 +666,38 @@ func save_level_to_file(path: String) -> void:
 		LevelManager.save_level_data(current_level, path)
 		current_level_path = path
 
-		# Automatically bake matching .tscn scene file for EVERY level when saved
-		var tscn_path = path.get_basename() + ".tscn"
-		LevelManager.bake_level_to_tscn(current_level, tscn_path)
+		# Auto-sync: If matching .res or .tscn files exist for this level, update them as well!
+		var base_path = path.get_basename()
+		var res_path = base_path + ".res"
+		if ResourceLoader.exists(res_path) or FileAccess.file_exists(res_path):
+			LevelManager.bake_level_to_res(current_level, res_path)
+
+		var tscn_path = base_path + ".tscn"
+		if ResourceLoader.exists(tscn_path) or FileAccess.file_exists(tscn_path):
+			LevelManager.bake_level_to_tscn(current_level, tscn_path)
 
 		populate_level_selector()
+
+func on_export_res_pressed() -> void:
+	if current_level and current_level_path != "":
+		save_level_to_file(current_level_path)
+		var res_path = current_level_path.get_basename() + ".res"
+		var err = LevelManager.bake_level_to_res(current_level, res_path)
+		if err == OK:
+			print("LevelEditor: Exported binary resource -> %s" % res_path)
+	elif current_level:
+		on_save_pressed()
+
+func on_export_tscn_pressed() -> void:
+	if current_level and current_level_path != "":
+		save_level_to_file(current_level_path)
+		var tscn_path = current_level_path.get_basename() + ".tscn"
+		var err = LevelManager.bake_level_to_tscn(current_level, tscn_path)
+		if err == OK:
+			print("LevelEditor: Exported pre-baked scene -> %s" % tscn_path)
+	elif current_level:
+		on_save_pressed()
+
 
 
 func on_load_pressed() -> void:

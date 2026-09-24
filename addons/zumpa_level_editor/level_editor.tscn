@@ -75,6 +75,16 @@ unique_name_in_owner = true
 layout_mode = 2
 text = " Load "
 
+[node name="ExportResBtn" type="Button" parent="MainVBox/TopBarPanel/TopBar" unique_id=11117]
+unique_name_in_owner = true
+layout_mode = 2
+text = " 📦 Export .RES "
+
+[node name="ExportTscnBtn" type="Button" parent="MainVBox/TopBarPanel/TopBar" unique_id=11118]
+unique_name_in_owner = true
+layout_mode = 2
+text = " 🎬 Export .TSCN "
+
 [node name="LevelSelectOpt" type="OptionButton" parent="MainVBox/TopBarPanel/TopBar" unique_id=11110]
 unique_name_in_owner = true
 layout_mode = 2
