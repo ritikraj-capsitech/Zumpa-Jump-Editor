@@ -45,6 +45,8 @@ func load_baked_level_scene(tscn_path: String, lvl_data: LevelData) -> void:
 					break
 
 		apply_world_theme(lvl_data, player)
+		if player and lvl_data:
+			LevelLoader.apply_camera_drag_settings(lvl_data, player)
 		setup_hud(lvl_data)
 	else:
 		push_error("GamePlay: Failed to load level scene at " + tscn_path)

@@ -322,5 +322,3 @@ static func bake_all_levels_to_tscn() -> void:
 		if lvl:
 			var tscn_p = p.get_basename() + ".tscn"
 			bake_level_to_tscn(lvl, tscn_p)
-
-

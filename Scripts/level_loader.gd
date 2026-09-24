@@ -37,17 +37,8 @@ static func load_level(level_data: LevelData, container: Node) -> CharacterBody2
 			p_bg.z_as_relative = false
 
 	# Apply Camera2D drag settings from LevelData
-	if player.has_node("Camera2D"):
-		var cam = player.get_node("Camera2D") as Camera2D
-		if cam:
-			cam.drag_horizontal_enabled = level_data.camera_drag_horizontal_enabled
-			cam.drag_vertical_enabled = level_data.camera_drag_vertical_enabled
-			cam.drag_horizontal_offset = level_data.camera_drag_horizontal_offset
-			cam.drag_vertical_offset = level_data.camera_drag_vertical_offset
-			cam.drag_left_margin = level_data.camera_drag_left_margin
-			cam.drag_top_margin = level_data.camera_drag_top_margin
-			cam.drag_right_margin = level_data.camera_drag_right_margin
-			cam.drag_bottom_margin = level_data.camera_drag_bottom_margin
+	apply_camera_drag_settings(level_data, player)
+
 
 
 
@@ -194,3 +185,18 @@ static func spawn_object(obj_data: ObjectData, container: Node) -> Node2D:
 # 		container.add_child(right_wall)
 # 
 # 		current_y -= segment_height
+
+static func apply_camera_drag_settings(level_data: LevelData, player: Node2D) -> void:
+	if not level_data or not player:
+		return
+	if player.has_node("Camera2D"):
+		var cam = player.get_node("Camera2D") as Camera2D
+		if cam:
+			cam.drag_horizontal_enabled = level_data.camera_drag_horizontal_enabled
+			cam.drag_vertical_enabled = level_data.camera_drag_vertical_enabled
+			cam.drag_horizontal_offset = level_data.camera_drag_horizontal_offset
+			cam.drag_vertical_offset = level_data.camera_drag_vertical_offset
+			cam.drag_left_margin = level_data.camera_drag_left_margin
+			cam.drag_top_margin = level_data.camera_drag_top_margin
+			cam.drag_right_margin = level_data.camera_drag_right_margin
+			cam.drag_bottom_margin = level_data.camera_drag_bottom_margin
