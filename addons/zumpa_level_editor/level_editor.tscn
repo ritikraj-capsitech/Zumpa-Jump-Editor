@@ -478,8 +478,133 @@ layout_mode = 2
 disabled = true
 text = "Apply Changes"
 
+[node name="HSeparatorCam" type="HSeparator" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=1690495359]
+layout_mode = 2
+
+[node name="CamHeader" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=1993687641]
+layout_mode = 2
+text = "PLAYER CAMERA DRAG"
+horizontal_alignment = 1
+
+[node name="PropCamDragHRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11427]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropCamDragHRow" unique_id=1426953086]
+layout_mode = 2
+text = "H Drag Enabled: "
+
+[node name="CamDragHCheck" type="CheckBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropCamDragHRow" unique_id=11428]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+
+[node name="PropCamDragVRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11429]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropCamDragVRow" unique_id=1426953087]
+layout_mode = 2
+text = "V Drag Enabled: "
+
+[node name="CamDragVCheck" type="CheckBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropCamDragVRow" unique_id=11430]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+
+[node name="PropCamLeftMarginRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11431]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropCamLeftMarginRow" unique_id=1426953088]
+layout_mode = 2
+text = "Left Margin: "
+
+[node name="CamLeftMarginSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropCamLeftMarginRow" unique_id=11432]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.05
+value = 0.8
+
+[node name="PropCamTopMarginRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11433]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropCamTopMarginRow" unique_id=1426953089]
+layout_mode = 2
+text = "Top Margin: "
+
+[node name="CamTopMarginSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropCamTopMarginRow" unique_id=11434]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.05
+value = 0.6
+
+[node name="PropCamRightMarginRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11437]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropCamRightMarginRow" unique_id=1426953090]
+layout_mode = 2
+text = "Right Margin: "
+
+[node name="CamRightMarginSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropCamRightMarginRow" unique_id=11438]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.05
+value = 0.8
+
+[node name="PropCamBotMarginRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11439]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropCamBotMarginRow" unique_id=1426953091]
+layout_mode = 2
+text = "Bottom Margin: "
+
+[node name="CamBotMarginSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropCamBotMarginRow" unique_id=11440]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.05
+value = 0.2
+
+[node name="PropCamHOffsetRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11441]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropCamHOffsetRow" unique_id=1426953092]
+layout_mode = 2
+text = "H Offset: "
+
+[node name="CamHOffsetSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropCamHOffsetRow" unique_id=11442]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -1.0
+max_value = 1.0
+step = 0.05
+value = 0.0
+
+[node name="PropCamVOffsetRow" type="HBoxContainer" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=11443]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropCamVOffsetRow" unique_id=1426953093]
+layout_mode = 2
+text = "V Offset: "
+
+[node name="CamVOffsetSpin" type="SpinBox" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox/PropCamVOffsetRow" unique_id=11444]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -1.0
+max_value = 1.0
+step = 0.05
+value = 0.0
+
 [node name="HSeparator2" type="HSeparator" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=1690495358]
 layout_mode = 2
+
 
 [node name="TileHeader" type="Label" parent="MainVBox/ContentHBox/InspectorPanel/InspectorScroll/VBox" unique_id=1993687638]
 layout_mode = 2

@@ -55,6 +55,17 @@ extends Control
 @onready var trigger_dist_spin: SpinBox = %TriggerDistSpin
 @onready var apply_btn: Button = %ApplyBtn
 
+# Player Camera Drag Inspector
+@onready var cam_drag_h_check: CheckBox = %CamDragHCheck if has_node("%CamDragHCheck") else null
+@onready var cam_drag_v_check: CheckBox = %CamDragVCheck if has_node("%CamDragVCheck") else null
+@onready var cam_left_margin_spin: SpinBox = %CamLeftMarginSpin if has_node("%CamLeftMarginSpin") else null
+@onready var cam_top_margin_spin: SpinBox = %CamTopMarginSpin if has_node("%CamTopMarginSpin") else null
+@onready var cam_right_margin_spin: SpinBox = %CamRightMarginSpin if has_node("%CamRightMarginSpin") else null
+@onready var cam_bot_margin_spin: SpinBox = %CamBotMarginSpin if has_node("%CamBotMarginSpin") else null
+@onready var cam_h_offset_spin: SpinBox = %CamHOffsetSpin if has_node("%CamHOffsetSpin") else null
+@onready var cam_v_offset_spin: SpinBox = %CamVOffsetSpin if has_node("%CamVOffsetSpin") else null
+
+
 # Tile Palette Inspector
 @onready var atlas_x_spin: SpinBox = %AtlasXSpin
 @onready var atlas_y_spin: SpinBox = %AtlasYSpin
@@ -365,6 +376,25 @@ func connect_signals() -> void:
 			canvas.refresh_canvas()
 	)
 
+	# Camera Drag Signals
+	if cam_drag_h_check:
+		cam_drag_h_check.toggled.connect(func(t): if current_level: current_level.camera_drag_horizontal_enabled = t)
+	if cam_drag_v_check:
+		cam_drag_v_check.toggled.connect(func(t): if current_level: current_level.camera_drag_vertical_enabled = t)
+	if cam_left_margin_spin:
+		cam_left_margin_spin.value_changed.connect(func(v): if current_level: current_level.camera_drag_left_margin = v)
+	if cam_top_margin_spin:
+		cam_top_margin_spin.value_changed.connect(func(v): if current_level: current_level.camera_drag_top_margin = v)
+	if cam_right_margin_spin:
+		cam_right_margin_spin.value_changed.connect(func(v): if current_level: current_level.camera_drag_right_margin = v)
+	if cam_bot_margin_spin:
+		cam_bot_margin_spin.value_changed.connect(func(v): if current_level: current_level.camera_drag_bottom_margin = v)
+	if cam_h_offset_spin:
+		cam_h_offset_spin.value_changed.connect(func(v): if current_level: current_level.camera_drag_horizontal_offset = v)
+	if cam_v_offset_spin:
+		cam_v_offset_spin.value_changed.connect(func(v): if current_level: current_level.camera_drag_vertical_offset = v)
+
+
 	save_dialog.file_selected.connect(save_level_to_file)
 	load_dialog.file_selected.connect(load_level_from_file)
 
@@ -479,9 +509,19 @@ func load_level(lvl: LevelData, path: String) -> void:
 	player_x_spin.value = lvl.player_start.x
 	player_y_spin.value = lvl.player_start.y
 
+	if cam_drag_h_check: cam_drag_h_check.button_pressed = lvl.camera_drag_horizontal_enabled
+	if cam_drag_v_check: cam_drag_v_check.button_pressed = lvl.camera_drag_vertical_enabled
+	if cam_left_margin_spin: cam_left_margin_spin.value = lvl.camera_drag_left_margin
+	if cam_top_margin_spin: cam_top_margin_spin.value = lvl.camera_drag_top_margin
+	if cam_right_margin_spin: cam_right_margin_spin.value = lvl.camera_drag_right_margin
+	if cam_bot_margin_spin: cam_bot_margin_spin.value = lvl.camera_drag_bottom_margin
+	if cam_h_offset_spin: cam_h_offset_spin.value = lvl.camera_drag_horizontal_offset
+	if cam_v_offset_spin: cam_v_offset_spin.value = lvl.camera_drag_vertical_offset
+
 	populate_level_selector()
 	on_object_selected(null)
 	call_deferred("center_view_on_player")
+
 
 func on_container_resized() -> void:
 	if canvas:
