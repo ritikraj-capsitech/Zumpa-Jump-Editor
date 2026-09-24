@@ -86,13 +86,14 @@ static func spawn_world_tilemap(level_data: LevelData, container: Node) -> Node:
 	tilemap_layer.z_index = 2
 
 	# Render saved tile map cells
-	if level_data.tile_data.size() > 0:
-		for cell in level_data.tile_data:
-			var coords := Vector2i(cell.get("x", 0), cell.get("y", 0))
-			var source_id: int = cell.get("source_id", 0)
-			var atlas_x: int = cell.get("atlas_x", def_atlas.x)
-			var atlas_y: int = cell.get("atlas_y", def_atlas.y)
-			tilemap_layer.set_cell(coords, source_id, Vector2i(atlas_x, atlas_y))
+	level_data.migrate_tile_data_if_needed()
+	var pt_size: int = level_data.packed_tiles.size()
+	if pt_size >= 4:
+		for i in range(0, pt_size, 4):
+			var cell := Vector2i(level_data.packed_tiles[i], level_data.packed_tiles[i + 1])
+			var atlas_x: int = level_data.packed_tiles[i + 2]
+			var atlas_y: int = level_data.packed_tiles[i + 3]
+			tilemap_layer.set_cell(cell, 0, Vector2i(atlas_x, atlas_y))
 
 	container.add_child(tilemap_layer)
 	return tilemap_layer

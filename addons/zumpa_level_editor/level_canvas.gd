@@ -73,13 +73,14 @@ func refresh_canvas() -> void:
 	add_child(canvas_tilemap)
 
 	# Render saved TileMap cells
-	if level_data.tile_data.size() > 0:
-		for cell in level_data.tile_data:
-			var coords := Vector2i(cell.get("x", 0), cell.get("y", 0))
-			var source_id: int = cell.get("source_id", 0)
-			var atlas_x: int = cell.get("atlas_x", def_atlas.x)
-			var atlas_y: int = cell.get("atlas_y", def_atlas.y)
-			canvas_tilemap.set_cell(coords, source_id, Vector2i(atlas_x, atlas_y))
+	level_data.migrate_tile_data_if_needed()
+	var pt_size: int = level_data.packed_tiles.size()
+	if pt_size >= 4:
+		for i in range(0, pt_size, 4):
+			var cell := Vector2i(level_data.packed_tiles[i], level_data.packed_tiles[i + 1])
+			var atlas_x: int = level_data.packed_tiles[i + 2]
+			var atlas_y: int = level_data.packed_tiles[i + 3]
+			canvas_tilemap.set_cell(cell, 0, Vector2i(atlas_x, atlas_y))
 
 	# Create Player Start Marker preview
 	var p_start_node := Node2D.new()
@@ -187,40 +188,41 @@ func place_tile_at(w_pos: Vector2) -> void:
 		return
 
 	# 48px tile size (16px * 3.0 scale)
-	var cell_x = int(floor(w_pos.x / 48.0))
-	var cell_y = int(floor(w_pos.y / 48.0))
+	var cell_x: int = int(floor(w_pos.x / 48.0))
+	var cell_y: int = int(floor(w_pos.y / 48.0))
 
-	# Check if tile already exists at cell
-	for i in range(level_data.tile_data.size()):
-		var cell = level_data.tile_data[i]
-		if cell.get("x", 0) == cell_x and cell.get("y", 0) == cell_y:
-			if cell.get("atlas_x", 0) != current_tile_atlas.x or cell.get("atlas_y", 0) != current_tile_atlas.y:
-				cell["atlas_x"] = current_tile_atlas.x
-				cell["atlas_y"] = current_tile_atlas.y
+	level_data.migrate_tile_data_if_needed()
+	var size: int = level_data.packed_tiles.size()
+	var found: bool = false
+	for i in range(0, size, 4):
+		if level_data.packed_tiles[i] == cell_x and level_data.packed_tiles[i + 1] == cell_y:
+			if level_data.packed_tiles[i + 2] != current_tile_atlas.x or level_data.packed_tiles[i + 3] != current_tile_atlas.y:
+				level_data.packed_tiles[i + 2] = current_tile_atlas.x
+				level_data.packed_tiles[i + 3] = current_tile_atlas.y
 				refresh_canvas()
 				emit_signal("level_data_modified")
-			return
+			found = true
+			break
 
-	level_data.tile_data.append({
-		"x": cell_x,
-		"y": cell_y,
-		"source_id": 0,
-		"atlas_x": current_tile_atlas.x,
-		"atlas_y": current_tile_atlas.y
-	})
-	refresh_canvas()
-	emit_signal("level_data_modified")
+	if not found:
+		level_data.add_packed_tile(cell_x, cell_y, current_tile_atlas.x, current_tile_atlas.y)
+		refresh_canvas()
+		emit_signal("level_data_modified")
 
 func erase_tile_at(w_pos: Vector2) -> void:
 	if not level_data:
 		return
-	var cell_x = int(floor(w_pos.x / 48.0))
-	var cell_y = int(floor(w_pos.y / 48.0))
+	var cell_x: int = int(floor(w_pos.x / 48.0))
+	var cell_y: int = int(floor(w_pos.y / 48.0))
 
-	for i in range(level_data.tile_data.size() - 1, -1, -1):
-		var cell = level_data.tile_data[i]
-		if cell.get("x", 0) == cell_x and cell.get("y", 0) == cell_y:
-			level_data.tile_data.remove_at(i)
+	level_data.migrate_tile_data_if_needed()
+	var size: int = level_data.packed_tiles.size()
+	for i in range(size - 4, -1, -4):
+		if level_data.packed_tiles[i] == cell_x and level_data.packed_tiles[i + 1] == cell_y:
+			level_data.packed_tiles.remove_at(i + 3)
+			level_data.packed_tiles.remove_at(i + 2)
+			level_data.packed_tiles.remove_at(i + 1)
+			level_data.packed_tiles.remove_at(i)
 			refresh_canvas()
 			emit_signal("level_data_modified")
 			return

@@ -175,40 +175,40 @@ static func create_default_level_1() -> LevelData:
 		var ax = 1
 		if cell_x == 4: ax = 0
 		elif cell_x == 18: ax = 2
-		lvl.tile_data.append({"x": cell_x, "y": 24, "source_id": 0, "atlas_x": ax, "atlas_y": 1})
-		lvl.tile_data.append({"x": cell_x, "y": 25, "source_id": 0, "atlas_x": 1, "atlas_y": 2})
+		lvl.add_packed_tile(cell_x, 24, ax, 1)
+		lvl.add_packed_tile(cell_x, 25, 1, 2)
 
 	# Stepping platforms
 	for cell_x in range(3, 9):
 		var ax = 1
 		if cell_x == 3: ax = 0
 		elif cell_x == 8: ax = 2
-		lvl.tile_data.append({"x": cell_x, "y": 18, "source_id": 0, "atlas_x": ax, "atlas_y": 1})
+		lvl.add_packed_tile(cell_x, 18, ax, 1)
 
 	for cell_x in range(13, 19):
 		var ax = 1
 		if cell_x == 13: ax = 0
 		elif cell_x == 18: ax = 2
-		lvl.tile_data.append({"x": cell_x, "y": 14, "source_id": 0, "atlas_x": ax, "atlas_y": 1})
+		lvl.add_packed_tile(cell_x, 14, ax, 1)
 
 	for cell_x in range(7, 15):
 		var ax = 1
 		if cell_x == 7: ax = 0
 		elif cell_x == 14: ax = 2
-		lvl.tile_data.append({"x": cell_x, "y": 9, "source_id": 0, "atlas_x": ax, "atlas_y": 1})
+		lvl.add_packed_tile(cell_x, 9, ax, 1)
 
 	for cell_x in range(4, 10):
 		var ax = 1
 		if cell_x == 4: ax = 0
 		elif cell_x == 9: ax = 2
-		lvl.tile_data.append({"x": cell_x, "y": 3, "source_id": 0, "atlas_x": ax, "atlas_y": 1})
+		lvl.add_packed_tile(cell_x, 3, ax, 1)
 
 	# Top goal platform
 	for cell_x in range(6, 17):
 		var ax = 1
 		if cell_x == 6: ax = 0
 		elif cell_x == 16: ax = 2
-		lvl.tile_data.append({"x": cell_x, "y": -5, "source_id": 0, "atlas_x": ax, "atlas_y": 1})
+		lvl.add_packed_tile(cell_x, -5, ax, 1)
 
 	# Obs1
 	var obs := ObjectData.new("obs_1", Vector2(540, 500), 0.0, Vector2(1, 1), {"rotation_speed": 2.0})
@@ -229,7 +229,7 @@ static func create_default_level_2() -> LevelData:
 	lvl.level_size = Vector2(1080, 3500)
 
 	for cell_x in range(5, 18):
-		lvl.tile_data.append({"x": cell_x, "y": 25, "source_id": 0, "atlas_x": 7, "atlas_y": 1})
+		lvl.add_packed_tile(cell_x, 25, 7, 1)
 
 	var obs1 := ObjectData.new("obs_1", Vector2(300, 800), 0.0, Vector2(1, 1), {"rotation_speed": 2.5})
 	lvl.add_object(obs1)
@@ -251,7 +251,7 @@ static func create_default_level_3() -> LevelData:
 	lvl.level_size = Vector2(1080, 3500)
 
 	for cell_x in range(4, 19):
-		lvl.tile_data.append({"x": cell_x, "y": 25, "source_id": 0, "atlas_x": 11, "atlas_y": 1})
+		lvl.add_packed_tile(cell_x, 25, 11, 1)
 
 	var obs2 := ObjectData.new("obs_2", Vector2(369, 204), 0.0, Vector2(1, 1), {"rotation_speed": 2.0, "move_speed": 100.0, "move_distance": 200.0})
 	lvl.add_object(obs2)

@@ -18,6 +18,7 @@ class_name LevelData
 @export var camera_drag_bottom_margin: float = 0.2
 
 @export var objects: Array[ObjectData] = []
+@export var packed_tiles: PackedInt32Array = PackedInt32Array()
 @export var tile_data: Array[Dictionary] = []
 
 
@@ -29,3 +30,22 @@ func remove_object(obj_data: ObjectData) -> void:
 
 func clear_objects() -> void:
 	objects.clear()
+
+func add_packed_tile(cell_x: int, cell_y: int, atlas_x: int, atlas_y: int) -> void:
+	packed_tiles.append_array([cell_x, cell_y, atlas_x, atlas_y])
+
+func migrate_tile_data_if_needed() -> void:
+	if tile_data.size() > 0:
+		if packed_tiles.is_empty():
+			var packed := PackedInt32Array()
+			packed.resize(tile_data.size() * 4)
+			var idx: int = 0
+			for cell in tile_data:
+				packed[idx] = int(cell.get("x", 0))
+				packed[idx + 1] = int(cell.get("y", 0))
+				packed[idx + 2] = int(cell.get("atlas_x", 1))
+				packed[idx + 3] = int(cell.get("atlas_y", 1))
+				idx += 4
+			packed_tiles = packed
+		tile_data.clear()
+
