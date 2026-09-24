@@ -30,13 +30,19 @@
 	#get_tree().paused = false
 	#get_tree().reload_current_scene()
 
+@tool
 extends Area2D
 
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
 	body_entered.connect(_on_body_entered)
 
 
 func _on_body_entered(body: Node2D) -> void:
+	if Engine.is_editor_hint():
+		return
 	if body is CharacterBody2D:
 		body.level_won()
+

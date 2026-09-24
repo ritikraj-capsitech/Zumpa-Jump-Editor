@@ -263,3 +263,48 @@ static func create_default_level_3() -> LevelData:
 	lvl.add_object(win)
 
 	return lvl
+
+
+static func bake_level_to_tscn(lvl_data: LevelData, save_path: String) -> Error:
+	if not lvl_data:
+		return ERR_INVALID_DATA
+
+	var temp_root := Node2D.new()
+	temp_root.name = "LevelRoot"
+
+	# Build level nodes dynamically
+	LevelLoader.load_level(lvl_data, temp_root)
+
+	# Set owner recursively so PackedScene includes all child nodes & TileMap
+	set_node_owner_recursive(temp_root, temp_root)
+
+	# Pack into scene and save .tscn
+	var packed_scene := PackedScene.new()
+	var err = packed_scene.pack(temp_root)
+	if err == OK:
+		var dir_path = save_path.get_base_dir()
+		if not DirAccess.dir_exists_absolute(dir_path):
+			DirAccess.make_dir_recursive_absolute(dir_path)
+		err = ResourceSaver.save(packed_scene, save_path)
+		print("LevelManager: Successfully baked scene to '%s'" % save_path)
+	else:
+		push_error("LevelManager: Failed to pack level scene: %d" % err)
+
+	temp_root.free()
+	return err
+
+static func set_node_owner_recursive(node: Node, root_node: Node) -> void:
+	for child in node.get_children():
+		if child.owner == null:
+			child.owner = root_node
+			set_node_owner_recursive(child, root_node)
+
+
+static func bake_all_levels_to_tscn() -> void:
+	var paths = get_all_level_paths()
+	for p in paths:
+		var lvl = load_level_data(p)
+		if lvl:
+			var tscn_p = p.get_basename() + ".tscn"
+			bake_level_to_tscn(lvl, tscn_p)
+

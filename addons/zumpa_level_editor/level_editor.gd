@@ -642,16 +642,41 @@ func on_save_pressed() -> void:
 	if current_level_path != "":
 		save_level_to_file(current_level_path)
 	else:
-		save_dialog.popup_centered()
+		var dialog := FileDialog.new()
+		dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+		dialog.filters = PackedStringArray(["*.tres ; Godot Resource File"])
+		dialog.file_selected.connect(func(path):
+			dialog.queue_free()
+			save_level_to_file(path)
+		)
+		dialog.canceled.connect(func(): dialog.queue_free())
+		add_child(dialog)
+		dialog.popup_centered(Vector2i(700, 500))
 
 func save_level_to_file(path: String) -> void:
 	if current_level:
 		LevelManager.save_level_data(current_level, path)
 		current_level_path = path
+
+		# Automatically bake matching .tscn scene file for EVERY level when saved
+		var tscn_path = path.get_basename() + ".tscn"
+		LevelManager.bake_level_to_tscn(current_level, tscn_path)
+
 		populate_level_selector()
 
+
 func on_load_pressed() -> void:
-	load_dialog.popup_centered()
+	var dialog := FileDialog.new()
+	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	dialog.filters = PackedStringArray(["*.tres ; Godot Resource File"])
+	dialog.file_selected.connect(func(path):
+		dialog.queue_free()
+		load_level_from_file(path)
+	)
+	dialog.canceled.connect(func(): dialog.queue_free())
+	add_child(dialog)
+	dialog.popup_centered(Vector2i(700, 500))
+
 
 func load_level_from_file(path: String) -> void:
 	var loaded = LevelManager.load_level_data(path)

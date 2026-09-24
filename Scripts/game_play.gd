@@ -15,9 +15,40 @@ func _ready() -> void:
 
 func load_current_level(lvl_data: LevelData) -> void:
 	current_lvl_data = lvl_data
-	var player = LevelLoader.load_level(lvl_data, level_root)
-	apply_world_theme(lvl_data, player)
-	setup_hud(lvl_data)
+	var active_path = LevelManager.get_active_level_path()
+	var tscn_path = active_path.get_basename() + ".tscn"
+
+	if not (ResourceLoader.exists(tscn_path) or FileAccess.file_exists(tscn_path)):
+		tscn_path = "res://Levels/" + lvl_data.level_id + ".tscn"
+		if not (ResourceLoader.exists(tscn_path) or FileAccess.file_exists(tscn_path)):
+			LevelManager.bake_level_to_tscn(lvl_data, tscn_path)
+
+	load_baked_level_scene(tscn_path, lvl_data)
+
+func load_baked_level_scene(tscn_path: String, lvl_data: LevelData) -> void:
+	for child in level_root.get_children():
+		child.queue_free()
+
+	var baked_scene = load(tscn_path) as PackedScene
+	if baked_scene:
+		var baked_instance = baked_scene.instantiate()
+		level_root.add_child(baked_instance)
+		print("GamePlay: Loaded level scene from: ", tscn_path)
+
+		var player: Node2D = null
+		if baked_instance.has_node("CharacterBody2D"):
+			player = baked_instance.get_node("CharacterBody2D")
+		else:
+			for child in baked_instance.get_children():
+				if child is CharacterBody2D:
+					player = child
+					break
+
+		apply_world_theme(lvl_data, player)
+		setup_hud(lvl_data)
+	else:
+		push_error("GamePlay: Failed to load level scene at " + tscn_path)
+
 
 func apply_world_theme(lvl_data: LevelData, player: Node2D = null) -> void:
 	var theme_info = WorldThemeRegistry.get_theme(lvl_data.world_theme)

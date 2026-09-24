@@ -23,18 +23,19 @@ static func load_level(level_data: LevelData, container: Node) -> CharacterBody2
 	var bg_path: String = theme_info.get("background", "res://Sprite/ENV/setting screen.png")
 	if ResourceLoader.exists(bg_path):
 		var bg_tex = load(bg_path)
-		if player.has_method("set_background_texture"):
-			player.call("set_background_texture", bg_tex)
-		else:
-			var p_bg: TextureRect = null
-			if player.has_node("BgAnchor/TextureRect"):
-				p_bg = player.get_node("BgAnchor/TextureRect") as TextureRect
-			elif player.has_node("Camera2D/TextureRect"):
-				p_bg = player.get_node("Camera2D/TextureRect") as TextureRect
-			if p_bg:
-				p_bg.texture = bg_tex
-				p_bg.z_index = -100
-				p_bg.z_as_relative = false
+		var p_bg: TextureRect = null
+		if player.has_node("BgAnchor/TextureRect"):
+			p_bg = player.get_node("BgAnchor/TextureRect") as TextureRect
+		elif player.has_node("Camera2D/TextureRect"):
+			p_bg = player.get_node("Camera2D/TextureRect") as TextureRect
+		elif player.has_node("TextureRect"):
+			p_bg = player.get_node("TextureRect") as TextureRect
+
+		if p_bg:
+			p_bg.texture = bg_tex
+			p_bg.z_index = -100
+			p_bg.z_as_relative = false
+
 
 
 	# Determine fall threshold (lowest Y position in level + padding)

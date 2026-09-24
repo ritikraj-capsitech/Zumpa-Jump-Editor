@@ -32,6 +32,16 @@ static var _themes: Dictionary = {
 		"tile_size": Vector2i(16, 16),
 		"default_atlas_coords": Vector2i(11, 1),
 		"theme_color": Color(0.2, 0.6, 1.0, 1.0)
+	},
+		"world_4": {
+		"id": "world_4",
+		"name": "World 4 - Cyber Night",
+		"background": "res://tiles/Bg.png",
+		"wall_texture": "res://Sprite/LVLFrames/Union.png",
+		"platform_texture": "res://tiles/Section 41.png",
+		"tile_size": Vector2i(16, 16),
+		"default_atlas_coords": Vector2i(11, 1),
+		"theme_color": Color(0.713, 0.576, 0.0, 1.0)
 	}
 }
 

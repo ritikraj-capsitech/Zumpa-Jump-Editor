@@ -146,6 +146,7 @@
 
 
 
+@tool
 extends CharacterBody2D
 
 const MOVE_SPEED = 350.0
@@ -163,12 +164,16 @@ var level_ended := false
 
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
 	# Avoid a one-frame pop before the first _process runs.
 	if bg_anchor and camera:
 		bg_anchor.global_position = camera.get_screen_center_position()
 
 
 func _process(_delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
 	if level_ended:
 		return
 
@@ -192,8 +197,11 @@ func set_background_texture(tex: Texture2D) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
 	if level_ended:
 		return
+
 
 	# Gravity
 	velocity += get_gravity() * delta
